@@ -1,24 +1,16 @@
----
-title: Chara Survival
-emoji: 🧬
-colorFrom: blue
-colorTo: gray
-sdk: gradio
-pinned: false
----
-﻿<div align="center">
+<div align="center">
 
-<img src="assets/iit-mandi-logo.png" width="96" alt="IIT Mandi" style="border-radius:20px"/>
+<img src="https://raw.githubusercontent.com/Sharon-codes/Chara/main/assets/iit-mandi-logo.png" width="96" alt="IIT Mandi" style="border-radius:20px"/>
 
 # Chara Survival
 
 **Thermodynamic Graph Laplacian Survival Inference for Transcriptomic Oncology**
 
-[![PyPI version](https://img.shields.io/pypi/v/chara-survival?color=0A84FF&label=PyPI&logo=pypi&logoColor=white)](https://pypi.org/project/chara-survival/)
-[![Python](https://img.shields.io/pypi/pyversions/chara-survival?color=0A84FF&logo=python&logoColor=white)](https://pypi.org/project/chara-survival/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-0A84FF.svg)](LICENSE)
-[![Gradio Space](https://img.shields.io/badge/Hugging%20Face-Spaces-FF6B00?logo=huggingface&logoColor=white)](https://huggingface.co/spaces/Sharon-codes/Chara)
-[![IIT Mandi](https://img.shields.io/badge/Lab-Computational%20%26%20Physical%20Genomics-6E6E73)](https://www.iitmandi.ac.in)
+[![PyPI version](https://img.shields.io/pypi/v/chara-survival?color=445D30&label=PyPI&logo=pypi&logoColor=white)](https://pypi.org/project/chara-survival/)
+[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-445D30?logo=python&logoColor=white)](https://pypi.org/project/chara-survival/)
+[![Web App](https://img.shields.io/badge/Web%20App-Live%20Demo-445D30?logo=vercel&logoColor=white)](https://chara-frontend.vercel.app)
+[![License: MIT](https://img.shields.io/badge/License-MIT-445D30.svg)](LICENSE)
+[![IIT Mandi](https://img.shields.io/badge/Lab-Computational%20%26%20Physical%20Genomics-2D3D21)](https://www.iitmandi.ac.in)
 
 *A frozen 4,337-gene thermodynamic intersection signature that transfers across sequencing platforms — zero retraining required.*
 
