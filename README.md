@@ -231,13 +231,13 @@ GitHub: https://github.com/Sharon-codes/Chara
 <table>
 <tr>
 <td width="200" align="center">
-<img src="assets/dr-kharerin-hungyo.png" width="140" style="border-radius:16px" alt="Dr. Kharerin Hungyo"/><br/>
+<img src="https://raw.githubusercontent.com/Sharon-codes/Chara/main/assets/dr-kharerin-hungyo.png" width="140" style="border-radius:16px" alt="Dr. Kharerin Hungyo"/><br/>
 <strong>Dr. Kharerin Hungyo</strong><br/>
 <sub>Principal Investigator<br/>Computational & Physical Genomics Lab<br/>Indian Institute of Technology Mandi</sub><br/>
 <a href="mailto:kharerin@iitmandi.ac.in">kharerin@iitmandi.ac.in</a>
 </td>
 <td width="200" align="center">
-<img src="assets/sharon-melhi.png" width="140" style="border-radius:16px" alt="Sharon Melhi"/><br/>
+<img src="https://raw.githubusercontent.com/Sharon-codes/Chara/main/assets/sharon-melhi.png" width="140" style="border-radius:16px" alt="Sharon Melhi"/><br/>
 <strong>Sharon Melhi</strong><br/>
 <sub>Computational Biologist<br/>Creator, Chara Survival</sub><br/>
 <a href="https://www.linkedin.com/in/sharon-melhi/">LinkedIn</a> · <a href="mailto:sharonmelhi365@gmail.com">Email</a>
@@ -245,7 +245,7 @@ GitHub: https://github.com/Sharon-codes/Chara
 </tr>
 </table>
 
-Special thanks to **Khushi Mhamane** for her continuous support and invaluable assistance throughout this project.
+Special thanks to **Khushi Mhamane** for her constant encouragement, thoughtful discussions, and belief in this research from its earliest stages. — Sharon Melhi
 
 ---
 
