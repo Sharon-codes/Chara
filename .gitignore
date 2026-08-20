@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg
+*.egg-info/
+dist/
+dist_*/
+build/
+.eggs/
+
+# Data & models (too large for Git)
+*.csv
+*.pkl
+*.pdf
+*.ssd
+*.itp
+
+# MD simulation artefacts
+*.xtc
+*.trr
+*.cpt
+*.tpr
+*.edr
+#chain_*.ssd.*#
+#molecule_*.itp.*#
+molecule_*.itp
+chain_*.ssd
+
+# Temp / OS
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+temp_output.txt
+debug_output.txt
+
+# DSSP temporary files
+dssp_in_*
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Caches
+geo_cache/
+gsea_tmp/
+.app_test*/
+.package_verify*/
+.superpowers/
+logs/
+
+# IDE
+.idea/
+.vscode/

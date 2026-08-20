@@ -140,7 +140,6 @@
                 Computational and Physical Genomics Laboratory · Indian Institute of Technology Mandi
             </div>
 
-            <!-- FONT INCREASED BY 0.2 FOR PERFECT TITLE IMPACT -->
             <h1 class="text-4xl sm:text-6xl lg:text-[4.4rem] font-bold tracking-tight text-olive-900 leading-[1.08] mb-6 font-academic">
                 Thermodynamic Graph Laplacian <br class="hidden sm:inline">
                 Manifold Alignment for Survival Inference
@@ -504,14 +503,101 @@
         </section>
     </main>
 
-    <!-- PAGE 4: LIVE DEMO (EXACT MATHEMATICAL ENGINE & 2-PAGE PUBLICATION PDF REPORT GENERATION) -->
+    <!-- PAGE 4: LIVE DEMO (EXACT MATHEMATICAL ENGINE, DETAILED DATA GUIDELINES & 2-PAGE PDF REPORT) -->
     <main id="page-inference" class="tab-page flex-grow">
         <section class="max-w-7xl mx-auto px-6 py-14 w-full">
             
-            <div class="text-center mb-12">
+            <div class="text-center mb-10">
                 <span class="text-xs font-mono tracking-widest text-olive-700 uppercase font-bold block mb-2">HIGH-PERFORMANCE SURVIVAL ENGINE</span>
                 <h2 class="text-4xl sm:text-5xl font-bold text-olive-900 tracking-tight mb-3 font-academic">Interactive Inference Demo</h2>
                 <p class="text-slate-600 text-base max-w-2xl mx-auto">Upload a cohort CSV file to execute graph Laplacian thermodynamic survival alignment in real-time.</p>
+            </div>
+
+            <!-- DETAILED DATA FORMAT & USER UPLOAD SPECIFICATIONS CARD -->
+            <div class="academic-card p-6 sm:p-8 rounded-3xl mb-10 border-l-4 border-l-olive-700 bg-parchment-100/90 shadow-sm">
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4 pb-4 border-b border-olive-900/15">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="px-2 py-0.5 rounded bg-olive-800 text-white font-mono text-[10px] font-bold uppercase">DATA FORMAT SPECIFICATION</span>
+                            <span class="text-xs font-mono text-slate-500">Cohort Transcriptomics Matrix</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-olive-900 font-academic">What Data to Upload &amp; How to Structure Your CSV</h3>
+                    </div>
+
+                    <!-- 1-Click Sample Dataset Downloads -->
+                    <div class="flex flex-wrap items-center gap-2.5">
+                        <button onclick="downloadSampleCohort(12)" class="px-3.5 py-2 rounded-xl bg-white hover:bg-olive-50 border border-olive-900/20 text-olive-900 font-mono text-xs font-semibold transition-all flex items-center gap-2 shadow-sm">
+                            <i class="fas fa-download text-olive-700"></i>
+                            <span>Sample CSV (12 Patients)</span>
+                        </button>
+                        <button onclick="downloadSampleCohort(25)" class="px-3.5 py-2 rounded-xl bg-white hover:bg-olive-50 border border-olive-900/20 text-olive-900 font-mono text-xs font-semibold transition-all flex items-center gap-2 shadow-sm">
+                            <i class="fas fa-download text-olive-700"></i>
+                            <span>Sample CSV (25 Patients)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6 text-xs text-slate-700 leading-relaxed mb-4">
+                    <div>
+                        <h4 class="font-bold text-olive-900 text-sm mb-1.5 flex items-center gap-1.5">
+                            <i class="fas fa-table-columns text-olive-700"></i> 1. Column &amp; Row Structure
+                        </h4>
+                        <p class="mb-1"><strong>Column 1:</strong> <code>Patient_ID</code> (e.g. <code>PATIENT_01</code>, <code>TCGA-LUAD-01</code>, <code>GSM12345</code>).</p>
+                        <p><strong>Columns 2 to N:</strong> Standard <strong>HGNC Gene Symbols</strong> (e.g. <code>CCL20</code>, <code>DKK1</code>, <code>MS4A1</code>, <code>FAIM2</code>, <code>TP53</code>, <code>KRAS</code>, <code>EGFR</code>, etc.).</p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-olive-900 text-sm mb-1.5 flex items-center gap-1.5">
+                            <i class="fas fa-chart-simple text-olive-700"></i> 2. Expression Units
+                        </h4>
+                        <p class="mb-1">Chara accepts unadjusted expression counts across all standard measurement platforms:</p>
+                        <p>• <strong>RNA-Seq:</strong> TPM, FPKM, RPKM, or log2(CPM+1).</p>
+                        <p>• <strong>Microarray:</strong> Log2 RMA / MAS5 probe intensity values.</p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-olive-900 text-sm mb-1.5 flex items-center gap-1.5">
+                            <i class="fas fa-shield-halved text-olive-700"></i> 3. Zero Data Leakage
+                        </h4>
+                        <p class="mb-1">You do not need to perform manual batch correction before uploading.</p>
+                        <p>Chara projects your expression matrix onto the frozen <strong>4,337-gene thermodynamic manifold</strong> in real time without training label leakage.</p>
+                    </div>
+                </div>
+
+                <!-- Interactive Visual Table Format Helper -->
+                <div class="p-3.5 rounded-xl bg-white border border-olive-900/15 overflow-x-auto font-mono text-[11px]">
+                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block mb-1.5 font-sans">Example CSV Structure (First 4 Columns Preview):</span>
+                    <table class="w-full text-left text-slate-800">
+                        <thead class="bg-olive-100/70 border-b border-olive-900/10 text-olive-900 font-bold">
+                            <tr>
+                                <th class="p-2">Patient_ID</th>
+                                <th class="p-2">CCL20</th>
+                                <th class="p-2">DKK1</th>
+                                <th class="p-2">MS4A1</th>
+                                <th class="p-2">FAIM2</th>
+                                <th class="p-2 text-slate-400">... [remaining genes]</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-olive-900/10">
+                            <tr>
+                                <td class="p-2 font-semibold text-olive-900">PATIENT_01</td>
+                                <td class="p-2 text-rose-700">14.82</td>
+                                <td class="p-2 text-rose-700">12.45</td>
+                                <td class="p-2 text-slate-600">2.10</td>
+                                <td class="p-2 text-slate-600">1.95</td>
+                                <td class="p-2 text-slate-400">...</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-semibold text-olive-900">PATIENT_02</td>
+                                <td class="p-2 text-slate-600">3.12</td>
+                                <td class="p-2 text-slate-600">2.80</td>
+                                <td class="p-2 text-olive-700 font-semibold">16.40</td>
+                                <td class="p-2 text-olive-700 font-semibold">14.90</td>
+                                <td class="p-2 text-slate-400">...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="grid lg:grid-cols-12 gap-6 items-stretch mb-10">
@@ -795,6 +881,44 @@
             0.3249, 0.2959, 0.2945, 0.2850, 0.2594, 0.2594, 0.2594, 0.2594, 0.2594, 0.2594,
             0.2594, 0.2594, 0.2594, 0.2594, 0.2594, 0.2594, 0.2594, 0.2594, 0.2594, 0.2594, 0.2594
         ];
+
+        // 1-Click Sample Dataset Downloader for Users
+        window.downloadSampleCohort = function(n) {
+            const genes = Object.keys(CHARA_TRAINED_COEFS);
+            let csvContent = "Patient_ID," + genes.join(",") + "\n";
+
+            for (let i = 1; i <= n; i++) {
+                const pid = `PATIENT_${i < 10 ? '0' + i : i}`;
+                const ptype = i % 4; // 0=Critical, 1=High, 2=Moderate, 3=Low
+                const rowVals = [pid];
+
+                genes.forEach(g => {
+                    const w = CHARA_TRAINED_COEFS[g];
+                    let base = 7.0 + (Math.random() * 2.0 - 1.0);
+                    if (ptype === 0) {
+                        if (w > 0.015) base += 5.0 + Math.random() * 3.0;
+                        else if (w < -0.015) base -= 3.5 + Math.random() * 2.5;
+                    } else if (ptype === 1) {
+                        if (w > 0.015) base += 2.5 + Math.random() * 2.0;
+                        else if (w < -0.015) base -= 1.5 + Math.random() * 1.5;
+                    } else if (ptype === 3) {
+                        if (w > 0.015) base -= 3.0 + Math.random() * 2.0;
+                        else if (w < -0.015) base += 4.5 + Math.random() * 3.0;
+                    }
+                    rowVals.push(Math.max(0.1, parseFloat(base.toFixed(2))));
+                });
+                csvContent += rowVals.join(",") + "\n";
+            }
+
+            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `chara_sample_cohort_${n}patients.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
 
         // Mobile Menu Handler
         window.toggleMobileMenu = function() {
