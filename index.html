@@ -165,28 +165,63 @@
                 </button>
             </div>
 
-            <!-- Key Metric Cards -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-5xl mb-14">
-                <div class="academic-card p-5 rounded-2xl text-left border-l-4 border-l-olive-600">
-                    <p class="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-1">Frozen Signature</p>
-                    <p class="text-xl sm:text-2xl font-extrabold text-olive-900">4,337 <span class="text-xs font-normal text-slate-600">Genes</span></p>
+            <!-- Key Metric Cards (Rich, Balanced & Informative) -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-5xl mb-12">
+                <div class="academic-card p-5 rounded-2xl text-left border-l-4 border-l-olive-600 flex flex-col justify-between h-full academic-card-hover">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="text-[10px] font-mono text-olive-700 font-bold uppercase tracking-wider">Frozen Signature</span>
+                        <div class="w-7 h-7 rounded-lg bg-olive-100/80 flex items-center justify-center text-olive-700 text-xs flex-shrink-0">
+                            <i class="fas fa-dna"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-olive-900 tracking-tight leading-none mb-1.5">4,337 <span class="text-xs font-medium text-slate-600">Genes</span></div>
+                        <p class="text-[11px] text-slate-600 leading-snug">Thermodynamic STRING Laplacian manifold features</p>
+                    </div>
                 </div>
-                <div class="academic-card p-5 rounded-2xl text-left border-l-4 border-l-olive-700">
-                    <p class="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-1">Concordance Gain</p>
-                    <p class="text-xl sm:text-2xl font-extrabold text-olive-900">+0.268 <span class="text-xs font-normal text-slate-600">C-Index</span></p>
+
+                <div class="academic-card p-5 rounded-2xl text-left border-l-4 border-l-olive-700 flex flex-col justify-between h-full academic-card-hover">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="text-[10px] font-mono text-olive-700 font-bold uppercase tracking-wider">Concordance Gain</span>
+                        <div class="w-7 h-7 rounded-lg bg-olive-100/80 flex items-center justify-center text-olive-700 text-xs flex-shrink-0">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-olive-900 tracking-tight leading-none mb-1.5">+0.268 <span class="text-xs font-medium text-slate-600">C-Index</span></div>
+                        <p class="text-[11px] text-slate-600 leading-snug">Peak OOD gain over DeepSurv &amp; Random Survival Forest</p>
+                    </div>
                 </div>
-                <div class="academic-card p-5 rounded-2xl text-left border-l-4 border-l-olive-800">
-                    <p class="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-1">Test Integrity</p>
-                    <p class="text-xl sm:text-2xl font-extrabold text-olive-900">Zero <span class="text-xs font-normal text-slate-600">Data Leakage</span></p>
+
+                <div class="academic-card p-5 rounded-2xl text-left border-l-4 border-l-olive-800 flex flex-col justify-between h-full academic-card-hover">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="text-[10px] font-mono text-olive-700 font-bold uppercase tracking-wider">Test Integrity</span>
+                        <div class="w-7 h-7 rounded-lg bg-olive-100/80 flex items-center justify-center text-olive-700 text-xs flex-shrink-0">
+                            <i class="fas fa-shield-halved"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-olive-900 tracking-tight leading-none mb-1.5">Zero <span class="text-xs font-medium text-slate-600">Leakage</span></div>
+                        <p class="text-[11px] text-slate-600 leading-snug">Out-of-sample frozen cohort clinical validation</p>
+                    </div>
                 </div>
-                <div class="academic-card p-5 rounded-2xl text-left border-l-4 border-l-olive-900">
-                    <p class="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-1">Inference Engine</p>
-                    <p class="text-xl sm:text-2xl font-extrabold text-olive-900">Exact <span class="text-xs font-normal text-slate-600">Coxnet (58 Biomarkers)</span></p>
+
+                <div class="academic-card p-5 rounded-2xl text-left border-l-4 border-l-olive-900 flex flex-col justify-between h-full academic-card-hover">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="text-[10px] font-mono text-olive-700 font-bold uppercase tracking-wider">Inference Model</span>
+                        <div class="w-7 h-7 rounded-lg bg-olive-100/80 flex items-center justify-center text-olive-700 text-xs flex-shrink-0">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-olive-900 tracking-tight leading-none mb-1.5">58 <span class="text-xs font-medium text-slate-600">Biomarkers</span></div>
+                        <p class="text-[11px] text-slate-600 leading-snug">Active regularized Coxnet hazard coefficients</p>
+                    </div>
                 </div>
             </div>
 
             <!-- Deep Academic Context Section -->
-            <div class="academic-card p-8 sm:p-10 rounded-3xl text-left w-full max-w-6xl mb-14 border-t-4 border-t-olive-800">
+            <div class="academic-card p-8 sm:p-10 rounded-3xl text-left w-full max-w-6xl mb-12 border-t-4 border-t-olive-800">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-6 border-b border-olive-900/10">
                     <div>
                         <span class="text-xs font-mono text-olive-700 uppercase tracking-widest block mb-1">BIOPHYSICAL LANDSCAPE</span>
@@ -219,7 +254,7 @@
             </div>
 
             <!-- Visual Data Lifecycle Flow -->
-            <div class="w-full max-w-6xl mb-14 text-left">
+            <div class="w-full max-w-6xl mb-12 text-left">
                 <h3 class="text-xl sm:text-2xl font-bold text-olive-900 mb-6 font-academic text-center">Chara Thermodynamic Data Lifecycle</h3>
                 
                 <div class="grid md:grid-cols-4 gap-4">
@@ -249,28 +284,29 @@
                 </div>
             </div>
 
-            <!-- PyPI Direct Link & Package Highlight -->
-            <div class="academic-card p-6 sm:p-8 rounded-3xl w-full max-w-6xl text-left bg-parchment-100/90 border border-olive-900/20">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-3">
-                    <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="text-xs font-mono text-olive-700 uppercase tracking-widest block">PYTHON PACKAGE</span>
-                            <span class="px-2 py-0.5 rounded bg-olive-800 text-white font-mono text-[10px] font-bold">chara-survival v0.1.8</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-olive-900 font-academic">Official PyPI Release</h3>
+            <!-- PyPI Direct Link & Package Highlight (Perfect Vertical Center Alignment) -->
+            <div class="academic-card p-6 sm:p-7 rounded-3xl w-full max-w-6xl text-left bg-parchment-100/90 border border-olive-900/20 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex-1">
+                    <div class="flex items-center gap-2 mb-1.5">
+                        <span class="text-xs font-mono text-olive-700 uppercase tracking-widest font-bold">PYTHON PACKAGE</span>
+                        <span class="px-2 py-0.5 rounded bg-olive-800 text-white font-mono text-[10px] font-bold">chara-survival v0.1.8</span>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <a href="https://pypi.org/project/chara-survival/" target="_blank" class="px-4 py-2 rounded-xl bg-olive-800 hover:bg-olive-900 text-white font-mono text-xs font-bold transition-all shadow-sm flex items-center gap-2">
-                            <span>Open PyPI Page</span> <i class="fas fa-external-link-alt text-[10px]"></i>
-                        </a>
-                        <div class="px-4 py-2 rounded-xl bg-white border border-olive-900/15 font-mono text-xs text-olive-900 font-bold shadow-sm hidden sm:block">
-                            pip install chara-survival
-                        </div>
+                    <h3 class="text-xl sm:text-2xl font-bold text-olive-900 font-academic mb-1.5">Official PyPI Release</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed max-w-2xl">
+                        Install or upgrade the official Python library directly in any terminal: <code>pip install --upgrade chara-survival</code>.
+                    </p>
+                </div>
+                
+                <!-- Perfectly Centered Action Buttons -->
+                <div class="flex items-center gap-3 flex-shrink-0 self-center">
+                    <a href="https://pypi.org/project/chara-survival/" target="_blank" class="px-5 py-3 rounded-xl bg-olive-800 hover:bg-olive-900 text-white font-mono text-xs font-bold transition-all shadow-sm flex items-center gap-2">
+                        <span>Open PyPI Page</span> <i class="fas fa-external-link-alt text-[10px]"></i>
+                    </a>
+                    <div class="px-4 py-3 rounded-xl bg-white border border-olive-900/15 font-mono text-xs text-olive-900 font-bold shadow-sm hidden sm:flex items-center gap-2">
+                        <i class="fas fa-terminal text-olive-700 text-[10px]"></i>
+                        <span>pip install chara-survival</span>
                     </div>
                 </div>
-                <p class="text-xs text-slate-600 leading-relaxed">
-                    Install or upgrade the official Python library directly via <code>pip install --upgrade chara-survival</code>.
-                </p>
             </div>
 
         </section>
@@ -516,7 +552,7 @@
                     </div>
                     <div class="p-3.5 rounded-xl bg-parchment-100 border border-olive-900/10 text-xs text-slate-700 flex items-center justify-between">
                         <span class="font-mono text-[11px] truncate">Nature (2009) · Stratton et al.</span>
-                        <a href="https://doi.org/10.1038/nature07943" target="_blank" class="px-3 py-1 rounded-lg bg-olive-800 hover:bg-olive-900 text-white font-mono text-[11px] transition-all flex items-center gap-1.5 flex-shrink-0 ml-2 shadow-sm">
+                        <a href="https://doi.org/10.1016/j.ccell.2017.07.007" target="_blank" class="px-3 py-1 rounded-lg bg-olive-800 hover:bg-olive-900 text-white font-mono text-[11px] transition-all flex items-center gap-1.5 flex-shrink-0 ml-2 shadow-sm">
                             <span>Read Paper</span> <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
                         </a>
                     </div>
