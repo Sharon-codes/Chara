@@ -9,16 +9,16 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&display=swap');
         body {
-            background-color: #f5f5f7;
-            color: #1d1d1f;
+            background-color: #030712; color: #f3f4f6;
+            color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
             -webkit-font-smoothing: antialiased;
         }
         .glass-card {
-            background: rgba(255, 255, 255, 0.72);
+            background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
             border-radius: 24px;
         }
@@ -44,7 +44,7 @@
         }
         .btn-secondary {
             background-color: #e8e8ed;
-            color: #1d1d1f;
+            color: #ffffff;
             border-radius: 980px;
             transition: all 0.2s ease;
         }
@@ -55,16 +55,16 @@
 </head>
 <body class="min-h-screen">
 
-    <header class="max-w-6xl mx-auto px-6 py-20 border-b border-gray-200">
+    <header class="max-w-6xl mx-auto px-6 py-20 border-b border-white/10">
         <div class="flex flex-col md:flex-row items-center gap-12">
-            <div class="w-24 h-24 bg-white rounded-2xl p-3 shadow-lg border border-gray-100 flex-shrink-0">
+            <div class="w-24 h-24 bg-white rounded-2xl p-3 shadow-lg border border-white/10 flex-shrink-0">
                 <img src="/assets/iit-mandi-logo.png" alt="IIT Mandi" class="w-full h-full object-contain">
             </div>
             <div>
-                <p class="text-gray-500 font-medium text-sm tracking-wider uppercase mb-2">IIT Mandi · Computational and Physical Genomics</p>
+                <p class="text-slate-400 font-medium text-sm tracking-wider uppercase mb-2">IIT Mandi · Computational and Physical Genomics</p>
                 <p class="text-[#0066cc] font-semibold text-xs tracking-widest uppercase mb-4">Chara Clinical Inference</p>
-                <h1 class="text-5xl md:text-6xl font-bold tracking-tight leading-tight mb-4 text-[#1d1d1f]">Read the signal<br>between platforms.</h1>
-                <p class="text-xl text-gray-500 max-w-2xl">A frozen 4,337-gene survival signature, aligned and scaled for a new cohort in one deliberate step.</p>
+                <h1 class="text-5xl md:text-6xl font-bold tracking-tight leading-tight mb-4 text-white">Read the signal<br>between platforms.</h1>
+                <p class="text-xl text-slate-400 max-w-2xl">A frozen 4,337-gene survival signature, aligned and scaled for a new cohort in one deliberate step.</p>
             </div>
         </div>
     </header>
@@ -73,29 +73,29 @@
         
         <section class="grid md:grid-cols-2 gap-8 mb-20">
             <div class="glass-card p-10">
-                <h2 class="text-3xl font-semibold mb-4 text-[#1d1d1f]">The Problem: Domain Shift</h2>
-                <p class="text-lg text-gray-600 mb-4 leading-relaxed">Transcriptomic data varies wildly between sequencing platforms, normalization pipelines, and patient cohorts. A machine learning model trained on TCGA data often fails catastrophically when applied to a local hospital's RNA-seq cohort due to batch effects and distribution shifts.</p>
-                <p class="text-lg text-gray-600 leading-relaxed">Traditionally, researchers use Combat or quantile normalization, which requires combining training and testing data, leading to data leakage and destroying the concept of a "frozen" clinical model.</p>
+                <h2 class="text-3xl font-semibold mb-4 text-white">The Problem: Domain Shift</h2>
+                <p class="text-lg text-slate-300 mb-4 leading-relaxed">Transcriptomic data varies wildly between sequencing platforms, normalization pipelines, and patient cohorts. A machine learning model trained on TCGA data often fails catastrophically when applied to a local hospital's RNA-seq cohort due to batch effects and distribution shifts.</p>
+                <p class="text-lg text-slate-300 leading-relaxed">Traditionally, researchers use Combat or quantile normalization, which requires combining training and testing data, leading to data leakage and destroying the concept of a "frozen" clinical model.</p>
             </div>
             <div class="glass-card p-10">
-                <h2 class="text-3xl font-semibold mb-4 text-[#1d1d1f]">The Solution: Thermodynamic Graphs</h2>
-                <p class="text-lg text-gray-600 mb-4 leading-relaxed">Chara solves this by modeling patients as nodes in a Thermodynamic Graph Laplacian. Instead of aligning features blindly, we compute the structural transition probabilities of the new cohort's expression manifold and map them securely into the frozen signature space.</p>
-                <p class="text-lg text-gray-600 leading-relaxed">This allows our robust 4,337-gene Cox Proportional Hazards model to execute on unseen data accurately, without ever needing to see the original training set again.</p>
+                <h2 class="text-3xl font-semibold mb-4 text-white">The Solution: Thermodynamic Graphs</h2>
+                <p class="text-lg text-slate-300 mb-4 leading-relaxed">Chara solves this by modeling patients as nodes in a Thermodynamic Graph Laplacian. Instead of aligning features blindly, we compute the structural transition probabilities of the new cohort's expression manifold and map them securely into the frozen signature space.</p>
+                <p class="text-lg text-slate-300 leading-relaxed">This allows our robust 4,337-gene Cox Proportional Hazards model to execute on unseen data accurately, without ever needing to see the original training set again.</p>
             </div>
         </section>
 
         <section class="mb-20">
-            <h2 class="text-4xl font-bold mb-8 text-[#1d1d1f]">Interactive Inference</h2>
+            <h2 class="text-4xl font-bold mb-8 text-white">Interactive Inference</h2>
             
             <div class="grid md:grid-cols-12 gap-8">
                 <div class="md:col-span-4 flex flex-col gap-6">
                     <div class="glass-card p-8 flex flex-col h-full">
                         <h3 class="text-2xl font-semibold mb-2">Bring a cohort</h3>
-                        <p class="text-gray-500 mb-6">Upload a CSV where rows are patients and columns are HGNC gene symbols.</p>
+                        <p class="text-slate-400 mb-6">Upload a CSV where rows are patients and columns are HGNC gene symbols.</p>
                         
                         <div id="dropzone" class="upload-zone flex-grow rounded-xl flex flex-col items-center justify-center p-8 cursor-pointer mb-6 bg-white bg-opacity-50">
                             <svg class="w-10 h-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                            <p class="text-gray-600 font-medium text-center">Drop CSV Here<br><span class="text-sm text-gray-400 font-normal">or click to browse</span></p>
+                            <p class="text-slate-300 font-medium text-center">Drop CSV Here<br><span class="text-sm text-gray-400 font-normal">or click to browse</span></p>
                             <input type="file" id="fileInput" class="hidden" accept=".csv">
                         </div>
 
@@ -131,21 +131,21 @@
                             </div>
 
                             <div class="grid grid-cols-4 gap-4 mt-auto">
-                                <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                                    <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">Mean Risk Score</p>
-                                    <p id="statRisk" class="text-xl font-semibold text-[#1d1d1f]">--</p>
+                                <div class="bg-slate-900/80 border border-white/10 rounded-xl p-4 border border-white/10">
+                                    <p class="text-xs text-slate-400 uppercase tracking-wider mb-1">Mean Risk Score</p>
+                                    <p id="statRisk" class="text-xl font-semibold text-white">--</p>
                                 </div>
-                                <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                                    <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">1-Year Surv</p>
-                                    <p id="stat1y" class="text-xl font-semibold text-[#1d1d1f]">--</p>
+                                <div class="bg-slate-900/80 border border-white/10 rounded-xl p-4 border border-white/10">
+                                    <p class="text-xs text-slate-400 uppercase tracking-wider mb-1">1-Year Surv</p>
+                                    <p id="stat1y" class="text-xl font-semibold text-white">--</p>
                                 </div>
-                                <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                                    <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">3-Year Surv</p>
-                                    <p id="stat3y" class="text-xl font-semibold text-[#1d1d1f]">--</p>
+                                <div class="bg-slate-900/80 border border-white/10 rounded-xl p-4 border border-white/10">
+                                    <p class="text-xs text-slate-400 uppercase tracking-wider mb-1">3-Year Surv</p>
+                                    <p id="stat3y" class="text-xl font-semibold text-white">--</p>
                                 </div>
-                                <div class="bg-gray-50 rounded-xl p-4 border border-gray-100">
-                                    <p class="text-xs text-gray-500 uppercase tracking-wider mb-1">5-Year Surv</p>
-                                    <p id="stat5y" class="text-xl font-semibold text-[#1d1d1f]">--</p>
+                                <div class="bg-slate-900/80 border border-white/10 rounded-xl p-4 border border-white/10">
+                                    <p class="text-xs text-slate-400 uppercase tracking-wider mb-1">5-Year Surv</p>
+                                    <p id="stat5y" class="text-xl font-semibold text-white">--</p>
                                 </div>
                             </div>
                         </div>
@@ -156,28 +156,28 @@
 
         <section class="mb-20">
             <div class="glass-card p-12 text-center max-w-4xl mx-auto">
-                <h2 class="text-3xl font-bold mb-4 text-[#1d1d1f]">Designed for Pipelines</h2>
-                <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">Chara is also available as a beautifully documented Python package. Integrate thermodynamic graph survival inference directly into your Bioinformatics workflows.</p>
-                <code class="bg-[#e8e8ed] text-[#1d1d1f] px-6 py-3 rounded-xl text-lg font-mono tracking-tight">pip install chara-survival</code>
+                <h2 class="text-3xl font-bold mb-4 text-white">Designed for Pipelines</h2>
+                <p class="text-lg text-slate-300 mb-8 max-w-2xl mx-auto">Chara is also available as a beautifully documented Python package. Integrate thermodynamic graph survival inference directly into your Bioinformatics workflows.</p>
+                <code class="bg-slate-900 border border-white/10 text-cyan-400 text-white px-6 py-3 rounded-xl text-lg font-mono tracking-tight">pip install chara-survival</code>
             </div>
         </section>
 
         <section>
-            <h2 class="text-4xl font-bold mb-4 text-[#1d1d1f]">The Team</h2>
-            <p class="text-xl text-gray-500 mb-10">The research context behind Chara Survival.</p>
+            <h2 class="text-4xl font-bold mb-4 text-white">The Team</h2>
+            <p class="text-xl text-slate-400 mb-10">The research context behind Chara Survival.</p>
             
             <div class="grid md:grid-cols-2 gap-8">
                 <div class="glass-card p-8 flex flex-col">
                     <img src="/assets/dr-kharerin-hungyo.png" alt="Dr. Kharerin Hungyo" class="w-full h-64 object-cover rounded-2xl mb-6 bg-gray-100">
                     <h3 class="text-2xl font-semibold mb-2">Dr. Kharerin Hungyo</h3>
-                    <p class="text-gray-500 mb-4 flex-grow">Principal Investigator, IIT Mandi · Computational and Physical Genomics Lab.<br><br>After earning his PhD from IIT Bombay and completing postdoctoral stints at Penn State and ENS de Lyon, Dr. Hungyo joined IIT Mandi in August 2023. His work studies nucleosome positioning and genome organization using biophysical and computational methods, alongside AI/ML methods for biological problems.</p>
+                    <p class="text-slate-400 mb-4 flex-grow">Principal Investigator, IIT Mandi · Computational and Physical Genomics Lab.<br><br>After earning his PhD from IIT Bombay and completing postdoctoral stints at Penn State and ENS de Lyon, Dr. Hungyo joined IIT Mandi in August 2023. His work studies nucleosome positioning and genome organization using biophysical and computational methods, alongside AI/ML methods for biological problems.</p>
                     <a href="mailto:kharerin@iitmandi.ac.in" class="text-[#0066cc] font-medium hover:underline">kharerin@iitmandi.ac.in</a>
                 </div>
                 
                 <div class="glass-card p-8 flex flex-col">
                     <img src="/assets/sharon-melhi.png" alt="Sharon Melhi" class="w-full h-64 object-cover rounded-2xl mb-6 bg-gray-100">
                     <h3 class="text-2xl font-semibold mb-2">Sharon Melhi</h3>
-                    <p class="text-gray-500 mb-4 flex-grow">Computational biologist and creator of the Chara Survival toolkit.<br><br>Developed at the Indian Institute of Technology Mandi to overcome domain shift barriers in transcriptomic oncology using graph thermodynamics.</p>
+                    <p class="text-slate-400 mb-4 flex-grow">Computational biologist and creator of the Chara Survival toolkit.<br><br>Developed at the Indian Institute of Technology Mandi to overcome domain shift barriers in transcriptomic oncology using graph thermodynamics.</p>
                     <div class="flex gap-4">
                         <a href="https://github.com/Sharon-codes" target="_blank" class="text-[#0066cc] font-medium hover:underline">GitHub</a>
                         <span class="text-gray-300">·</span>
@@ -308,5 +308,72 @@
             });
         }
     </script>
+
+<div id="canvas-container" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;opacity:0.4;"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+    const container = document.getElementById("canvas-container");
+    if (container && typeof THREE !== "undefined") {
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        container.appendChild(renderer.domElement);
+
+        const nodeCount = 80;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(nodeCount * 3);
+        const velocities = [];
+
+        for (let i = 0; i < nodeCount * 3; i += 3) {
+            positions[i] = (Math.random() - 0.5) * 30;
+            positions[i + 1] = (Math.random() - 0.5) * 30;
+            positions[i + 2] = (Math.random() - 0.5) * 20;
+            velocities.push({ x: (Math.random() - 0.5) * 0.015, y: (Math.random() - 0.5) * 0.015, z: (Math.random() - 0.5) * 0.015 });
+        }
+        geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+        const material = new THREE.PointsMaterial({ color: 0x38bdf8, size: 0.3, transparent: true, opacity: 0.8 });
+        const points = new THREE.Points(geometry, material);
+        scene.add(points);
+
+        const lineMaterial = new THREE.LineBasicMaterial({ color: 0x6366f1, transparent: true, opacity: 0.2 });
+        const lineGeometry = new THREE.BufferGeometry();
+        const linesMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
+        scene.add(linesMesh);
+        camera.position.z = 15;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const posAttr = points.geometry.attributes.position;
+            const posArr = posAttr.array;
+            const linePositions = [];
+            for (let i = 0; i < nodeCount; i++) {
+                const idx = i * 3;
+                posArr[idx] += velocities[i].x;
+                posArr[idx + 1] += velocities[i].y;
+                posArr[idx + 2] += velocities[i].z;
+                if (Math.abs(posArr[idx]) > 18) velocities[i].x *= -1;
+                if (Math.abs(posArr[idx + 1]) > 18) velocities[i].y *= -1;
+                if (Math.abs(posArr[idx + 2]) > 12) velocities[i].z *= -1;
+                for (let j = i + 1; j < nodeCount; j++) {
+                    const jdx = j * 3;
+                    const dx = posArr[idx] - posArr[jdx];
+                    const dy = posArr[idx + 1] - posArr[jdx + 1];
+                    const dz = posArr[idx + 2] - posArr[jdx + 2];
+                    if (Math.sqrt(dx * dx + dy * dy + dz * dz) < 4.5) {
+                        linePositions.push(posArr[idx], posArr[idx + 1], posArr[idx + 2]);
+                        linePositions.push(posArr[jdx], posArr[jdx + 1], posArr[jdx + 2]);
+                    }
+                }
+            }
+            posAttr.needsUpdate = true;
+            linesMesh.geometry.setAttribute("position", new THREE.Float32BufferAttribute(linePositions, 3));
+            points.rotation.y += 0.001;
+            linesMesh.rotation.y = points.rotation.y;
+            renderer.render(scene, camera);
+        }
+        animate();
+    }
+</script>
 </body>
 </html>
