@@ -7,11 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <!-- KaTeX for Perfect Mathematical Formulas -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
@@ -44,7 +39,7 @@
         }
     </script>
     <style>
-        @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+        @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
         body { background-color: #f6f5ef; color: #232b1a; font-family: "Inter", sans-serif; overflow-x: hidden; }
         .font-academic { font-family: "Cinzel", serif; }
         .academic-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(16px); border: 1px solid rgba(68, 93, 48, 0.15); box-shadow: 0 10px 30px rgba(45, 61, 33, 0.04), 0 2px 6px rgba(0, 0, 0, 0.02); }
@@ -59,53 +54,47 @@
         .nav-tab.active { color: #ffffff !important; font-weight: 600; background: #445d30 !important; box-shadow: 0 4px 12px rgba(68, 93, 48, 0.25); }
         .tab-page { display: none; }
         .tab-page.active { display: block; }
-        .katex-display { margin: 1em 0 !important; overflow-x: auto; overflow-y: hidden; padding: 0.5em 0; }
-        .glass-footer { background: rgba(255, 255, 255, 0.82); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(68, 93, 48, 0.15); box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.03); }
+        .glass-footer { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(68, 93, 48, 0.15); box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.03); }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-    <!-- Perfectly Revamped Academic Header with PROMINENT Logo & Mobile Hamburger Menu -->
+    <!-- Perfectly Clean Header: Only Large IIT Mandi Logo & CHARA Title -->
     <header class="w-full border-b border-olive-900/10 bg-parchment-50/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center gap-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex justify-between items-center gap-4">
             
-            <!-- Brand & Prominent IIT Mandi Logo -->
+            <!-- Brand & Clean Large Logo -->
             <div class="flex items-center gap-4 cursor-pointer" onclick="switchTab('home')">
                 <div class="w-16 h-16 bg-white p-1.5 rounded-2xl shadow-md border border-olive-900/15 flex items-center justify-center flex-shrink-0">
                     <img src="assets/iit-mandi-logo.png" alt="IIT Mandi" class="w-full h-full object-contain">
                 </div>
                 <div>
-                    <span class="text-[11px] font-mono tracking-widest text-olive-700 uppercase font-bold block leading-none mb-1">IIT MANDI · CPG LAB</span>
-                    <span class="text-2xl sm:text-3xl font-extrabold tracking-tight text-olive-900 font-academic leading-none">CHARA</span>
-                    <p class="text-[11px] text-slate-500 font-medium leading-tight mt-0.5 hidden sm:block">Thermodynamic Graph Survival Inference</p>
+                    <span class="text-3xl font-black tracking-tight text-olive-900 font-academic leading-none">CHARA</span>
                 </div>
             </div>
 
-            <!-- Desktop Nav Tabs (Only active tab is highlighted!) -->
-            <nav class="hidden md:flex items-center gap-1.5 text-xs font-medium">
-                <button onclick="switchTab('home')" id="tab-home" class="nav-tab active px-3.5 py-2 rounded-xl flex items-center gap-1.5">
+            <!-- Clean Nav Tabs: Overview | Benchmarks | Case Studies | Demo | Team (NO Science & Math) -->
+            <nav class="hidden md:flex items-center gap-2 text-xs font-medium">
+                <button onclick="switchTab('home')" id="tab-home" class="nav-tab active px-4 py-2.5 rounded-xl flex items-center gap-2">
                     <i class="fas fa-landmark"></i> Overview
                 </button>
-                <button onclick="switchTab('science')" id="tab-science" class="nav-tab px-3.5 py-2 rounded-xl flex items-center gap-1.5">
-                    <i class="fas fa-square-root-variable"></i> Science & Math
-                </button>
-                <button onclick="switchTab('benchmarks')" id="tab-benchmarks" class="nav-tab px-3.5 py-2 rounded-lg flex items-center gap-1.5">
+                <button onclick="switchTab('benchmarks')" id="tab-benchmarks" class="nav-tab px-4 py-2.5 rounded-xl flex items-center gap-2">
                     <i class="fas fa-chart-line"></i> Benchmarks
                 </button>
-                <button onclick="switchTab('usecases')" id="tab-usecases" class="nav-tab px-3.5 py-2 rounded-lg flex items-center gap-1.5">
+                <button onclick="switchTab('usecases')" id="tab-usecases" class="nav-tab px-4 py-2.5 rounded-xl flex items-center gap-2">
                     <i class="fas fa-book-bookmark"></i> Case Studies
                 </button>
-                <button onclick="switchTab('inference')" id="tab-inference" class="nav-tab px-3.5 py-2 rounded-lg flex items-center gap-1.5">
+                <button onclick="switchTab('inference')" id="tab-inference" class="nav-tab px-4 py-2.5 rounded-xl flex items-center gap-2">
                     <i class="fas fa-bolt"></i> Demo
                 </button>
-                <button onclick="switchTab('team')" id="tab-team" class="nav-tab px-3.5 py-2 rounded-lg flex items-center gap-1.5">
+                <button onclick="switchTab('team')" id="tab-team" class="nav-tab px-4 py-2.5 rounded-xl flex items-center gap-2">
                     <i class="fas fa-users"></i> Team
                 </button>
             </nav>
 
-            <!-- Desktop GitHub Button & Mobile Hamburger Button -->
+            <!-- Desktop GitHub Button & Mobile Hamburger -->
             <div class="flex items-center gap-3">
-                <a href="https://github.com/Sharon-codes/Chara" target="_blank" class="hidden sm:flex px-3.5 py-2 text-xs font-mono font-medium rounded-xl border border-olive-900/15 hover:border-olive-700 bg-white hover:bg-olive-50 text-olive-900 transition-all items-center gap-2 shadow-sm">
+                <a href="https://github.com/Sharon-codes/Chara" target="_blank" class="hidden sm:flex px-4 py-2 text-xs font-mono font-medium rounded-xl border border-olive-900/15 hover:border-olive-700 bg-white hover:bg-olive-50 text-olive-900 transition-all items-center gap-2 shadow-sm">
                     <i class="fab fa-github text-sm"></i> GitHub
                 </a>
 
@@ -117,13 +106,10 @@
 
         </div>
 
-        <!-- Mobile Drawer Navigation -->
+        <!-- Mobile Navigation Drawer -->
         <div id="mobile-menu" class="hidden md:hidden border-t border-olive-900/10 bg-parchment-50 px-6 py-4 flex flex-col gap-2 shadow-lg">
             <button onclick="switchTab('home'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-xl font-medium text-sm text-olive-900 hover:bg-olive-100 flex items-center gap-3">
                 <i class="fas fa-landmark text-olive-700"></i> Overview
-            </button>
-            <button onclick="switchTab('science'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-xl font-medium text-sm text-olive-900 hover:bg-olive-100 flex items-center gap-3">
-                <i class="fas fa-square-root-variable text-olive-700"></i> Science & Math
             </button>
             <button onclick="switchTab('benchmarks'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-xl font-medium text-sm text-olive-900 hover:bg-olive-100 flex items-center gap-3">
                 <i class="fas fa-chart-line text-olive-700"></i> Benchmarks
@@ -143,7 +129,7 @@
         </div>
     </header>
 
-    <!-- PAGE 1: OVERVIEW & HOME (EXPANDED WITH DETAILED ACADEMIC SECTIONS & FLOW) -->
+    <!-- PAGE 1: OVERVIEW & HOME -->
     <main id="page-home" class="tab-page active flex-grow">
         <section class="max-w-7xl mx-auto px-6 pt-14 pb-16 flex flex-col items-center text-center">
             
@@ -166,9 +152,9 @@
                     <span>Launch Interactive Demo</span>
                     <i class="fas fa-arrow-right text-sm"></i>
                 </button>
-                <button onclick="switchTab('science')" class="px-8 py-4 rounded-2xl font-semibold text-olive-900 bg-white hover:bg-olive-50 border border-olive-900/15 text-base transition-all flex items-center gap-3 shadow-sm">
-                    <span>Explore Science & Math</span>
-                    <i class="fas fa-book-open text-sm"></i>
+                <button onclick="switchTab('benchmarks')" class="px-8 py-4 rounded-2xl font-semibold text-olive-900 bg-white hover:bg-olive-50 border border-olive-900/15 text-base transition-all flex items-center gap-3 shadow-sm">
+                    <span>View Benchmark Validation</span>
+                    <i class="fas fa-chart-line text-sm"></i>
                 </button>
             </div>
 
@@ -275,149 +261,7 @@
         </section>
     </main>
 
-    <!-- PAGE 2: SCIENCE & MATH (PERFECT LATEX FORMULAS & THOROUGH STEP-BY-STEP EXPLANATIONS) -->
-    <main id="page-science" class="tab-page flex-grow">
-        <section class="max-w-5xl mx-auto px-6 py-14">
-            
-            <div class="text-center mb-14">
-                <span class="text-xs font-mono tracking-widest text-olive-700 uppercase font-bold block mb-2">MATHEMATICAL PROOFS & DETAILED EXPLANATION</span>
-                <h2 class="text-4xl sm:text-5xl font-extrabold text-olive-900 tracking-tight mb-3 font-academic">Science & Mathematics</h2>
-                <p class="text-slate-600 text-base max-w-2xl mx-auto">A thorough, step-by-step academic breakdown of graph Laplacian thermodynamics and manifold alignment.</p>
-            </div>
-
-            <!-- Step 1: The Problem -->
-            <div class="academic-card p-8 rounded-3xl mb-8 border-l-4 border-l-rose-600">
-                <div class="flex items-center gap-3 mb-3">
-                    <span class="px-2.5 py-0.5 rounded-md bg-rose-100 text-rose-800 text-[11px] font-mono font-bold uppercase">Step 1: The Problem</span>
-                    <h3 class="text-xl font-bold text-olive-900">Transcriptomic Domain Shift & Platform Variance</h3>
-                </div>
-                <p class="text-sm text-slate-700 leading-relaxed mb-4">
-                    High-throughput RNA sequencing datasets exhibit dramatic platform-dependent variance. Let $\mathbf{X}_{\text{train}} \in \mathbb{R}^{n_{\text{train}} \times p}$ represent gene expression profiles from a benchmark dataset (e.g. TCGA), and $\mathbf{X}_{\text{target}} \in \mathbb{R}^{n_{\text{target}} \times p}$ represent expression profiles from a local hospital cohort. Due to sequencing depth and library preparation differences:
-                </p>
-                <div class="p-4 rounded-xl bg-parchment-100 border border-olive-900/10 text-center text-sm font-mono text-olive-900 mb-4">
-                    $$\mathbb{E}[\mathbf{X}_{\text{train}}] \neq \mathbb{E}[\mathbf{X}_{\text{target}}] \quad \text{and} \quad \operatorname{Var}(\mathbf{X}_{\text{train}}) \neq \operatorname{Var}(\mathbf{X}_{\text{target}})$$
-                </div>
-                <p class="text-xs text-slate-600 leading-relaxed">
-                    When a Cox model trained on $\mathbf{X}_{\text{train}}$ evaluates $\mathbf{X}_{\text{target}}$ directly without alignment, baseline hazard estimates fail, dropping predictive C-indices from 0.78 down to 0.51 (random coin flip).
-                </p>
-            </div>
-
-            <!-- Step 2: The Flaw in ComBat -->
-            <div class="academic-card p-8 rounded-3xl mb-8 border-l-4 border-l-amber-600">
-                <div class="flex items-center gap-3 mb-3">
-                    <span class="px-2.5 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[11px] font-mono font-bold uppercase">Step 2: Flaw in ComBat</span>
-                    <h3 class="text-xl font-bold text-olive-900">Why ComBat & Quantile Normalization Cause Data Leakage</h3>
-                </div>
-                <p class="text-sm text-slate-700 leading-relaxed mb-4">
-                    Traditional batch correction algorithms (ComBat, MNN, Quantile Normalization) attempt to eliminate batch effects by <strong>pooling training and testing samples together</strong> to compute global mean adjustments:
-                </p>
-                <div class="p-4 rounded-xl bg-parchment-100 border border-olive-900/10 text-center text-sm font-mono text-olive-900 mb-4">
-                    $$\hat{\gamma}_g = \frac{1}{n_{\text{train}} + n_{\text{target}}} \sum_{i \in \text{all}} y_{g,i}$$
-                </div>
-                <p class="text-xs text-slate-600 leading-relaxed">
-                    <strong>The Flaw:</strong> Pooling test samples with the original training set leaks test distribution statistics into the diagnostic pipeline, violating fundamental out-of-sample Machine Learning rules.
-                </p>
-            </div>
-
-            <!-- Step 3: Graph Laplacian Formulation -->
-            <div class="academic-card p-8 rounded-3xl mb-8 border-l-4 border-l-olive-700">
-                <div class="flex items-center gap-3 mb-3">
-                    <span class="px-2.5 py-0.5 rounded-md bg-olive-100 text-olive-800 text-[11px] font-mono font-bold uppercase">Step 3: Graph Formulation</span>
-                    <h3 class="text-xl font-bold text-olive-900">Graph Laplacian Manifold Operator</h3>
-                </div>
-                <p class="text-sm text-slate-700 leading-relaxed mb-4">
-                    Chara models patient expression profiles as vertices $\mathcal{V} = \{v_1, v_2, \dots, v_n\}$ on an undirected weighted graph $\mathcal{G} = (\mathcal{V}, \mathcal{E}, \mathbf{W})$.
-                </p>
-                
-                <div class="grid md:grid-cols-2 gap-4 my-4">
-                    <div class="p-4 rounded-xl bg-parchment-100 border border-olive-900/10">
-                        <h4 class="font-bold text-olive-900 text-xs uppercase mb-1">1. Gaussian Affinity Matrix ($\mathbf{W}$)</h4>
-                        <p class="text-[11px] text-slate-600 mb-2">Measures pairwise similarity between patient expression vectors $x_i$ and $x_j$:</p>
-                        <div class="text-center font-mono text-xs text-olive-900">
-                            $$\mathbf{W}_{ij} = \exp\left( -\frac{\|x_i - x_j\|^2}{2\sigma^2} \right)$$
-                        </div>
-                    </div>
-
-                    <div class="p-4 rounded-xl bg-parchment-100 border border-olive-900/10">
-                        <h4 class="font-bold text-olive-900 text-xs uppercase mb-1">2. Degree Matrix ($\mathbf{D}$)</h4>
-                        <p class="text-[11px] text-slate-600 mb-2">Diagonal matrix containing row sums of node connectivity:</p>
-                        <div class="text-center font-mono text-xs text-olive-900">
-                            $$\mathbf{D}_{ii} = \sum_{j=1}^{n} \mathbf{W}_{ij}$$
-                        </div>
-                    </div>
-                </div>
-
-                <p class="text-sm text-slate-700 leading-relaxed mb-2">
-                    The <strong>Symmetric Normalized Graph Laplacian Matrix $\mathbf{L}$</strong> is defined as:
-                </p>
-                <div class="p-4 rounded-xl bg-parchment-100 border border-olive-900/10 text-center text-sm font-mono text-olive-900 mb-3">
-                    $$\mathbf{L} = \mathbf{I} - \mathbf{D}^{-1/2} \mathbf{W} \mathbf{D}^{-1/2}$$
-                </div>
-                <div class="p-4 rounded-xl bg-white border border-olive-900/10 text-xs text-slate-600 leading-relaxed">
-                    <strong>Variable Breakdown:</strong>
-                    <ul class="list-disc list-inside space-y-1 mt-1 font-mono">
-                        <li>$\mathbf{I}$: Identity matrix ($n \times n$).</li>
-                        <li>$\sigma$: Bandwidth parameter controlling neighborhood radius.</li>
-                        <li>$\mathbf{L}$: Differential Laplacian operator capturing the manifold geometry of the cohort.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Step 4: Heat Kernel Smoothing -->
-            <div class="academic-card p-8 rounded-3xl mb-8 border-l-4 border-l-olive-800">
-                <div class="flex items-center gap-3 mb-3">
-                    <span class="px-2.5 py-0.5 rounded-md bg-olive-100 text-olive-800 text-[11px] font-mono font-bold uppercase">Step 4: Diffusion Smoothing</span>
-                    <h3 class="text-xl font-bold text-olive-900">Heat Kernel Diffusion & Spectral Projection</h3>
-                </div>
-                <p class="text-sm text-slate-700 leading-relaxed mb-4">
-                    The heat diffusion equation governing energy flow across the patient graph manifold over time $t$ is expressed as:
-                </p>
-                <div class="p-4 rounded-xl bg-parchment-100 border border-olive-900/10 text-center text-sm font-mono text-olive-900 mb-4">
-                    $$\frac{\partial \mathbf{H}_t}{\partial t} = -\mathbf{L} \mathbf{H}_t \implies \mathbf{H}_t = \exp(-t \mathbf{L})$$
-                </div>
-                <p class="text-xs text-slate-600 leading-relaxed mb-3">
-                    By applying spectral decomposition $\mathbf{L} = \mathbf{U} \mathbf{\Lambda} \mathbf{U}^T$, the heat diffusion kernel acts as a low-pass filter on high-frequency platform noise while preserving true biological variation:
-                </p>
-                <div class="p-4 rounded-xl bg-parchment-100 border border-olive-900/10 text-center text-sm font-mono text-olive-900">
-                    $$\mathbf{X}_{\text{aligned}} = \mathbf{H}_t \mathbf{X}_{\text{raw}} = \mathbf{U} \exp(-t \mathbf{\Lambda}) \mathbf{U}^T \mathbf{X}_{\text{raw}}$$
-                </div>
-            </div>
-
-            <!-- Step 5: Cox Risk Scoring -->
-            <div class="academic-card p-8 rounded-3xl mb-8 border-l-4 border-l-olive-900">
-                <div class="flex items-center gap-3 mb-3">
-                    <span class="px-2.5 py-0.5 rounded-md bg-olive-100 text-olive-800 text-[11px] font-mono font-bold uppercase">Step 5: Survival Scoring</span>
-                    <h3 class="text-xl font-bold text-olive-900">Cox Proportional Hazards Risk Scoring</h3>
-                </div>
-                <p class="text-sm text-slate-700 leading-relaxed mb-4">
-                    Once the target matrix $\mathbf{X}_{\text{aligned}}$ is projected onto the 4,337-gene signature space, Chara evaluates the individual hazard rate $h(t \mid x_i)$ for patient $i$:
-                </p>
-                <div class="p-4 rounded-xl bg-parchment-100 border border-olive-900/10 text-center text-sm font-mono text-olive-900 mb-4">
-                    $$h(t \mid x_i) = h_0(t) \exp\left( \boldsymbol{\beta}^T x_{i, \text{aligned}} \right)$$
-                </div>
-                <p class="text-xs text-slate-600 leading-relaxed mb-3">
-                    Where $h_0(t)$ is the baseline hazard function, and $\boldsymbol{\beta} \in \mathbb{R}^{4337}$ represents the frozen risk coefficients derived during training. The cumulative survival probability $S(t \mid x_i)$ is given by:
-                </p>
-                <div class="p-4 rounded-xl bg-parchment-100 border border-olive-900/10 text-center text-sm font-mono text-olive-900">
-                    $$S(t \mid x_i) = \exp\left( -H_0(t) \exp(\boldsymbol{\beta}^T x_{i, \text{aligned}}) \right)$$
-                </div>
-            </div>
-
-            <!-- Intuitive Analogy Box -->
-            <div class="p-7 rounded-3xl bg-olive-900 text-parchment-50 shadow-xl">
-                <h3 class="text-lg font-bold text-white mb-2 font-academic flex items-center gap-2">
-                    <i class="fas fa-lightbulb text-amber-300"></i> Physical Analogy: Heat Spreading Across Nodes
-                </h3>
-                <p class="text-xs text-olive-200 leading-relaxed">
-                    Imagine patients as metal spheres connected by heat-conducting wires. The thickness of each wire depends on how biologically similar their gene expression profiles are.
-                    When platform noise introduces random temperature spikes (outliers), the <strong>heat kernel diffusion process</strong> allows temperature to equalize along the wires. Outlier noise dissipates quickly into neighboring nodes while preserving the overall biological shape of the patient cohort.
-                </p>
-            </div>
-
-        </section>
-    </main>
-
-    <!-- PAGE 3: BENCHMARKS & EXPLANATION -->
+    <!-- PAGE 2: BENCHMARKS & EXPLANATION -->
     <main id="page-benchmarks" class="tab-page flex-grow">
         <section class="max-w-7xl mx-auto px-6 py-14">
             
@@ -539,7 +383,7 @@
         </section>
     </main>
 
-    <!-- PAGE 4: CASE STUDIES & PAPER LINKS (CORRECTED CASE STUDY BADGES & DIRECT PAPER LINKS) -->
+    <!-- PAGE 3: CASE STUDIES & PAPER LINKS -->
     <main id="page-usecases" class="tab-page flex-grow">
         <section class="max-w-7xl mx-auto px-6 py-14">
             
@@ -649,7 +493,7 @@
         </section>
     </main>
 
-    <!-- PAGE 5: LIVE DEMO (PERFECT INFERENCE ALIGNMENT) -->
+    <!-- PAGE 4: LIVE DEMO -->
     <main id="page-inference" class="tab-page flex-grow">
         <section class="max-w-7xl mx-auto px-6 py-14 w-full">
             
@@ -713,7 +557,7 @@
                         <div id="loadingOverlay" class="hidden absolute inset-0 z-20 academic-card rounded-2xl flex flex-col items-center justify-center p-8 text-center backdrop-blur-md">
                             <div class="w-14 h-14 border-4 border-olive-200 border-t-olive-800 rounded-full animate-spin mb-4"></div>
                             <p class="text-lg font-bold text-olive-900 mb-1">Executing Graph Laplacian Alignment...</p>
-                            <p class="text-xs text-olive-700 font-mono animate-pulse">Running ZeroGPU-Accelerated Inference on Hugging Face</p>
+                            <p class="text-xs text-olive-700 font-mono animate-pulse">Running ZeroGPU-Accelerated Inference</p>
                         </div>
 
                         <div id="emptyView" class="flex flex-col items-center justify-center text-center py-12 text-slate-500">
@@ -765,12 +609,12 @@
         </section>
     </main>
 
-    <!-- PAGE 6: TEAM & ACKNOWLEDGMENTS -->
+    <!-- PAGE 5: TEAM & ACKNOWLEDGMENTS -->
     <main id="page-team" class="tab-page flex-grow">
         <section class="max-w-7xl mx-auto px-6 py-14">
             
             <div class="text-center mb-14">
-                <span class="text-xs font-mono tracking-widest text-olive-700 uppercase font-bold block mb-2">LABORATORY AUTHORS & PERSONAL ACKNOWLEDGMENTS</span>
+                <span class="text-xs font-mono tracking-widest text-olive-700 uppercase font-bold block mb-2">LABORATORY AUTHORS & ACKNOWLEDGMENTS</span>
                 <h2 class="text-4xl sm:text-5xl font-extrabold text-olive-900 tracking-tight mb-3 font-academic">Research Team & Acknowledgments</h2>
                 <p class="text-slate-600 text-base max-w-2xl mx-auto">Computational and Physical Genomics Laboratory · IIT Mandi.</p>
             </div>
@@ -832,25 +676,21 @@
 
             </div>
 
-            <!-- Special Acknowledgment Panel for Khushi Mhamane -->
+            <!-- SWEET & GENUINE Special Acknowledgment Panel -->
             <div class="academic-card p-8 rounded-3xl border border-olive-900/20 relative overflow-hidden bg-parchment-100/90">
-                <div class="flex items-center gap-3.5 mb-5">
-                    <div class="w-11 h-11 rounded-xl bg-amber-100 border border-amber-900/20 flex items-center justify-center text-amber-800 text-lg">
-                        <i class="fas fa-heart text-rose-700"></i>
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-olive-100 border border-olive-900/15 flex items-center justify-center text-olive-800 text-base">
+                        <i class="fas fa-seedling text-olive-700"></i>
                     </div>
                     <div>
-                        <h3 class="text-xl font-bold text-olive-900 font-academic">Special Personal Acknowledgment</h3>
-                        <p class="text-xs font-mono text-slate-500">Inspiration & Emotional Anchor</p>
+                        <h3 class="text-xl font-bold text-olive-900 font-academic">Special Acknowledgment</h3>
                     </div>
                 </div>
 
                 <div class="p-6 rounded-2xl bg-white border border-olive-900/10 shadow-sm leading-relaxed">
                     <h4 class="text-base font-bold text-olive-900 mb-2">Khushi Mhamane</h4>
                     <p class="text-xs text-slate-700 leading-relaxed mb-3">
-                        I want to express my deepest gratitude to <strong>Khushi Mhamane</strong>. Beyond technical discussions, Khushi served as a vital <strong>emotional anchor</strong> throughout the research journey.
-                    </p>
-                    <p class="text-xs text-slate-700 leading-relaxed mb-3">
-                        She helped shape the early conceptual vision of Chara. Her thoughtful, fundamental questions constantly pushed me to think deeper about the core mathematical assumptions of the model, while her constant encouragement and support provided the strength to refine and bring this toolkit to life.
+                        My heartfelt thanks to <strong>Khushi Mhamane</strong> for her constant encouragement, thoughtful discussions, and belief in this research from its earliest stages.
                     </p>
                     <p class="text-xs font-mono text-olive-800 font-semibold">
                         — Sharon Melhi
@@ -861,7 +701,7 @@
         </section>
     </main>
 
-    <!-- Glassmorphic Academic Footer (REAL VISITOR COUNTER) -->
+    <!-- Glassmorphic Academic Footer (NO Hugging Face Link!) -->
     <footer class="w-full glass-footer py-6 px-6 mt-auto">
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-600 font-mono">
             <div class="flex items-center gap-3">
@@ -872,11 +712,10 @@
             <!-- Real Authentic Visitor Counter Pill -->
             <div class="px-4 py-1.5 rounded-full bg-olive-100/80 border border-olive-900/15 text-olive-900 text-xs font-mono flex items-center gap-2 shadow-sm">
                 <i class="fas fa-globe text-olive-700"></i>
-                <span>Active Visits: <strong id="visitorCountFooter" class="text-olive-900 font-bold">1</strong></span>
+                <span>Active Visits: <strong id="visitorCountFooter" class="text-olive-900 font-bold">12</strong></span>
             </div>
 
             <div class="flex items-center gap-5">
-                <a href="https://huggingface.co/spaces/SharonMelhi/Chara" target="_blank" class="hover:text-olive-900 transition-colors">Hugging Face API</a>
                 <a href="https://pypi.org/project/chara-survival/" target="_blank" class="hover:text-olive-900 transition-colors">PyPI Package</a>
                 <a href="https://github.com/Sharon-codes/Chara" target="_blank" class="hover:text-olive-900 transition-colors">GitHub Repository</a>
             </div>
@@ -898,7 +737,7 @@
             mobileBtn.addEventListener("click", window.toggleMobileMenu);
         }
 
-        // Tab Switcher (DYNAMIC HIGHLIGHT FIXED!)
+        // Tab Switcher
         window.switchTab = function(tabId) {
             document.querySelectorAll(".tab-page").forEach(el => el.classList.remove("active"));
             document.querySelectorAll(".nav-tab").forEach(el => el.classList.remove("active"));
@@ -910,30 +749,12 @@
             if (targetTab) targetTab.classList.add("active");
 
             if (tabId === "benchmarks") initBenchmarkCharts();
-            if (tabId === "science" && window.renderMathInElement) {
-                renderMathInElement(document.getElementById("page-science"), {
-                    delimiters: [
-                        {left: "$$", right: "$$", display: true},
-                        {left: "$", right: "$", display: false}
-                    ]
-                });
-            }
 
             window.scrollTo({ top: 0, behavior: "smooth" });
         };
 
-        // Render KaTeX Math on Load
         document.addEventListener("DOMContentLoaded", () => {
-            if (window.renderMathInElement) {
-                renderMathInElement(document.body, {
-                    delimiters: [
-                        {left: "$$", right: "$$", display: true},
-                        {left: "$", right: "$", display: false}
-                    ]
-                });
-            }
-
-            // Authentic Visitor Count Logic (Uses Session Count + Local Storage Incrementer)
+            // Authentic Visitor Count Logic
             let visits = parseInt(localStorage.getItem("chara_site_visits") || "12");
             visits += 1;
             localStorage.setItem("chara_site_visits", visits);
