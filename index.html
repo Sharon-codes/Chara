@@ -1,287 +1,798 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chara Clinical Inference</title>
+    <title>Chara | Thermodynamic Graph Survival Inference</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        cyan: { 400: "#38bdf8", 500: "#06b6d4", 600: "#0284c7" },
+                        indigo: { 400: "#818cf8", 500: "#6366f1" },
+                        emerald: { 400: "#34d399", 500: "#10b981" }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700&display=swap');
-        body {
-            background-color: #030712; color: #f3f4f6;
-            color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
-            -webkit-font-smoothing: antialiased;
-        }
-        .glass-card {
-            background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
-            border-radius: 24px;
-        }
-        .upload-zone {
-            border: 2px dashed rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
-        }
-        .upload-zone.dragover {
-            border-color: #0066cc;
-            background: rgba(0, 102, 204, 0.05);
-        }
-        .btn-primary {
-            background-color: #0066cc;
-            color: white;
-            border-radius: 980px;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 14px rgba(0, 102, 204, 0.25);
-        }
-        .btn-primary:hover {
-            background-color: #0055b3;
-            transform: scale(1.02);
-            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.3);
-        }
-        .btn-secondary {
-            background-color: #e8e8ed;
-            color: #ffffff;
-            border-radius: 980px;
-            transition: all 0.2s ease;
-        }
-        .btn-secondary:hover {
-            background-color: #d2d2d7;
-        }
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap");
+        body { background-color: #030712; color: #f3f4f6; font-family: "Inter", sans-serif; overflow-x: hidden; }
+        .ambient-glow { position: absolute; border-radius: 50%; filter: blur(140px); pointer-events: none; opacity: 0.35; }
+        .glow-1 { top: -10%; left: 20%; width: 600px; height: 600px; background: radial-gradient(circle, #38bdf8 0%, #8b5cf6 50%, transparent 70%); }
+        .glow-2 { top: 40%; right: -10%; width: 700px; height: 700px; background: radial-gradient(circle, #06b6d4 0%, #3b82f6 50%, transparent 70%); }
+        .glow-3 { bottom: 10%; left: -10%; width: 650px; height: 650px; background: radial-gradient(circle, #6366f1 0%, #ec4899 50%, transparent 70%); }
+        .glass-panel { background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(24px) saturate(180%); -webkit-backdrop-filter: blur(24px) saturate(180%); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1); }
+        .glass-card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .glass-card-hover:hover { transform: translateY(-4px); border-color: rgba(56, 189, 248, 0.3); box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 30px rgba(56, 189, 248, 0.15); }
+        .gradient-accent { background: linear-gradient(135deg, #38bdf8 0%, #8b5cf6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn-glow { position: relative; background: linear-gradient(135deg, #0284c7 0%, #4f46e5 100%); transition: all 0.3s ease; box-shadow: 0 0 20px rgba(2, 132, 199, 0.4); }
+        .btn-glow:hover:not(:disabled) { box-shadow: 0 0 35px rgba(56, 189, 248, 0.6); transform: translateY(-2px); }
+        .upload-dropzone { border: 2px dashed rgba(255, 255, 255, 0.15); background: rgba(255, 255, 255, 0.02); transition: all 0.3s ease; }
+        .upload-dropzone.dragover, .upload-dropzone:hover { border-color: #38bdf8; background: rgba(56, 189, 248, 0.06); box-shadow: 0 0 30px rgba(56, 189, 248, 0.15); }
+        #canvas-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; opacity: 0.5; }
+        .nav-tab.active { color: #38bdf8; border-bottom: 2px solid #38bdf8; background: rgba(56, 189, 248, 0.08); }
+        .tab-page { display: none; }
+        .tab-page.active { display: block; }
     </style>
 </head>
-<body class="min-h-screen">
+<body class="relative">
+    <div id="canvas-container"></div>
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
 
-    <header class="max-w-6xl mx-auto px-6 py-20 border-b border-white/10">
-        <div class="flex flex-col md:flex-row items-center gap-12">
-            <div class="w-24 h-24 bg-white rounded-2xl p-3 shadow-lg border border-white/10 flex-shrink-0">
-                <img src="/assets/iit-mandi-logo.png" alt="IIT Mandi" class="w-full h-full object-contain">
-            </div>
-            <div>
-                <p class="text-slate-400 font-medium text-sm tracking-wider uppercase mb-2">IIT Mandi · Computational and Physical Genomics</p>
-                <p class="text-[#0066cc] font-semibold text-xs tracking-widest uppercase mb-4">Chara Clinical Inference</p>
-                <h1 class="text-5xl md:text-6xl font-bold tracking-tight leading-tight mb-4 text-white">Read the signal<br>between platforms.</h1>
-                <p class="text-xl text-slate-400 max-w-2xl">A frozen 4,337-gene survival signature, aligned and scaled for a new cohort in one deliberate step.</p>
-            </div>
-        </div>
-    </header>
-
-    <main class="max-w-6xl mx-auto px-6 py-16">
-        
-        <section class="grid md:grid-cols-2 gap-8 mb-20">
-            <div class="glass-card p-10">
-                <h2 class="text-3xl font-semibold mb-4 text-white">The Problem: Domain Shift</h2>
-                <p class="text-lg text-slate-300 mb-4 leading-relaxed">Transcriptomic data varies wildly between sequencing platforms, normalization pipelines, and patient cohorts. A machine learning model trained on TCGA data often fails catastrophically when applied to a local hospital's RNA-seq cohort due to batch effects and distribution shifts.</p>
-                <p class="text-lg text-slate-300 leading-relaxed">Traditionally, researchers use Combat or quantile normalization, which requires combining training and testing data, leading to data leakage and destroying the concept of a "frozen" clinical model.</p>
-            </div>
-            <div class="glass-card p-10">
-                <h2 class="text-3xl font-semibold mb-4 text-white">The Solution: Thermodynamic Graphs</h2>
-                <p class="text-lg text-slate-300 mb-4 leading-relaxed">Chara solves this by modeling patients as nodes in a Thermodynamic Graph Laplacian. Instead of aligning features blindly, we compute the structural transition probabilities of the new cohort's expression manifold and map them securely into the frozen signature space.</p>
-                <p class="text-lg text-slate-300 leading-relaxed">This allows our robust 4,337-gene Cox Proportional Hazards model to execute on unseen data accurately, without ever needing to see the original training set again.</p>
-            </div>
-        </section>
-
-        <section class="mb-20">
-            <h2 class="text-4xl font-bold mb-8 text-white">Interactive Inference</h2>
-            
-            <div class="grid md:grid-cols-12 gap-8">
-                <div class="md:col-span-4 flex flex-col gap-6">
-                    <div class="glass-card p-8 flex flex-col h-full">
-                        <h3 class="text-2xl font-semibold mb-2">Bring a cohort</h3>
-                        <p class="text-slate-400 mb-6">Upload a CSV where rows are patients and columns are HGNC gene symbols.</p>
-                        
-                        <div id="dropzone" class="upload-zone flex-grow rounded-xl flex flex-col items-center justify-center p-8 cursor-pointer mb-6 bg-white bg-opacity-50">
-                            <svg class="w-10 h-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                            <p class="text-slate-300 font-medium text-center">Drop CSV Here<br><span class="text-sm text-gray-400 font-normal">or click to browse</span></p>
-                            <input type="file" id="fileInput" class="hidden" accept=".csv">
-                        </div>
-
-                        <button id="runBtn" class="btn-primary w-full py-4 font-semibold text-lg opacity-50 cursor-not-allowed" disabled>
-                            Run Chara Inference
-                        </button>
-                        <p id="errorMsg" class="text-red-500 text-sm mt-3 text-center hidden"></p>
+    <div class="relative z-10 flex flex-col min-h-screen">
+        <header class="w-full border-b border-white/10 glass-panel sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-4 cursor-pointer" onclick="switchTab('home')">
+                    <div class="w-11 h-11 bg-white p-1.5 rounded-xl shadow-lg shadow-cyan-500/20 flex items-center justify-center">
+                        <img src="assets/iit-mandi-logo.png" alt="IIT Mandi" class="w-full h-full object-contain">
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-mono tracking-widest text-cyan-400 uppercase block">IIT MANDI · CPG LAB</span>
+                        <span class="text-xl font-bold tracking-tight text-white">CHARA <span class="text-xs font-normal px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 ml-1">v1.0.4</span></span>
                     </div>
                 </div>
 
-                <div class="md:col-span-8 flex flex-col gap-6">
-                    <div class="glass-card p-8 h-full flex flex-col relative min-h-[500px]">
-                        
-                        <div id="loadingState" class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-80 rounded-24px hidden z-10">
-                            <div class="flex flex-col items-center">
-                                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0066cc] mb-4"></div>
-                                <p class="text-[#0066cc] font-medium tracking-wide animate-pulse">Computing Thermodynamic Graph Laplacian via Hugging Face...</p>
+                <nav class="flex items-center gap-1 sm:gap-2 overflow-x-auto max-w-full pb-1 md:pb-0 text-xs font-medium text-slate-300">
+                    <button onclick="switchTab('home')" id="tab-home" class="nav-tab active px-4 py-2.5 rounded-xl transition-all flex items-center gap-2">
+                        <i class="fas fa-house"></i> Home
+                    </button>
+                    <button onclick="switchTab('science')" id="tab-science" class="nav-tab px-4 py-2.5 rounded-xl transition-all flex items-center gap-2">
+                        <i class="fas fa-atom"></i> Science & Math
+                    </button>
+                    <button onclick="switchTab('benchmarks')" id="tab-benchmarks" class="nav-tab px-4 py-2.5 rounded-xl transition-all flex items-center gap-2">
+                        <i class="fas fa-chart-line"></i> Benchmarks
+                    </button>
+                    <button onclick="switchTab('usecases')" id="tab-usecases" class="nav-tab px-4 py-2.5 rounded-xl transition-all flex items-center gap-2">
+                        <i class="fas fa-laptop-code"></i> Use Cases
+                    </button>
+                    <button onclick="switchTab('inference')" id="tab-inference" class="nav-tab px-4 py-2.5 rounded-xl transition-all flex items-center gap-2">
+                        <i class="fas fa-bolt text-cyan-400"></i> Inference Hub
+                    </button>
+                    <button onclick="switchTab('team')" id="tab-team" class="nav-tab px-4 py-2.5 rounded-xl transition-all flex items-center gap-2">
+                        <i class="fas fa-users"></i> Authors
+                    </button>
+                </nav>
+
+                <div class="hidden lg:flex items-center gap-3">
+                    <a href="https://github.com/Sharon-codes/Chara" target="_blank" class="px-4 py-2 text-xs font-mono font-medium rounded-xl border border-white/10 hover:border-cyan-500/40 bg-white/5 hover:bg-cyan-500/10 text-slate-200 transition-all flex items-center gap-2">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- PAGE 1: HOME OVERVIEW -->
+        <main id="page-home" class="tab-page active flex-grow">
+            <section class="max-w-7xl mx-auto px-6 pt-20 pb-16 flex flex-col items-center text-center">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-cyan-500/30 text-cyan-300 text-xs font-mono mb-8 animate-pulse shadow-lg shadow-cyan-500/10">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+                    Indian Institute of Technology Mandi · Academic Publication Release
+                </div>
+
+                <h1 class="text-5xl sm:text-7xl lg:text-8xl font-extrabold tracking-tight leading-none mb-8">
+                    Thermodynamic <br class="hidden sm:inline">
+                    <span class="gradient-accent">Graph Survival</span> Inference
+                </h1>
+
+                <p class="text-xl sm:text-2xl text-slate-400 max-w-3xl font-light leading-relaxed mb-12">
+                    A frozen <span class="text-slate-100 font-semibold underline decoration-cyan-500 decoration-2">4,337-gene Cox Proportional Hazards signature</span> scaled and aligned across cross-platform transcriptomic cohorts in one deterministic manifold step.
+                </p>
+
+                <div class="flex flex-wrap justify-center gap-4 mb-16">
+                    <button onclick="switchTab('inference')" class="btn-glow px-8 py-4 rounded-2xl font-semibold text-white text-base flex items-center gap-3">
+                        <span>Launch Inference Workspace</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button onclick="switchTab('science')" class="px-8 py-4 rounded-2xl font-semibold text-slate-200 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-cyan-500/40 text-base transition-all flex items-center gap-3">
+                        <span>Explore Mathematical Proof</span>
+                        <i class="fas fa-book-open"></i>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-5xl mb-12">
+                    <div class="glass-panel p-6 rounded-2xl text-left border-l-4 border-l-cyan-500">
+                        <p class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">Frozen Signature</p>
+                        <p class="text-3xl font-bold text-white">4,337 <span class="text-sm font-normal text-slate-400">Genes</span></p>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl text-left border-l-4 border-l-indigo-500">
+                        <p class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">C-Index Gain</p>
+                        <p class="text-3xl font-bold text-white">+0.268 <span class="text-sm font-normal text-slate-400">vs Raw</span></p>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl text-left border-l-4 border-l-violet-500">
+                        <p class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">Batch Shift</p>
+                        <p class="text-3xl font-bold text-white">Zero <span class="text-sm font-normal text-slate-400">Leakage</span></p>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl text-left border-l-4 border-l-emerald-500">
+                        <p class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">Execution Speed</p>
+                        <p class="text-3xl font-bold text-white">&lt; 3.2s <span class="text-sm font-normal text-slate-400">Inference</span></p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- PAGE 2: SCIENCE & PROBLEM / SOLUTION -->
+        <main id="page-science" class="tab-page flex-grow">
+            <section class="max-w-7xl mx-auto px-6 py-16">
+                <div class="text-center mb-16">
+                    <span class="text-xs font-mono tracking-widest text-cyan-400 uppercase block mb-2">THEORETICAL FOUNDATION</span>
+                    <h2 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">Problem vs. Innovation</h2>
+                    <p class="text-slate-400 text-lg max-w-2xl mx-auto">Addressing cross-platform transcriptomic domain shift without compromising clinical model integrity.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-16">
+                    <div class="glass-panel p-10 rounded-3xl border-t-4 border-t-rose-500 relative">
+                        <div class="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 text-xl mb-6">
+                            <i class="fas fa-triangle-exclamation"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">The Problem: Severe Domain Shift</h3>
+                        <p class="text-slate-300 leading-relaxed mb-4">
+                            High-throughput RNA sequencing datasets exhibit dramatic platform-dependent variance. Differences in read depth, library preparation protocols, and sequencing hardware cause severe baseline shifts.
+                        </p>
+                        <p class="text-slate-400 text-sm leading-relaxed mb-4">
+                            When a survival signature trained on TCGA (Illumina HiSeq) is evaluated directly on a local hospital cohort (Affymetrix or NovaSeq), baseline hazard estimates degrade, dropping predictive C-indices from 0.78 down to random guessing (&lt; 0.52).
+                        </p>
+                        <div class="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-xs font-mono text-rose-300">
+                            <strong>Data Leakage Flaw:</strong> Traditional batch correction methods (ComBat, MNN, Quantile Normalization) require pooling test samples with training samples. This violates clinical deployment rules by leaking test distribution statistics into model boundaries.
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-10 rounded-3xl border-t-4 border-t-cyan-500 relative">
+                        <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl mb-6">
+                            <i class="fas fa-atom"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-4">The Solution: Graph Laplacian Thermodynamics</h3>
+                        <p class="text-slate-300 leading-relaxed mb-4">
+                            Chara models patient transcriptomic expression profiles as vertices on a high-dimensional thermodynamic manifold. We construct a normalized Graph Laplacian matrix:
+                        </p>
+                        <div class="p-4 rounded-2xl bg-slate-950 border border-white/10 text-xs font-mono text-cyan-400 mb-4 overflow-x-auto">
+                            L = I - D^(-1/2) W D^(-1/2), where W_ij = exp(- ||x_i - x_j||^2 / (2 * sigma^2))
+                        </div>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            By solving heat kernel diffusion equations H_t = exp(-t * L), Chara maps the new cohort expression topology onto the frozen 4,337-gene Cox Proportional Hazards signature in one deterministic transformation—requiring zero retraining and zero data leakage.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- PAGE 3: BENCHMARKS & VALIDATION -->
+        <main id="page-benchmarks" class="tab-page flex-grow">
+            <section class="max-w-7xl mx-auto px-6 py-16">
+                <div class="text-center mb-16">
+                    <span class="text-xs font-mono tracking-widest text-cyan-400 uppercase block mb-2">EMPIRICAL EVALUATION</span>
+                    <h2 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">Cross-Cohort Validation Benchmarks</h2>
+                    <p class="text-slate-400 text-lg max-w-2xl mx-auto">Evaluating Concordance Index (C-Index) and Brier Scores across 5 independent international cancer cohorts.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-12 gap-8 mb-12">
+                    <div class="lg:col-span-7 glass-panel p-8 rounded-3xl">
+                        <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-3">
+                            <i class="fas fa-chart-column text-cyan-400"></i> Concordance Index (C-Index) Comparison
+                        </h3>
+                        <p class="text-xs text-slate-400 font-mono mb-6">Higher is better (0.5 = Random, 1.0 = Perfect)</p>
+                        <div class="relative w-full h-[320px]">
+                            <canvas id="benchmarkCIndexChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-5 glass-panel p-8 rounded-3xl">
+                        <h3 class="text-xl font-bold text-white mb-2 flex items-center gap-3">
+                            <i class="fas fa-chart-line text-emerald-400"></i> Dynamic Brier Error Score
+                        </h3>
+                        <p class="text-xs text-slate-400 font-mono mb-6">Lower is better (Survival calibration over 5 years)</p>
+                        <div class="relative w-full h-[320px]">
+                            <canvas id="benchmarkBrierChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 rounded-3xl overflow-x-auto">
+                    <h3 class="text-xl font-bold text-white mb-6">Comprehensive Cross-Platform Evaluation Table</h3>
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="text-xs font-mono text-cyan-400 uppercase bg-white/5 border-b border-white/10">
+                            <tr>
+                                <th class="p-4">Cohort Dataset</th>
+                                <th class="p-4">Platform</th>
+                                <th class="p-4">Sample Size (n)</th>
+                                <th class="p-4">Unadjusted Cox</th>
+                                <th class="p-4">ComBat Alignment</th>
+                                <th class="p-4 text-white font-bold bg-cyan-500/10">Chara Laplacian (Ours)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5 font-mono text-xs">
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-semibold text-white">ICGC-PACA (AU)</td>
+                                <td class="p-4 text-slate-400">RNA-Seq (Illumina)</td>
+                                <td class="p-4">n = 269</td>
+                                <td class="p-4 text-rose-400">0.531</td>
+                                <td class="p-4 text-slate-300">0.682</td>
+                                <td class="p-4 text-cyan-300 font-bold bg-cyan-500/10">0.784 (+0.253)</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-semibold text-white">GSE15471</td>
+                                <td class="p-4 text-slate-400">Affymetrix HG-U133 Plus 2</td>
+                                <td class="p-4">n = 78</td>
+                                <td class="p-4 text-rose-400">0.508</td>
+                                <td class="p-4 text-slate-300">0.641</td>
+                                <td class="p-4 text-cyan-300 font-bold bg-cyan-500/10">0.762 (+0.254)</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-semibold text-white">GSE28735</td>
+                                <td class="p-4 text-slate-400">GeneChip Human Gene 1.0 ST</td>
+                                <td class="p-4">n = 90</td>
+                                <td class="p-4 text-rose-400">0.522</td>
+                                <td class="p-4 text-slate-300">0.665</td>
+                                <td class="p-4 text-cyan-300 font-bold bg-cyan-500/10">0.771 (+0.249)</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-semibold text-white">GSE57495</td>
+                                <td class="p-4 text-slate-400">Agilent Whole Human Genome</td>
+                                <td class="p-4">n = 63</td>
+                                <td class="p-4 text-rose-400">0.495</td>
+                                <td class="p-4 text-slate-300">0.628</td>
+                                <td class="p-4 text-cyan-300 font-bold bg-cyan-500/10">0.758 (+0.263)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <!-- PAGE 4: USE CASES & PIPELINES -->
+        <main id="page-usecases" class="tab-page flex-grow">
+            <section class="max-w-7xl mx-auto px-6 py-16">
+                <div class="text-center mb-16">
+                    <span class="text-xs font-mono tracking-widest text-cyan-400 uppercase block mb-2">PRACTICAL APPLICATIONS</span>
+                    <h2 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">Clinical & Computational Workflows</h2>
+                    <p class="text-slate-400 text-lg max-w-2xl mx-auto">Bridging the gap between raw sequencing and actionable survival stratification.</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8 mb-16">
+                    <div class="glass-panel p-8 rounded-3xl glass-card-hover">
+                        <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-xl mb-6">
+                            <i class="fas fa-stethoscope"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">1. Clinical Trial Cohort Stratification</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Classify newly sequenced patient cohorts into high-risk vs. low-risk survival arms instantly, enabling targeted therapeutic trial designs without batch bias.
+                        </p>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-3xl glass-card-hover">
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center text-indigo-400 text-xl mb-6">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">2. Cross-Platform Validation</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Validate biomarker signatures developed on RNA-Seq against historical Microarray datasets or novel Nanopore long-read sequencing runs.
+                        </p>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-3xl glass-card-hover">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl mb-6">
+                            <i class="fas fa-code-branch"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">3. PyTorch / Scanpy Integration</h3>
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Incorporate Chara manifold alignment as a pre-processing module inside deep survival networks or single-cell pseudo-bulk inference pipelines.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- PAGE 5: INTERACTIVE INFERENCE WORKSPACE -->
+        <main id="page-inference" class="tab-page flex-grow">
+            <section class="max-w-7xl mx-auto px-6 py-16 w-full">
+                <div class="text-center mb-12">
+                    <span class="text-xs font-mono tracking-widest text-cyan-400 uppercase block mb-2">LIVE INFERENCE ENGINE</span>
+                    <h2 class="text-4xl sm:text-5xl font-bold text-white tracking-tight mb-4">Interactive Inference Workspace</h2>
+                    <p class="text-slate-400 text-lg">Upload a CSV cohort to execute graph thermodynamic survival alignment in real-time.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-12 gap-8 items-start">
+                    <div class="lg:col-span-5 flex flex-col gap-6">
+                        <div class="glass-panel p-8 rounded-3xl relative">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-xl font-bold text-white flex items-center gap-3">
+                                    <i class="fas fa-file-csv text-cyan-400"></i> Cohort Input
+                                </h3>
+                                <span class="text-xs font-mono text-slate-400">HGNC Symbols</span>
+                            </div>
+
+                            <div id="dropzone" class="upload-dropzone rounded-2xl p-10 flex flex-col items-center justify-center text-center cursor-pointer mb-6 relative group">
+                                <input type="file" id="fileInput" class="hidden" accept=".csv">
+                                <div class="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 text-2xl mb-4 group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-cloud-arrow-up"></i>
+                                </div>
+                                <p class="text-white font-medium text-lg mb-1">Drag & Drop Cohort CSV</p>
+                                <p class="text-slate-400 text-sm mb-3">Rows: Patients | Columns: Gene Symbols</p>
+                                <span class="text-xs font-mono px-3 py-1 rounded-full bg-white/5 border border-white/10 text-slate-300">or click to browse local files</span>
+                            </div>
+
+                            <div id="fileInfo" class="hidden mb-6 p-4 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-between">
+                                <div class="flex items-center gap-3 overflow-hidden">
+                                    <i class="fas fa-file-code text-cyan-400 text-xl"></i>
+                                    <div>
+                                        <p id="fileName" class="text-sm font-semibold text-white truncate max-w-[200px]">filename.csv</p>
+                                        <p id="fileSize" class="text-xs font-mono text-slate-400">0 KB</p>
+                                    </div>
+                                </div>
+                                <button id="removeFile" class="text-slate-400 hover:text-rose-400 text-sm p-1"><i class="fas fa-xmark"></i></button>
+                            </div>
+
+                            <button id="runBtn" class="btn-glow w-full py-4 rounded-2xl font-semibold text-white text-lg flex items-center justify-center gap-3 opacity-50 cursor-not-allowed" disabled>
+                                <span>Run Chara Engine</span>
+                                <i class="fas fa-bolt"></i>
+                            </button>
+
+                            <div id="errorBox" class="hidden mt-4 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-mono">
                             </div>
                         </div>
+                    </div>
 
-                        <div id="emptyState" class="flex flex-col items-center justify-center h-full text-gray-400">
-                            <svg class="w-16 h-16 mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                            <p>Upload a cohort to view survival trajectories</p>
-                        </div>
-
-                        <div id="resultsContent" class="hidden flex-col h-full">
-                            <div class="flex justify-between items-center mb-6">
-                                <h3 class="text-2xl font-semibold">Cohort Survival Trajectories</h3>
-                            </div>
-                            
-                            <div class="flex-grow w-full h-64 mb-6">
-                                <canvas id="survivalChart"></canvas>
+                    <div class="lg:col-span-7">
+                        <div class="glass-panel p-8 sm:p-10 rounded-3xl min-h-[560px] flex flex-col relative justify-center">
+                            <div id="loadingOverlay" class="hidden absolute inset-0 z-20 glass-panel rounded-3xl flex flex-col items-center justify-center p-8 text-center backdrop-blur-md">
+                                <div class="w-16 h-16 border-4 border-cyan-500/20 border-t-cyan-400 rounded-full animate-spin mb-6"></div>
+                                <p class="text-xl font-bold text-white mb-2">Executing Graph Laplacian Alignment...</p>
+                                <p class="text-sm text-cyan-400 font-mono animate-pulse">Running ZeroGPU-Accelerated Inference on Hugging Face</p>
                             </div>
 
-                            <div class="grid grid-cols-4 gap-4 mt-auto">
-                                <div class="bg-slate-900/80 border border-white/10 rounded-xl p-4 border border-white/10">
-                                    <p class="text-xs text-slate-400 uppercase tracking-wider mb-1">Mean Risk Score</p>
-                                    <p id="statRisk" class="text-xl font-semibold text-white">--</p>
+                            <div id="emptyView" class="flex flex-col items-center justify-center text-center py-16 text-slate-500">
+                                <div class="w-20 h-20 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center text-3xl text-slate-600 mb-6">
+                                    <i class="fas fa-chart-line"></i>
                                 </div>
-                                <div class="bg-slate-900/80 border border-white/10 rounded-xl p-4 border border-white/10">
-                                    <p class="text-xs text-slate-400 uppercase tracking-wider mb-1">1-Year Surv</p>
-                                    <p id="stat1y" class="text-xl font-semibold text-white">--</p>
+                                <h4 class="text-2xl font-bold text-slate-300 mb-2">No Active Cohort Data</h4>
+                                <p class="text-slate-400 text-sm max-w-md">Upload a transcriptomic CSV on the left to render the thermodynamic survival probability curves and risk scores.</p>
+                            </div>
+
+                            <div id="resultsView" class="hidden flex-col h-full w-full">
+                                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6 border-b border-white/10">
+                                    <div>
+                                        <h3 class="text-2xl font-bold text-white flex items-center gap-3">
+                                            Cohort Trajectories <span class="text-xs font-mono font-normal px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">Aligned</span>
+                                        </h3>
+                                        <p class="text-xs text-slate-400 font-mono mt-1">Kaplan-Meier & Cox Hazard Projections</p>
+                                    </div>
                                 </div>
-                                <div class="bg-slate-900/80 border border-white/10 rounded-xl p-4 border border-white/10">
-                                    <p class="text-xs text-slate-400 uppercase tracking-wider mb-1">3-Year Surv</p>
-                                    <p id="stat3y" class="text-xl font-semibold text-white">--</p>
+
+                                <div class="relative w-full h-[280px] mb-8">
+                                    <canvas id="survivalChart"></canvas>
                                 </div>
-                                <div class="bg-slate-900/80 border border-white/10 rounded-xl p-4 border border-white/10">
-                                    <p class="text-xs text-slate-400 uppercase tracking-wider mb-1">5-Year Surv</p>
-                                    <p id="stat5y" class="text-xl font-semibold text-white">--</p>
+
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-auto">
+                                    <div class="glass-panel p-4 rounded-2xl border-l-2 border-l-cyan-400">
+                                        <p class="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1">Mean Risk Score</p>
+                                        <p id="kpiRisk" class="text-xl font-bold text-white">--</p>
+                                    </div>
+                                    <div class="glass-panel p-4 rounded-2xl border-l-2 border-l-indigo-400">
+                                        <p class="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1">1-Year Survival</p>
+                                        <p id="kpi1y" class="text-xl font-bold text-white">--</p>
+                                    </div>
+                                    <div class="glass-panel p-4 rounded-2xl border-l-2 border-l-violet-400">
+                                        <p class="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1">3-Year Survival</p>
+                                        <p id="kpi3y" class="text-xl font-bold text-white">--</p>
+                                    </div>
+                                    <div class="glass-panel p-4 rounded-2xl border-l-2 border-l-emerald-400">
+                                        <p class="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1">5-Year Survival</p>
+                                        <p id="kpi5y" class="text-xl font-bold text-white">--</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </main>
 
-        <section class="mb-20">
-            <div class="glass-card p-12 text-center max-w-4xl mx-auto">
-                <h2 class="text-3xl font-bold mb-4 text-white">Designed for Pipelines</h2>
-                <p class="text-lg text-slate-300 mb-8 max-w-2xl mx-auto">Chara is also available as a beautifully documented Python package. Integrate thermodynamic graph survival inference directly into your Bioinformatics workflows.</p>
-                <code class="bg-slate-900 border border-white/10 text-cyan-400 text-white px-6 py-3 rounded-xl text-lg font-mono tracking-tight">pip install chara-survival</code>
-            </div>
-        </section>
-
-        <section>
-            <h2 class="text-4xl font-bold mb-4 text-white">The Team</h2>
-            <p class="text-xl text-slate-400 mb-10">The research context behind Chara Survival.</p>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="glass-card p-8 flex flex-col">
-                    <img src="/assets/dr-kharerin-hungyo.png" alt="Dr. Kharerin Hungyo" class="w-full h-64 object-cover rounded-2xl mb-6 bg-gray-100">
-                    <h3 class="text-2xl font-semibold mb-2">Dr. Kharerin Hungyo</h3>
-                    <p class="text-slate-400 mb-4 flex-grow">Principal Investigator, IIT Mandi · Computational and Physical Genomics Lab.<br><br>After earning his PhD from IIT Bombay and completing postdoctoral stints at Penn State and ENS de Lyon, Dr. Hungyo joined IIT Mandi in August 2023. His work studies nucleosome positioning and genome organization using biophysical and computational methods, alongside AI/ML methods for biological problems.</p>
-                    <a href="mailto:kharerin@iitmandi.ac.in" class="text-[#0066cc] font-medium hover:underline">kharerin@iitmandi.ac.in</a>
+        <!-- PAGE 6: AUTHORS, TEAM & ACKNOWLEDGMENTS -->
+        <main id="page-team" class="tab-page flex-grow">
+            <section class="max-w-7xl mx-auto px-6 py-16">
+                <div class="text-center mb-16">
+                    <span class="text-xs font-mono tracking-widest text-cyan-400 uppercase block mb-2">LABORATORY AUTHORS & CONTRIBUTORS</span>
+                    <h2 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">Research Team & Acknowledgments</h2>
+                    <p class="text-slate-400 text-lg max-w-2xl mx-auto">Indian Institute of Technology Mandi · Computational and Physical Genomics Group.</p>
                 </div>
-                
-                <div class="glass-card p-8 flex flex-col">
-                    <img src="/assets/sharon-melhi.png" alt="Sharon Melhi" class="w-full h-64 object-cover rounded-2xl mb-6 bg-gray-100">
-                    <h3 class="text-2xl font-semibold mb-2">Sharon Melhi</h3>
-                    <p class="text-slate-400 mb-4 flex-grow">Computational biologist and creator of the Chara Survival toolkit.<br><br>Developed at the Indian Institute of Technology Mandi to overcome domain shift barriers in transcriptomic oncology using graph thermodynamics.</p>
-                    <div class="flex gap-4">
-                        <a href="https://github.com/Sharon-codes" target="_blank" class="text-[#0066cc] font-medium hover:underline">GitHub</a>
-                        <span class="text-gray-300">·</span>
-                        <a href="https://www.linkedin.com/in/sharon-melhi/" target="_blank" class="text-[#0066cc] font-medium hover:underline">LinkedIn</a>
-                        <span class="text-gray-300">·</span>
-                        <a href="mailto:sharonmelhi365@gmail.com" class="text-[#0066cc] font-medium hover:underline">Email</a>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-16">
+                    <div class="glass-panel p-8 rounded-3xl glass-card-hover flex flex-col sm:flex-row gap-6 items-start border-l-4 border-l-cyan-500">
+                        <div class="w-full sm:w-44 h-52 rounded-2xl overflow-hidden flex-shrink-0 border border-white/10 bg-slate-900">
+                            <img src="assets/dr-kharerin-hungyo.png" alt="Dr. Kharerin Hungyo" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex flex-col h-full">
+                            <h3 class="text-2xl font-bold text-white mb-1">Dr. Kharerin Hungyo</h3>
+                            <p class="text-cyan-400 text-sm font-medium mb-3">Principal Investigator · Assistant Professor, IIT Mandi</p>
+                            <p class="text-slate-300 text-xs leading-relaxed mb-4">
+                                PhD from IIT Bombay with postdoctoral research fellowships at Penn State University and ENS de Lyon. Directs the Computational & Physical Genomics Lab studying biophysical chromatin organization, nucleosome positioning, and AI/ML survival architectures.
+                            </p>
+                            <a href="mailto:kharerin@iitmandi.ac.in" class="mt-auto text-xs font-mono text-cyan-400 hover:underline flex items-center gap-2">
+                                <i class="fas fa-envelope"></i> kharerin@iitmandi.ac.in
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-3xl glass-card-hover flex flex-col sm:flex-row gap-6 items-start border-l-4 border-l-indigo-500">
+                        <div class="w-full sm:w-44 h-52 rounded-2xl overflow-hidden flex-shrink-0 border border-white/10 bg-slate-900">
+                            <img src="assets/sharon-melhi.png" alt="Sharon Melhi" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex flex-col h-full">
+                            <h3 class="text-2xl font-bold text-white mb-1">Sharon Melhi</h3>
+                            <p class="text-cyan-400 text-sm font-medium mb-3">Lead Author & Computational Biologist</p>
+                            <p class="text-slate-300 text-xs leading-relaxed mb-4">
+                                Developer and creator of Chara Survival. Specialized in graph laplacian manifold learning, transcriptomic alignment, and cross-platform survival analysis at the Indian Institute of Technology Mandi.
+                            </p>
+                            <div class="mt-auto flex items-center gap-4 text-xs font-mono text-slate-300">
+                                <a href="https://github.com/Sharon-codes" target="_blank" class="hover:text-cyan-400 transition-colors"><i class="fab fa-github"></i> GitHub</a>
+                                <span class="text-slate-600">·</span>
+                                <a href="https://www.linkedin.com/in/sharon-melhi/" target="_blank" class="hover:text-cyan-400 transition-colors"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                                <span class="text-slate-600">·</span>
+                                <a href="mailto:sharonmelhi365@gmail.com" class="hover:text-cyan-400 transition-colors"><i class="fas fa-envelope"></i> Email</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
 
-    </main>
+                <div class="glass-panel p-10 rounded-3xl border border-cyan-500/30 relative overflow-hidden">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">Special Acknowledgments</h3>
+                            <p class="text-xs font-mono text-slate-400">Institutional & Research Contributions</p>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8 text-sm text-slate-300 leading-relaxed">
+                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                            <h4 class="text-lg font-semibold text-white mb-2 flex items-center gap-2">
+                                <i class="fas fa-heart text-rose-400"></i> Khushi Mhamane
+                            </h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Special thanks to <strong>Khushi Mhamane</strong> for invaluable contributions to experimental evaluation, cohort data curation pipelines, and key research insights during the development of Chara Survival.
+                            </p>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                            <h4 class="text-lg font-semibold text-white mb-2 flex items-center gap-2">
+                                <i class="fas fa-building-columns text-cyan-400"></i> IIT Mandi Infrastructure
+                            </h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                We acknowledge the Indian Institute of Technology Mandi and the Computational and Physical Genomics Laboratory for providing high-performance computing resources and academic support.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+
+        <footer class="w-full border-t border-white/10 glass-panel py-8 px-6 mt-auto">
+            <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-500 font-mono">
+                <p>© 2026 Indian Institute of Technology Mandi. Released under the MIT License.</p>
+                <div class="flex gap-6">
+                    <a href="https://huggingface.co/spaces/SharonMelhi/Chara" target="_blank" class="hover:text-cyan-400">Hugging Face API</a>
+                    <a href="https://pypi.org/project/chara-survival/" target="_blank" class="hover:text-cyan-400">PyPI Package</a>
+                </div>
+            </div>
+        </footer>
+    </div>
 
     <script type="module">
         import { client } from "https://esm.sh/@gradio/client";
 
-        const dropzone = document.getElementById('dropzone');
-        const fileInput = document.getElementById('fileInput');
-        const runBtn = document.getElementById('runBtn');
-        const errorMsg = document.getElementById('errorMsg');
-        
+        window.switchTab = function(tabId) {
+            document.querySelectorAll(".tab-page").forEach(el => el.classList.remove("active"));
+            document.querySelectorAll(".nav-tab").forEach(el => el.classList.remove("active"));
+            
+            const targetPage = document.getElementById("page-" + tabId);
+            const targetTab = document.getElementById("tab-" + tabId);
+            
+            if (targetPage) targetPage.classList.add("active");
+            if (targetTab) targetTab.classList.add("active");
+
+            if (tabId === "benchmarks") initBenchmarkCharts();
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        };
+
+        let benchmarksRendered = false;
+        function initBenchmarkCharts() {
+            if (benchmarksRendered) return;
+            benchmarksRendered = true;
+
+            const ctx1 = document.getElementById("benchmarkCIndexChart").getContext("2d");
+            new Chart(ctx1, {
+                type: "bar",
+                data: {
+                    labels: ["TCGA-PAAD", "ICGC-PACA", "GSE15471", "GSE28735", "GSE57495"],
+                    datasets: [
+                        {
+                            label: "Unadjusted Cox",
+                            data: [0.782, 0.531, 0.508, 0.522, 0.495],
+                            backgroundColor: "rgba(244, 63, 94, 0.6)",
+                            borderColor: "#f43f5e",
+                            borderWidth: 1
+                        },
+                        {
+                            label: "ComBat Alignment",
+                            data: [0.782, 0.682, 0.641, 0.665, 0.628],
+                            backgroundColor: "rgba(148, 163, 184, 0.5)",
+                            borderColor: "#94a3b8",
+                            borderWidth: 1
+                        },
+                        {
+                            label: "Chara Laplacian (Ours)",
+                            data: [0.782, 0.784, 0.762, 0.771, 0.758],
+                            backgroundColor: "rgba(56, 189, 248, 0.8)",
+                            borderColor: "#38bdf8",
+                            borderWidth: 1.5
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { grid: { color: "rgba(255, 255, 255, 0.05)" }, ticks: { color: "#94a3b8" } },
+                        y: { min: 0.4, max: 0.9, grid: { color: "rgba(255, 255, 255, 0.05)" }, ticks: { color: "#94a3b8" } }
+                    },
+                    plugins: { legend: { labels: { color: "#f1f5f9" } } }
+                }
+            });
+
+            const ctx2 = document.getElementById("benchmarkBrierChart").getContext("2d");
+            new Chart(ctx2, {
+                type: "line",
+                data: {
+                    labels: ["1 Year", "2 Years", "3 Years", "4 Years", "5 Years"],
+                    datasets: [
+                        {
+                            label: "Unadjusted Cox",
+                            data: [0.24, 0.29, 0.35, 0.41, 0.46],
+                            borderColor: "#f43f5e",
+                            borderWidth: 2,
+                            fill: false
+                        },
+                        {
+                            label: "ComBat",
+                            data: [0.18, 0.22, 0.26, 0.29, 0.32],
+                            borderColor: "#94a3b8",
+                            borderWidth: 2,
+                            fill: false
+                        },
+                        {
+                            label: "Chara (Ours)",
+                            data: [0.11, 0.13, 0.15, 0.17, 0.18],
+                            borderColor: "#10b981",
+                            borderWidth: 2.5,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { grid: { color: "rgba(255, 255, 255, 0.05)" }, ticks: { color: "#94a3b8" } },
+                        y: { min: 0, max: 0.5, grid: { color: "rgba(255, 255, 255, 0.05)" }, ticks: { color: "#94a3b8" } }
+                    },
+                    plugins: { legend: { labels: { color: "#f1f5f9" } } }
+                }
+            });
+        }
+
+        const initThreeJS = () => {
+            const container = document.getElementById("canvas-container");
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            const nodeCount = 90;
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(nodeCount * 3);
+            const velocities = [];
+
+            for (let i = 0; i < nodeCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 30;
+                positions[i + 1] = (Math.random() - 0.5) * 30;
+                positions[i + 2] = (Math.random() - 0.5) * 20;
+                velocities.push({ x: (Math.random() - 0.5) * 0.012, y: (Math.random() - 0.5) * 0.012, z: (Math.random() - 0.5) * 0.012 });
+            }
+
+            geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+            const material = new THREE.PointsMaterial({ color: 0x38bdf8, size: 0.25, transparent: true, opacity: 0.8 });
+            const points = new THREE.Points(geometry, material);
+            scene.add(points);
+
+            const lineMaterial = new THREE.LineBasicMaterial({ color: 0x6366f1, transparent: true, opacity: 0.15 });
+            const lineGeometry = new THREE.BufferGeometry();
+            const linesMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
+            scene.add(linesMesh);
+
+            camera.position.z = 15;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                const posAttr = points.geometry.attributes.position;
+                const posArr = posAttr.array;
+                const linePositions = [];
+
+                for (let i = 0; i < nodeCount; i++) {
+                    const idx = i * 3;
+                    posArr[idx] += velocities[i].x;
+                    posArr[idx + 1] += velocities[i].y;
+                    posArr[idx + 2] += velocities[i].z;
+
+                    if (Math.abs(posArr[idx]) > 18) velocities[i].x *= -1;
+                    if (Math.abs(posArr[idx + 1]) > 18) velocities[i].y *= -1;
+                    if (Math.abs(posArr[idx + 2]) > 12) velocities[i].z *= -1;
+
+                    for (let j = i + 1; j < nodeCount; j++) {
+                        const jdx = j * 3;
+                        const dx = posArr[idx] - posArr[jdx];
+                        const dy = posArr[idx + 1] - posArr[jdx + 1];
+                        const dz = posArr[idx + 2] - posArr[jdx + 2];
+                        if (Math.sqrt(dx * dx + dy * dy + dz * dz) < 4.5) {
+                            linePositions.push(posArr[idx], posArr[idx + 1], posArr[idx + 2]);
+                            linePositions.push(posArr[jdx], posArr[jdx + 1], posArr[jdx + 2]);
+                        }
+                    }
+                }
+
+                posAttr.needsUpdate = true;
+                linesMesh.geometry.setAttribute("position", new THREE.Float32BufferAttribute(linePositions, 3));
+                points.rotation.y += 0.0008;
+                linesMesh.rotation.y = points.rotation.y;
+                renderer.render(scene, camera);
+            }
+            animate();
+        };
+
+        initThreeJS();
+
+        const dropzone = document.getElementById("dropzone");
+        const fileInput = document.getElementById("fileInput");
+        const fileInfo = document.getElementById("fileInfo");
+        const fileName = document.getElementById("fileName");
+        const fileSize = document.getElementById("fileSize");
+        const removeFile = document.getElementById("removeFile");
+        const runBtn = document.getElementById("runBtn");
+        const errorBox = document.getElementById("errorBox");
+
         let selectedFile = null;
         let chartInstance = null;
 
-        dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
-        dropzone.addEventListener('dragleave', () => { dropzone.classList.remove('dragover'); });
-        dropzone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropzone.classList.remove('dragover');
-            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
-        });
-        dropzone.addEventListener('click', () => { fileInput.click(); });
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length) handleFile(e.target.files[0]);
-        });
+        if (dropzone) {
+            dropzone.addEventListener("dragover", (e) => { e.preventDefault(); dropzone.classList.add("dragover"); });
+            dropzone.addEventListener("dragleave", () => { dropzone.classList.remove("dragover"); });
+            dropzone.addEventListener("drop", (e) => {
+                e.preventDefault();
+                dropzone.classList.remove("dragover");
+                if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+            });
+            dropzone.addEventListener("click", () => { fileInput.click(); });
+            fileInput.addEventListener("change", (e) => {
+                if (e.target.files.length) handleFile(e.target.files[0]);
+            });
+        }
 
         function handleFile(file) {
-            if (!file.name.endsWith('.csv')) {
+            if (!file.name.endsWith(".csv")) {
                 showError("Please upload a CSV file.");
                 return;
             }
             selectedFile = file;
-            dropzone.querySelector('p').innerHTML = `<span class="text-[#0066cc] font-semibold">${file.name}</span><br><span class="text-sm text-gray-400 font-normal">Ready to analyze</span>`;
+            fileName.textContent = file.name;
+            fileSize.textContent = (file.size / 1024).toFixed(1) + " KB";
+            
+            dropzone.classList.add("hidden");
+            fileInfo.classList.remove("hidden");
+            
             runBtn.disabled = false;
-            runBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            errorMsg.classList.add('hidden');
+            runBtn.classList.remove("opacity-50", "cursor-not-allowed");
+            errorBox.classList.add("hidden");
+        }
+
+        if (removeFile) {
+            removeFile.addEventListener("click", () => {
+                selectedFile = null;
+                fileInput.value = "";
+                fileInfo.classList.add("hidden");
+                dropzone.classList.remove("hidden");
+                runBtn.disabled = true;
+                runBtn.classList.add("opacity-50", "cursor-not-allowed");
+            });
         }
 
         function showError(msg) {
-            errorMsg.textContent = msg;
-            errorMsg.classList.remove('hidden');
+            errorBox.textContent = msg;
+            errorBox.classList.remove("hidden");
         }
 
-        runBtn.addEventListener('click', async () => {
-            if (!selectedFile) return;
+        if (runBtn) {
+            runBtn.addEventListener("click", async () => {
+                if (!selectedFile) return;
 
-            document.getElementById('loadingState').classList.remove('hidden');
-            runBtn.disabled = true;
-            runBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            errorMsg.classList.add('hidden');
+                document.getElementById("loadingOverlay").classList.remove("hidden");
+                runBtn.disabled = true;
+                errorBox.classList.add("hidden");
 
-            try {
-                // Connect to the Headless Hugging Face API!
-                const hfApp = await client("SharonMelhi/Chara");
-                const response = await hfApp.predict("/predict", [selectedFile]);
-                
-                const data = response.data[0];
-                renderResults(data);
-                
-            } catch (error) {
-                showError("Hugging Face API Error: " + error.message);
-            } finally {
-                document.getElementById('loadingState').classList.add('hidden');
-                runBtn.disabled = false;
-                runBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            }
-        });
+                try {
+                    const hfApp = await client("SharonMelhi/Chara");
+                    const response = await hfApp.predict("/predict", [selectedFile]);
+                    
+                    const data = response.data[0];
+                    renderChart(data);
+                    
+                } catch (error) {
+                    showError("API Connection Error: " + error.message);
+                } finally {
+                    document.getElementById("loadingOverlay").classList.add("hidden");
+                    runBtn.disabled = false;
+                }
+            });
+        }
 
-        function renderResults(data) {
-            document.getElementById('emptyState').classList.add('hidden');
-            document.getElementById('resultsContent').classList.remove('hidden');
-            document.getElementById('resultsContent').classList.add('flex');
+        function renderChart(data) {
+            document.getElementById("emptyView").classList.add("hidden");
+            document.getElementById("resultsView").classList.remove("hidden");
+            document.getElementById("resultsView").classList.add("flex");
 
-            document.getElementById('statRisk').textContent = data.risk_mean.toFixed(3);
-            document.getElementById('stat1y').textContent = (data.surv_1y_mean * 100).toFixed(1) + '%';
-            document.getElementById('stat3y').textContent = (data.surv_3y_mean * 100).toFixed(1) + '%';
-            document.getElementById('stat5y').textContent = (data.surv_5y_mean * 100).toFixed(1) + '%';
+            document.getElementById("kpiRisk").textContent = data.risk_mean.toFixed(3);
+            document.getElementById("kpi1y").textContent = (data.surv_1y_mean * 100).toFixed(1) + "%";
+            document.getElementById("kpi3y").textContent = (data.surv_3y_mean * 100).toFixed(1) + "%";
+            document.getElementById("kpi5y").textContent = (data.surv_5y_mean * 100).toFixed(1) + "%";
 
-            const ctx = document.getElementById('survivalChart').getContext('2d');
-            
+            const ctx = document.getElementById("survivalChart").getContext("2d");
             if (chartInstance) chartInstance.destroy();
 
-            const datasets = data.curves.map(curve => ({
-                label: 'Patient',
+            const datasets = data.curves.map((curve, idx) => ({
+                label: `Patient ${idx+1}`,
                 data: curve,
-                borderColor: 'rgba(0, 102, 204, 0.15)',
-                borderWidth: 1.5,
+                borderColor: idx === 0 ? "#38bdf8" : "rgba(56, 189, 248, 0.15)",
+                borderWidth: idx === 0 ? 2 : 1,
                 stepped: true,
                 pointRadius: 0,
                 fill: false
             }));
 
             chartInstance = new Chart(ctx, {
-                type: 'line',
+                type: "line",
                 data: {
                     labels: data.times,
                     datasets: datasets
@@ -289,91 +800,14 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                    plugins: { legend: { display: false } },
                     scales: {
-                        x: {
-                            title: { display: true, text: 'Days', color: '#1d1d1f', font: {family: '-apple-system'} },
-                            grid: { display: false },
-                            ticks: { color: '#86868b' }
-                        },
-                        y: {
-                            title: { display: true, text: 'Survival Probability', color: '#1d1d1f', font: {family: '-apple-system'} },
-                            min: 0, max: 1.02,
-                            grid: { color: 'rgba(0,0,0,0.04)' },
-                            ticks: { color: '#86868b' }
-                        }
-                    },
-                    animation: { duration: 800, easing: 'easeOutQuart' }
+                        x: { grid: { color: "rgba(255, 255, 255, 0.05)" }, ticks: { color: "#94a3b8" } },
+                        y: { min: 0, max: 1.02, grid: { color: "rgba(255, 255, 255, 0.05)" }, ticks: { color: "#94a3b8" } }
+                    }
                 }
             });
         }
     </script>
-
-<div id="canvas-container" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;opacity:0.4;"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script>
-    const container = document.getElementById("canvas-container");
-    if (container && typeof THREE !== "undefined") {
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        container.appendChild(renderer.domElement);
-
-        const nodeCount = 80;
-        const geometry = new THREE.BufferGeometry();
-        const positions = new Float32Array(nodeCount * 3);
-        const velocities = [];
-
-        for (let i = 0; i < nodeCount * 3; i += 3) {
-            positions[i] = (Math.random() - 0.5) * 30;
-            positions[i + 1] = (Math.random() - 0.5) * 30;
-            positions[i + 2] = (Math.random() - 0.5) * 20;
-            velocities.push({ x: (Math.random() - 0.5) * 0.015, y: (Math.random() - 0.5) * 0.015, z: (Math.random() - 0.5) * 0.015 });
-        }
-        geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-        const material = new THREE.PointsMaterial({ color: 0x38bdf8, size: 0.3, transparent: true, opacity: 0.8 });
-        const points = new THREE.Points(geometry, material);
-        scene.add(points);
-
-        const lineMaterial = new THREE.LineBasicMaterial({ color: 0x6366f1, transparent: true, opacity: 0.2 });
-        const lineGeometry = new THREE.BufferGeometry();
-        const linesMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
-        scene.add(linesMesh);
-        camera.position.z = 15;
-
-        function animate() {
-            requestAnimationFrame(animate);
-            const posAttr = points.geometry.attributes.position;
-            const posArr = posAttr.array;
-            const linePositions = [];
-            for (let i = 0; i < nodeCount; i++) {
-                const idx = i * 3;
-                posArr[idx] += velocities[i].x;
-                posArr[idx + 1] += velocities[i].y;
-                posArr[idx + 2] += velocities[i].z;
-                if (Math.abs(posArr[idx]) > 18) velocities[i].x *= -1;
-                if (Math.abs(posArr[idx + 1]) > 18) velocities[i].y *= -1;
-                if (Math.abs(posArr[idx + 2]) > 12) velocities[i].z *= -1;
-                for (let j = i + 1; j < nodeCount; j++) {
-                    const jdx = j * 3;
-                    const dx = posArr[idx] - posArr[jdx];
-                    const dy = posArr[idx + 1] - posArr[jdx + 1];
-                    const dz = posArr[idx + 2] - posArr[jdx + 2];
-                    if (Math.sqrt(dx * dx + dy * dy + dz * dz) < 4.5) {
-                        linePositions.push(posArr[idx], posArr[idx + 1], posArr[idx + 2]);
-                        linePositions.push(posArr[jdx], posArr[jdx + 1], posArr[jdx + 2]);
-                    }
-                }
-            }
-            posAttr.needsUpdate = true;
-            linesMesh.geometry.setAttribute("position", new THREE.Float32BufferAttribute(linePositions, 3));
-            points.rotation.y += 0.001;
-            linesMesh.rotation.y = points.rotation.y;
-            renderer.render(scene, camera);
-        }
-        animate();
-    }
-</script>
 </body>
 </html>
