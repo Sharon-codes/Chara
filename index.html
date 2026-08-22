@@ -72,7 +72,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-    <!-- Header: Blended Large IIT Mandi Logo & CHARA Title -->
+    <!-- Header: Blended Large IIT Mandi Logo, CHARA Title, Hugging Face & GitHub Badges -->
     <header class="w-full border-b border-olive-900/10 bg-parchment-50/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex justify-between items-center gap-4">
             
@@ -105,9 +105,12 @@
                 </button>
             </nav>
 
-            <!-- GitHub Button & Mobile Hamburger -->
-            <div class="flex items-center gap-3">
-                <a href="https://github.com/Sharon-codes/Chara" target="_blank" class="hidden sm:flex px-4 py-2 text-xs font-mono font-medium rounded-xl border border-olive-900/15 hover:border-olive-700 bg-white hover:bg-olive-50 text-olive-900 transition-all items-center gap-2 shadow-sm">
+            <!-- External Links: Hugging Face + GitHub -->
+            <div class="flex items-center gap-2.5">
+                <a href="https://huggingface.co/SharonMelhi/chara-survival" target="_blank" class="hidden sm:flex px-3.5 py-2 text-xs font-mono font-medium rounded-xl border border-amber-600/30 hover:border-amber-600 bg-amber-50/80 hover:bg-amber-100/80 text-amber-900 transition-all items-center gap-1.5 shadow-sm">
+                    <span>🤗</span> <span>Hugging Face</span>
+                </a>
+                <a href="https://github.com/Sharon-codes/Chara" target="_blank" class="hidden sm:flex px-3.5 py-2 text-xs font-mono font-medium rounded-xl border border-olive-900/15 hover:border-olive-700 bg-white hover:bg-olive-50 text-olive-900 transition-all items-center gap-2 shadow-sm">
                     <i class="fab fa-github text-sm"></i> GitHub
                 </a>
 
@@ -135,7 +138,10 @@
             <button onclick="switchTab('team'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-xl font-medium text-sm text-olive-900 hover:bg-olive-100 flex items-center gap-3">
                 <i class="fas fa-users text-olive-700"></i> Research Team
             </button>
-            <a href="https://github.com/Sharon-codes/Chara" target="_blank" class="w-full text-center mt-2 py-2.5 rounded-xl bg-olive-800 text-white font-mono text-xs flex items-center justify-center gap-2">
+            <a href="https://huggingface.co/SharonMelhi/chara-survival" target="_blank" class="w-full text-center mt-2 py-2.5 rounded-xl bg-amber-600 text-white font-mono text-xs flex items-center justify-center gap-2">
+                <span>🤗</span> Hugging Face Model Hub
+            </a>
+            <a href="https://github.com/Sharon-codes/Chara" target="_blank" class="w-full text-center py-2.5 rounded-xl bg-olive-800 text-white font-mono text-xs flex items-center justify-center gap-2">
                 <i class="fab fa-github"></i> GitHub Repository
             </a>
         </div>
@@ -292,28 +298,28 @@
                 </div>
             </div>
 
-            <!-- PyPI Direct Link & Package Highlight (Perfect Vertical Center Alignment) -->
+            <!-- PyPI & Hugging Face Hub Direct Links -->
             <div class="academic-card p-6 sm:p-7 rounded-3xl w-full max-w-6xl text-left bg-parchment-100/90 border border-olive-900/20 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="flex-1">
                     <div class="flex items-center gap-2 mb-1.5">
-                        <span class="text-xs font-mono text-olive-700 uppercase tracking-widest font-bold">PYTHON PACKAGE</span>
-                        <span class="px-2 py-0.5 rounded bg-olive-800 text-white font-mono text-[10px] font-bold">chara-survival v0.1.8</span>
+                        <span class="text-xs font-mono text-olive-700 uppercase tracking-widest font-bold">COMMUNITY RELEASES</span>
+                        <span class="px-2 py-0.5 rounded bg-olive-800 text-white font-mono text-[10px] font-bold">v0.1.8</span>
+                        <span class="px-2 py-0.5 rounded bg-amber-600 text-white font-mono text-[10px] font-bold">🤗 Hugging Face Hub</span>
                     </div>
-                    <h3 class="text-xl sm:text-2xl font-bold text-olive-900 font-academic mb-1.5">Official PyPI Release</h3>
+                    <h3 class="text-xl sm:text-2xl font-bold text-olive-900 font-academic mb-1.5">Official PyPI &amp; Hugging Face Model Hub</h3>
                     <p class="text-xs text-slate-600 leading-relaxed max-w-2xl">
-                        Install or upgrade the official Python library directly in any terminal: <code>pip install --upgrade chara-survival</code>.
+                        Load the frozen Chara model weights directly in Python or install the library: <code>pip install --upgrade chara-survival</code>.
                     </p>
                 </div>
                 
                 <!-- Perfectly Centered Action Buttons -->
-                <div class="flex items-center gap-3 flex-shrink-0 self-center">
-                    <a href="https://pypi.org/project/chara-survival/" target="_blank" class="px-5 py-3 rounded-xl bg-olive-800 hover:bg-olive-900 text-white font-mono text-xs font-bold transition-all shadow-sm flex items-center gap-2">
-                        <span>Open PyPI Page</span> <i class="fas fa-external-link-alt text-[10px]"></i>
+                <div class="flex flex-wrap items-center gap-3 flex-shrink-0 self-center">
+                    <a href="https://huggingface.co/SharonMelhi/chara-survival" target="_blank" class="px-4 py-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-mono text-xs font-bold transition-all shadow-sm flex items-center gap-2">
+                        <span>🤗</span> <span>Hugging Face Hub</span> <i class="fas fa-external-link-alt text-[10px]"></i>
                     </a>
-                    <div class="px-4 py-3 rounded-xl bg-white border border-olive-900/15 font-mono text-xs text-olive-900 font-bold shadow-sm hidden sm:flex items-center gap-2">
-                        <i class="fas fa-terminal text-olive-700 text-[10px]"></i>
-                        <span>pip install chara-survival</span>
-                    </div>
+                    <a href="https://pypi.org/project/chara-survival/" target="_blank" class="px-4 py-3 rounded-xl bg-olive-800 hover:bg-olive-900 text-white font-mono text-xs font-bold transition-all shadow-sm flex items-center gap-2">
+                        <span>PyPI Release</span> <i class="fas fa-external-link-alt text-[10px]"></i>
+                    </a>
                 </div>
             </div>
 
@@ -762,7 +768,7 @@
                             </div>
                         </div>
 
-                        <!-- Action Buttons: Run Chara Engine & Clear/Reset Button Side by Side -->
+                        <!-- Action Buttons: Run Engine & Clear/Reset Button Side by Side -->
                         <div>
                             <div class="flex items-center gap-3">
                                 <button id="runBtn" class="btn-olive flex-1 py-3.5 rounded-2xl font-bold text-sm sm:text-base flex items-center justify-center gap-2 opacity-50 cursor-not-allowed" disabled>
@@ -973,8 +979,11 @@
                 <span>Active Visits: <strong id="visitorCountFooter" class="text-olive-900 font-bold">12</strong></span>
             </div>
 
-            <div class="flex items-center gap-5">
-                <a href="https://pypi.org/project/chara-survival/" target="_blank" class="hover:text-olive-900 transition-colors">PyPI Package (chara-survival)</a>
+            <div class="flex flex-wrap items-center gap-5">
+                <a href="https://huggingface.co/SharonMelhi/chara-survival" target="_blank" class="hover:text-olive-900 transition-colors flex items-center gap-1">
+                    <span>🤗</span> Hugging Face Hub
+                </a>
+                <a href="https://pypi.org/project/chara-survival/" target="_blank" class="hover:text-olive-900 transition-colors">PyPI (chara-survival)</a>
                 <a href="https://github.com/Sharon-codes/Chara" target="_blank" class="hover:text-olive-900 transition-colors">GitHub Repository</a>
             </div>
         </div>
