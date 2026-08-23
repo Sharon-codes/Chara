@@ -610,42 +610,6 @@
                 <p class="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto">Upload a cohort CSV file to evaluate real survival trajectories and compare Chara against baseline survival architectures side-by-side.</p>
             </div>
 
-            <!-- INTERACTIVE MODEL ARCHITECTURE SELECTOR / COMPARISON TOGGLE -->
-            <div class="academic-card p-4 sm:p-5 rounded-3xl mb-8 border border-olive-900/20 bg-parchment-100/90 shadow-sm max-w-5xl mx-auto">
-                <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
-                    <div class="flex items-center gap-2">
-                        <i class="fas fa-sliders text-olive-700 text-sm"></i>
-                        <span class="text-xs font-mono font-bold text-olive-900 uppercase">ACTIVE SURVIVAL ARCHITECTURE:</span>
-                    </div>
-
-                    <!-- 4 Mode Toggle Buttons -->
-                    <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2 w-full sm:w-auto">
-                        <button id="toggle-chara" onclick="setActiveModel('chara')" class="model-pill active-chara px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-                            <span>Chara Laplacian (Ours)</span>
-                        </button>
-                        <button id="toggle-elastic" onclick="setActiveModel('elastic')" class="model-pill px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
-                            <span>Unadjusted ElasticNet</span>
-                        </button>
-                        <button id="toggle-clinical" onclick="setActiveModel('clinical')" class="model-pill px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                            <span>Standard Clinical</span>
-                        </button>
-                        <button id="toggle-compare" onclick="setActiveModel('compare')" class="model-pill px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-2">
-                            <i class="fas fa-layer-group text-xs"></i>
-                            <span>Multi-Model Overlay</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Explanatory Tag for Active Model -->
-                <div id="modelDescriptionBanner" class="mt-3 pt-3 border-t border-olive-900/10 text-xs text-slate-700 flex items-center gap-2 font-mono">
-                    <span class="text-olive-700 font-bold">● Active Engine:</span>
-                    <span id="modelDescText">Chara Thermodynamic Graph Laplacian Manifold Smoothing + 58 Coxnet Biomarker Weights (C-Index: 0.784).</span>
-                </div>
-            </div>
-
             <!-- DETAILED DATA FORMAT & USER UPLOAD SPECIFICATIONS CARD -->
             <div class="academic-card p-6 sm:p-7 rounded-3xl mb-8 border-l-4 border-l-olive-700 bg-parchment-100/90 shadow-sm">
                 <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4 pb-4 border-b border-olive-900/15">
@@ -787,17 +751,57 @@
                     </div>
                 </div>
 
-                <!-- Results Column: Multi-Chart Suite & KPI Metrics -->
+                <!-- Results Column: Multi-Chart Suite, Active Model Toolbar & KPI Metrics -->
                 <div class="lg:col-span-7 flex flex-col">
-                    <div class="academic-card p-6 sm:p-7 rounded-3xl min-h-[480px] flex flex-col relative justify-center h-full">
+                    <div class="academic-card p-6 sm:p-7 rounded-3xl min-h-[520px] flex flex-col relative justify-between h-full">
                         
+                        <!-- TOP INTEGRATED TOOLBAR: ACTIVE SURVIVAL ARCHITECTURE SELECTOR -->
+                        <div class="mb-4 pb-3.5 border-b border-olive-900/15">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2.5 mb-2.5">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-2 h-2 rounded-full bg-olive-700 animate-pulse"></span>
+                                    <span class="text-xs font-mono font-bold text-olive-900 uppercase tracking-wider">ACTIVE ARCHITECTURE:</span>
+                                </div>
+
+                                <!-- 4 Interactive Architecture Selector Pills -->
+                                <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 w-full sm:w-auto">
+                                    <button id="toggle-chara" onclick="setActiveModel('chara')" class="model-pill active-chara px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                                        <span>Chara (Ours)</span>
+                                    </button>
+                                    <button id="toggle-elastic" onclick="setActiveModel('elastic')" class="model-pill px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm">
+                                        <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                                        <span>ElasticNet</span>
+                                    </button>
+                                    <button id="toggle-clinical" onclick="setActiveModel('clinical')" class="model-pill px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm">
+                                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                                        <span>Clinical</span>
+                                    </button>
+                                    <button id="toggle-compare" onclick="setActiveModel('compare')" class="model-pill px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm">
+                                        <i class="fas fa-layer-group text-[10px]"></i>
+                                        <span>Multi-Overlay</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Mathematical & Biophysical Specification Banner with Publication-Grade Typography -->
+                            <div id="modelDescriptionBanner" class="p-2.5 rounded-xl bg-olive-50/90 border border-olive-900/10 text-xs text-slate-700 font-mono leading-relaxed">
+                                <span class="text-olive-800 font-bold">● Architecture:</span>
+                                <span id="modelDescText">
+                                    <strong>Chara Thermodynamic Laplacian (Ours):</strong> Spectral heat diffusion operator <code class="bg-olive-200/80 text-olive-950 px-1.5 py-0.5 rounded font-mono font-bold text-xs">H<sub>t</sub> = e<sup>-tL</sup></code> on MD-weighted STRING manifold with 58 regularized Coxnet biomarkers. <em class="text-olive-700 font-semibold">(C-Index: 0.784, Zero-leakage OOD Transfer)</em>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Loading Overlay -->
                         <div id="loadingOverlay" class="hidden absolute inset-0 z-20 academic-card rounded-3xl flex flex-col items-center justify-center p-8 text-center backdrop-blur-md">
                             <div class="w-12 h-12 border-4 border-olive-200 border-t-olive-800 rounded-full animate-spin mb-4"></div>
                             <p id="loadingMainText" class="text-base sm:text-lg font-bold text-olive-900 mb-1">Executing Model Pipeline...</p>
                             <p id="loadingSubtext" class="text-xs text-olive-700 font-mono animate-pulse">Evaluating survival projections and calibration curves...</p>
                         </div>
 
-                        <div id="emptyView" class="flex flex-col items-center justify-center text-center py-12 text-slate-500">
+                        <!-- Empty View (Before Upload / Run) -->
+                        <div id="emptyView" class="flex flex-col items-center justify-center text-center py-10 text-slate-500 my-auto">
                             <div class="w-14 h-14 rounded-2xl bg-olive-100/60 border border-olive-900/10 flex items-center justify-center text-xl text-olive-700 mb-4">
                                 <i class="fas fa-chart-line"></i>
                             </div>
@@ -805,6 +809,7 @@
                             <p class="text-slate-600 text-xs max-w-sm">Upload a transcriptomic CSV on the left to compute real thermodynamic survival trajectories.</p>
                         </div>
 
+                        <!-- Results View (After Execution) -->
                         <div id="resultsView" class="hidden flex-col h-full w-full justify-between">
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-3 pb-3 border-b border-olive-900/10">
                                 <div>
@@ -1034,7 +1039,7 @@
             
             // Update UI Button Classes
             document.querySelectorAll(".model-pill").forEach(el => {
-                el.className = "model-pill px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-2";
+                el.className = "model-pill px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm";
             });
 
             const btn = document.getElementById("toggle-" + modelKey);
@@ -1045,17 +1050,17 @@
                 else if (modelKey === "compare") btn.classList.add("active-compare");
             }
 
-            // Update Banner Description
+            // Update Banner Description with Clean HTML Math Typography
             const descEl = document.getElementById("modelDescText");
             if (descEl) {
                 if (modelKey === "chara") {
-                    descEl.innerHTML = "<strong>Chara Thermodynamic Graph Laplacian</strong> (Ours) · Heat diffusion operator $H_t = \exp(-tL)$ with 58 regularized biomarker coefficients. <em>(Expected C-Index: 0.784, Zero-leakage OOD Transfer)</em>";
+                    descEl.innerHTML = "<strong>Chara Thermodynamic Laplacian (Ours):</strong> Spectral heat diffusion operator <code class='bg-olive-200/80 text-olive-950 px-1.5 py-0.5 rounded font-mono font-bold text-xs'>H<sub>t</sub> = e<sup>-tL</sup></code> on MD-weighted STRING manifold with 58 regularized Coxnet biomarkers. <em class='text-olive-700 font-semibold'>(C-Index: 0.784, Zero-leakage OOD Transfer)</em>";
                 } else if (modelKey === "elastic") {
-                    descEl.innerHTML = "<strong>Unadjusted ElasticNet Cox</strong> · Raw un-smoothed transcriptomic features. Suffers from cross-platform domain shift. <em>(Expected C-Index: 0.524, Platform Noise Vulnerable)</em>";
+                    descEl.innerHTML = "<strong>Unadjusted ElasticNet Cox:</strong> Raw un-smoothed transcriptomic features <code class='bg-rose-100 text-rose-950 px-1.5 py-0.5 rounded font-mono font-bold text-xs'>X &middot; &beta;</code> without graph manifold regularization. <em class='text-rose-700 font-semibold'>(C-Index: 0.524, Cross-platform Domain Shift Collapse)</em>";
                 } else if (modelKey === "clinical") {
-                    descEl.innerHTML = "<strong>Standard Clinical Model</strong> · Baseline prognostic parameters (Age, Tumor Stage, Histological Grade). <em>(Expected C-Index: 0.500, Random Stratification)</em>";
+                    descEl.innerHTML = "<strong>Standard Clinical Model:</strong> Baseline demographic parameters <code class='bg-blue-100 text-blue-950 px-1.5 py-0.5 rounded font-mono font-bold text-xs'>&lambda;<sub>0</sub>(t) &middot; exp(&beta;<sub>age</sub> + &beta;<sub>stage</sub>)</code> without transcriptomic features. <em class='text-blue-700 font-semibold'>(C-Index: 0.500, Random Stratification)</em>";
                 } else if (modelKey === "compare") {
-                    descEl.innerHTML = "<strong>Multi-Model Benchmark Comparison</strong> · Overlays Chara (Green), ElasticNet (Red), and Clinical Baseline (Blue) to demonstrate clear predictive separation.";
+                    descEl.innerHTML = "<strong>Multi-Model Overlay Comparison:</strong> Simultaneous overlay of <span class='text-emerald-700 font-bold'>Chara (Green)</span> vs <span class='text-rose-600 font-bold'>ElasticNet (Red)</span> vs <span class='text-blue-600 font-bold'>Clinical Baseline (Blue)</span> across your cohort.";
                 }
             }
 
