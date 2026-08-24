@@ -5,7 +5,7 @@ README = Path(__file__).with_name("README.md").read_text(encoding="utf-8")
 
 setup(
     name="chara-survival",
-    version="0.1.8",
+    version="0.2.0",
     description="Thermodynamic Graph Laplacian survival inference for out-of-distribution transcriptomic oncology",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -14,9 +14,10 @@ setup(
     license="MIT",
     url="https://github.com/Sharon-codes/Chara",
     project_urls={
-        "Bug Tracker": "https://github.com/Sharon-codes/Chara/issues",
+        "Hugging Face Hub": "https://huggingface.co/SharonMelhi/chara-survival",
         "Web App": "https://chara-frontend.vercel.app",
         "PyPI": "https://pypi.org/project/chara-survival/",
+        "Bug Tracker": "https://github.com/Sharon-codes/Chara/issues",
     },
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -38,6 +39,7 @@ setup(
         "scikit-survival==0.23.1",
         "lifelines==0.28.0",
         "joblib==1.3.2",
+        "huggingface_hub>=0.20.0",
     ],
     keywords=[
         "survival analysis",
@@ -48,5 +50,6 @@ setup(
         "transcriptomics",
         "lung adenocarcinoma",
         "CoxNet",
+        "huggingface",
     ],
 )

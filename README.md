@@ -7,6 +7,7 @@
 **Thermodynamic Graph Laplacian Survival Inference for Transcriptomic Oncology**
 
 [![PyPI version](https://img.shields.io/pypi/v/chara-survival?color=445D30&label=PyPI&logo=pypi&logoColor=white)](https://pypi.org/project/chara-survival/)
+[![Hugging Face](https://img.shields.io/badge/🤗%20Hugging%20Face-SharonMelhi%2Fchara--survival-yellow)](https://huggingface.co/SharonMelhi/chara-survival)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-445D30?logo=python&logoColor=white)](https://pypi.org/project/chara-survival/)
 [![Web App](https://img.shields.io/badge/Web%20App-Live%20Demo-445D30?logo=vercel&logoColor=white)](https://chara-frontend.vercel.app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-445D30.svg)](LICENSE)
@@ -18,26 +19,27 @@
 
 ---
 
-## The Problem
+## 🌟 The Problem
 
 Standard survival models — Cox proportional hazards, Random Survival Forests, DeepSurv — are trained on RNA-seq cohorts (typically TCGA) and **collapse catastrophically** when applied to microarray data (GEO). The cause is structural: uncorrected platform variance and feature distribution shift corrupt the learned risk landscape. The concordance index, already noisy at 0.50–0.55 on in-distribution data, degrades to random or sub-random when the platform changes.
 
 This failure is not a modelling artefact. It is a **physical problem** — raw transcript counts do not encode the molecular interaction topology that determines biological function. Chara corrects this at the feature level, before training even begins.
 
-## The Solution
+## 💡 The Solution
 
 Chara grounds gene expression features in **thermodynamic graph Laplacians** derived from MARTINI 3 coarse-grained molecular dynamics (MD) simulations. Specifically:
 
 1. **MARTINI 3 MD trajectories** are run for key oncogenic protein systems (KRAS, CMYC/MAX, PTPN11, MUT-TP53) across biological replicates.
-2. **Exponential heat kernels** are computed from the symmetrised graph Laplacian of the STRING protein–protein interaction network, weighted by MD-derived edge variances via the Chara exponential operator.
-3. The resulting **thermodynamic Laplacian representation** produces a platform-invariant feature space — the spectral geometry of molecular interaction rather than raw transcript abundance.
-4. A **frozen CoxNet** trained on TCGA-LUAD using these 4,337 thermodynamically-stabilised features is applied directly to unseen cohorts without fine-tuning.
+2. **Exponential heat kernels** are computed from the symmetrised graph Laplacian of the STRING protein–protein interaction network, weighted by MD-derived edge variances via the Chara exponential operator:
+   $$W_{\text{Chara}}(i, j) = W_{\text{STRING}}(i, j) \cdot \exp\left(\tau \cdot Z(\sigma^2_{ij})\right)$$
+3. The resulting **thermodynamic Laplacian representation** produces a platform-invariant feature space via spectral heat diffusion $H_t = \exp(-tL)$ — the spectral geometry of molecular interaction rather than raw transcript abundance.
+4. A **frozen CoxNet** trained on TCGA-LUAD using these 4,337 thermodynamically-stabilised features (58 active regularized biomarkers) is applied directly to unseen cohorts without fine-tuning.
 
 The result is a model that generalises across the RNA-seq ↔ microarray boundary as a matter of physical principle, not statistical luck.
 
 ---
 
-## Performance
+## 🔬 Benchmark Performance
 
 Evaluated zero-shot on **GSE31210** (Affymetrix Human Genome U133 Plus 2.0, n = 226, completely held-out lung adenocarcinoma microarray cohort — never seen during training):
 
@@ -53,180 +55,79 @@ Chara achieves a **+0.267 absolute improvement in OOD C-index** over the next-be
 
 ---
 
-## Live Inference
-
-A zero-install interactive inference interface is hosted on Hugging Face Spaces:
-
-**→ [https://huggingface.co/spaces/Sharon-codes/Chara](https://huggingface.co/spaces/Sharon-codes/Chara)**
-
-Upload a patient-by-gene CSV (rows = samples, columns = HGNC symbols). The app aligns your cohort to the frozen 4,337-gene signature, computes risk scores, renders Kaplan–Meier–style survival curves, and returns a downloadable report — all in seconds.
-
----
-
-## Python Package
+## 🚀 Quickstart: Python Package
 
 ### Installation
 
 ```bash
-pip install chara-survival
+pip install --upgrade chara-survival
 ```
 
-Requires Python ≥ 3.10. The frozen model artefact (`chara_model_4337.pkl`) must be placed in your working directory or downloaded from the [Releases](https://github.com/Sharon-codes/Chara/releases) page.
-
-### Programmatic Inference
+### 1-Line Python Inference (Auto-Downloads from Hugging Face Hub)
 
 ```python
+import chara
 import pandas as pd
-from chara import CharaModel
 
-# Load the frozen model
-model = CharaModel.load("chara_model_4337.pkl")
+# 1. Load the frozen pretrained model (auto-fetches from Hugging Face Hub)
+model = chara.load_model()
 
-# expression_matrix: patients × HGNC gene symbols
-expression_matrix = pd.read_csv("patient_expression.csv", index_col=0)
+# 2. Ingest your patient cohort CSV (or load sample mock cohort for instant testing)
+cohort_df = chara.load_sample_cohort(n_patients=12)
 
-# Align, scale, and infer
-risk_scores, x_scaled, aligned_df, scaler, alpha_index = model.predict(expression_matrix)
+# 3. Generate 1-Click Structured Clinical Summary DataFrame
+summary_df = model.predict_dataframe(cohort_df)
+print(summary_df)
+# Output columns: [Risk_Score, Risk_Stratification, 1_Year_Survival_Prob, 3_Year_Survival_Prob, 5_Year_Survival_Prob]
 
-print(f"Processed {len(expression_matrix)} patients")
-print(f"Risk score range: [{risk_scores.min():.4f}, {risk_scores.max():.4f}]")
+# 4. View Top Prognostic Biomarkers
+print(model.get_biomarkers(n=5))
 ```
 
-### Survival Curve Extraction
+### Direct Hugging Face Hub Loading
 
 ```python
-import numpy as np
+from huggingface_hub import hf_hub_download
+import joblib
 
-# Retrieve full survival functions for all patients
-curves, times = model.survival_curves(x_scaled, alpha_index)
-
-# Interpolate to clinical horizons
-horizons = np.array([365.0, 1095.0, 1825.0])  # 1, 3, 5 years
-survival = np.array([
-    np.interp(horizons, times, row, left=1.0, right=row[-1])
-    for row in curves
-])
-# survival[:, 0]  →  1-year survival probability per patient
-# survival[:, 1]  →  3-year survival probability per patient
-# survival[:, 2]  →  5-year survival probability per patient
-```
-
-### Thermodynamic Graph Utilities
-
-The `chara` package also exposes the graph primitives used during training:
-
-```python
-from chara.graph import laplacian_from_edges, heat_kernel, exponential_chara_laplacian
-
-# Construct a graph Laplacian from an edge list (e.g., STRING interactions)
-L = laplacian_from_edges(edge_df, node_list, source="protein1", target="protein2", weight="score")
-
-# Standard heat kernel (diffusion on Laplacian spectrum)
-K = heat_kernel(L, diffusion_time=0.1)
-
-# Chara exponential operator — weights edges by MD variance
-L_chara = exponential_chara_laplacian(adjacency, edge_variance, tau=0.5)
-```
-
-### API Reference
-
-#### `CharaModel`
-
-| Method | Signature | Description |
-|---|---|---|
-| `load` | `cls, path: str \| Path → CharaModel` | Deserialise a frozen Chara model bundle. |
-| `predict` | `expression: DataFrame → (risk, x_scaled, aligned, scaler, alpha)` | Align, scale, and score a patient cohort. |
-| `align_and_scale` | `expression: DataFrame → (x, aligned, scaler)` | Feature alignment only. |
-| `survival_curves` | `x, alpha_index → (curves, times)` | Full survival functions via the frozen CoxNet. |
-
-#### `scale_external_expression`
-
-```python
-from chara import scale_external_expression
-
-x, aligned, scaler = scale_external_expression(expression_df, feature_list)
-```
-
-Aligns an external expression matrix to a target feature list (zero-imputing missing genes, averaging duplicate symbols) and applies `StandardScaler`.
-
----
-
-## Input Specification
-
-| Property | Requirement |
-|---|---|
-| **Format** | CSV, rows = patients/samples, columns = HGNC gene symbols |
-| **Values** | Continuous numeric (TPM, FPKM, log2-counts, normalised microarray intensities) |
-| **Missing genes** | Zero-imputed against the 4,337-gene signature |
-| **Duplicate symbols** | Averaged automatically |
-| **Platforms tested** | TCGA RNA-Seq (TPM), Affymetrix HG U133 Plus 2.0, Illumina microarray |
-| **Minimum cohort** | 1 patient (single-sample inference is supported) |
-
----
-
-## Repository Architecture
-
-```
-chara-survival/
-├── chara/
-│   ├── __init__.py          # Public API: CharaModel, scale_external_expression
-│   ├── model.py             # Frozen CoxNet wrapper with strict feature alignment
-│   ├── graph.py             # Thermodynamic Laplacian and heat-kernel operators
-│   └── preprocessing.py    # Cross-platform StandardScaler pipeline
-│
-├── scripts/                 # Full research pipeline (01 → 19)
-│   ├── 01_fetch_tcga.py     # TCGA-LUAD expression + survival data
-│   ├── 02_generate_string.py
-│   ├── 03_generate_chara.py # Thermodynamic Laplacian construction
-│   ├── 04_chara_ood_validation.py
-│   ├── 05_adversarial_poisoning.py
-│   ├── 06_dirichlet_energy.py
-│   ├── 07_biological_gsea.py
-│   ├── 09_zeroshot_external_validation.py
-│   ├── 11_clinical_frontier_metrics.py
-│   ├── benchmark_frontiers.py
-│   └── ...
-│
-├── assets/                  # Logos and figures
-├── app.py                   # Gradio inference interface
-├── chara_model_4337.pkl     # Frozen model artefact (4,337-gene signature)
-├── requirements.txt
-├── setup.py
-├── pyproject.toml
-└── LICENSE
+model_path = hf_hub_download(repo_id="SharonMelhi/chara-survival", filename="chara_model_4337.pkl")
+bundle = joblib.load(model_path)
+print(f"Loaded Chara bundle with {len(bundle['genes'])} features and {len(bundle['non_zero_genes'])} biomarkers.")
 ```
 
 ---
 
-## Reproducibility
+## 🌐 Interactive Web Portal & Comparison Sandbox
 
-The complete research pipeline is contained in `scripts/`. Execution order follows the numeric prefix (01 → 19). MARTINI 3 MD trajectories require GROMACS ≥ 2023.3; all downstream graph construction and survival modelling is pure Python.
+Try the live, zero-install interactive inference suite and multi-model benchmark sandbox:
 
-Key intermediate artefacts required to reproduce the frozen model from scratch:
-
-| File | Description |
-|---|---|
-| `Laplacian_Chara_4337.csv` | Chara thermodynamic Laplacian (4,337-gene intersection) |
-| `Laplacian_STRING_4337.csv` | Pure STRING Laplacian (ablation baseline) |
-| `TCGA-LUAD_expression.csv` | Training expression matrix |
-| `TCGA-LUAD_survival.csv` | Training survival outcomes |
-| `frontier_benchmark_results.csv` | Full benchmark table |
+👉 **[https://chara-frontend.vercel.app](https://chara-frontend.vercel.app)**
 
 ---
 
-## Citation
+## 🧬 Key Biomarkers & Hazard Drivers
 
-If you use Chara in published research, please cite this repository until a formal preprint is available:
+The regularized signature isolates 58 key prognostic genes:
+- **Top Oncogenic Hazard Drivers ($\beta > 0$):** `CCL20` (+0.0642), `DKK1` (+0.0610), `IGF2BP1` (+0.0351), `BARX1` (+0.0328), `SPRR1B` (+0.0324).
+- **Top Favorable / Protective Biomarkers ($\beta < 0$):** `MS4A1` (-0.0708, CD20 B-cell marker), `FAIM2` (-0.0524), `FAM133A` (-0.0470), `SLC5A5` (-0.0290).
 
-```
-Sharon Melhi (2026). Chara Survival: Thermodynamic Graph Laplacian Survival Inference
-for Out-of-Distribution Transcriptomic Oncology.
-GitHub: https://github.com/Sharon-codes/Chara
+---
+
+## 📜 Citation
+
+```bibtex
+@software{Melhi_Chara_Survival_2026,
+  author = {Melhi, Sharon and Hungyo, Kharerin},
+  title = {Chara: Thermodynamic Graph Laplacian Survival Inference for Transcriptomic Oncology},
+  url = {https://github.com/Sharon-codes/Chara},
+  year = {2026},
+  publisher = {Computational and Physical Genomics Laboratory, Indian Institute of Technology Mandi}
+}
 ```
 
 ---
 
-## People
+## 👥 Authors & Lab
 
 <table>
 <tr>
@@ -249,12 +150,6 @@ Special thanks to **Khushi Mhamane** for her constant encouragement, thoughtful 
 
 ---
 
-## License
+## 📄 License
 
 Released under the [MIT License](LICENSE). © 2026 Sharon Melhi.
-
----
-
-<div align="center">
-<sub>Developed at the <strong>Computational and Physical Genomics Lab</strong> · Indian Institute of Technology Mandi</sub>
-</div>
