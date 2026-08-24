@@ -66,23 +66,25 @@ pip install --upgrade chara-survival
 ### 1-Line Python Inference (Auto-Downloads from Hugging Face Hub)
 
 ```python
-import pandas as pd
 import chara
+import pandas as pd
 
-# 1. Load the frozen pretrained model (auto-fetches from Hugging Face Hub if needed)
+# 1. Load the frozen pretrained model (auto-fetches from Hugging Face Hub)
 model = chara.load_model()
 
-# 2. Ingest your patient cohort CSV (Rows: Samples, Columns: HGNC Gene Symbols)
-df = pd.read_csv("patient_expression.csv", index_col=0)
+# 2. Ingest your patient cohort CSV (or load sample mock cohort for instant testing)
+cohort_df = chara.load_sample_cohort(n_patients=12)
 
-# 3. Predict full Kaplan-Meier survival curves & patient hazard risk scores
-curves, times, risk_scores = model.predict_survival_curves(df)
+# 3. Generate 1-Click Structured Clinical Summary DataFrame
+summary_df = model.predict_dataframe(cohort_df)
+print(summary_df)
+# Output columns: [Risk_Score, Risk_Stratification, 1_Year_Survival_Prob, 3_Year_Survival_Prob, 5_Year_Survival_Prob]
 
-print(f"Evaluated {len(df)} patients across {len(times)} months.")
-print(f"Mean Risk: {risk_scores.mean():.4f} | 5-Year Survival: {curves[:, 60].mean() * 100:.1f}%")
+# 4. View Top Prognostic Biomarkers
+print(model.get_biomarkers(n=5))
 ```
 
-### Load Directly from Hugging Face Hub
+### Direct Hugging Face Hub Loading
 
 ```python
 from huggingface_hub import hf_hub_download
