@@ -1,4 +1,4 @@
-"""Frozen Chara Coxnet inference, feature alignment, and Hugging Face integration."""
+"""Frozen Chara Coxnet inference, feature alignment, plotting, and Hugging Face integration."""
 import os
 from pathlib import Path
 import joblib
@@ -121,7 +121,7 @@ class CharaModel:
     def predict_dataframe(self, expression) -> pd.DataFrame:
         """
         Runs end-to-end survival inference and returns a structured clinical DataFrame.
-        Columns: [Risk_Score, Risk_Stratification, Survival_1Year, Survival_3Year, Survival_5Year]
+        Columns: [Risk_Score, Risk_Stratification, 1_Year_Survival_Prob, 3_Year_Survival_Prob, 5_Year_Survival_Prob]
         """
         curves, times, risks = self.predict_survival_curves(expression)
         
@@ -151,6 +151,26 @@ class CharaModel:
         }, index=expression.index if isinstance(expression, pd.DataFrame) else None)
         return df
 
+    def predict_patient(self, expression_data) -> dict:
+        """
+        Single-patient survival evaluation helper.
+        Accepts a dict, Series, or 1-row DataFrame and returns a comprehensive prognosis dictionary.
+        """
+        if isinstance(expression_data, dict):
+            df = pd.DataFrame([expression_data])
+        elif isinstance(expression_data, pd.Series):
+            df = pd.DataFrame([expression_data.to_dict()])
+        elif isinstance(expression_data, pd.DataFrame):
+            df = expression_data
+        else:
+            raise ValueError("expression_data must be a dict, pandas Series, or pandas DataFrame.")
+
+        res_df = self.predict_dataframe(df)
+        row = res_df.iloc[0].to_dict()
+        if df.index is not None and len(df.index) > 0 and str(df.index[0]) != "0":
+            row["Patient_ID"] = str(df.index[0])
+        return row
+
     def get_biomarkers(self, n=None) -> pd.DataFrame:
         """
         Returns active biomarker genes with their regularized Cox hazard coefficients.
@@ -162,6 +182,83 @@ class CharaModel:
         df = df.sort_values(by="Absolute_Weight", ascending=False).drop(columns=["Absolute_Weight"])
         return df.head(n) if n else df
 
+    def plot_survival(self, expression, title="Chara Survival Projections", save_path=None, ax=None):
+        """
+        Plots publication-grade Kaplan-Meier survival curves using matplotlib.
+        """
+        try:
+            import matplotlib.pyplot as plt
+        except ImportError:
+            raise ImportError("matplotlib is required for plotting survival curves. Run: pip install matplotlib")
+
+        curves, times, risks = self.predict_survival_curves(expression)
+        
+        if ax is None:
+            fig, ax = plt.subplots(figsize=(8, 5), dpi=150)
+            created_fig = True
+        else:
+            created_fig = False
+
+        patient_names = expression.index if isinstance(expression, pd.DataFrame) else [f"Patient {i+1}" for i in range(len(risks))]
+        
+        for idx, curve in enumerate(curves):
+            r = risks[idx]
+            if r > 0.6:
+                color = "#e11d48" # High/Critical risk
+                lw = 1.8
+            elif r < -0.6:
+                color = "#445d30" # Low risk
+                lw = 1.8
+            else:
+                color = "#729457" # Moderate risk
+                lw = 1.2
+
+            ax.step(times, curve, where="post", color=color, linewidth=lw, alpha=0.85, label=patient_names[idx] if len(curves) <= 6 else None)
+
+        ax.set_ylim(0, 1.05)
+        ax.set_xlim(0, max(times))
+        ax.set_xlabel("Timeline (Months Post-Diagnosis)", fontsize=11, fontweight="bold")
+        ax.set_ylabel("Survival Probability", fontsize=11, fontweight="bold")
+        ax.set_title(title, fontsize=13, fontweight="bold", pad=12)
+        ax.grid(True, linestyle="--", alpha=0.4)
+
+        if len(curves) <= 6:
+            ax.legend(frameon=True, fontsize=9, loc="upper right")
+
+        if save_path:
+            plt.savefig(save_path, bbox_inches="tight")
+            
+        return ax
+
+    def plot_biomarkers(self, top_n=15, title="Top Chara Prognostic Biomarkers", save_path=None, ax=None):
+        """
+        Plots horizontal bar chart of top hazard drivers and protective markers.
+        """
+        try:
+            import matplotlib.pyplot as plt
+        except ImportError:
+            raise ImportError("matplotlib is required for plotting biomarkers. Run: pip install matplotlib")
+
+        df = self.get_biomarkers(n=top_n)
+        df = df.sort_values(by="Coefficient", ascending=True)
+
+        if ax is None:
+            fig, ax = plt.subplots(figsize=(8, 6), dpi=150)
+        
+        colors = ["#445d30" if c < 0 else "#be123c" for c in df["Coefficient"]]
+        bars = ax.barh(df["Gene"], df["Coefficient"], color=colors, height=0.65, edgecolor="none")
+        
+        ax.axvline(0, color="black", linestyle="--", linewidth=0.8, alpha=0.7)
+        ax.set_xlabel("Cox Proportional Hazard Weight (β)", fontsize=11, fontweight="bold")
+        ax.set_ylabel("HGNC Gene Symbol", fontsize=11, fontweight="bold")
+        ax.set_title(title, fontsize=13, fontweight="bold", pad=12)
+        ax.grid(True, linestyle=":", alpha=0.4, axis="x")
+
+        if save_path:
+            plt.savefig(save_path, bbox_inches="tight")
+
+        return ax
+
     def align_and_scale(self, expression):
         return scale_external_expression(expression, self.features)
 
@@ -171,7 +268,6 @@ def load_sample_cohort(n_patients=12) -> pd.DataFrame:
     Generates a realistic synthetic cohort DataFrame with n patients for immediate testing.
     """
     genes = list(DEFAULT_COEFFICIENTS.keys())
-    # Pad to standard gene subset
     all_genes = genes + [f"GENE_{i}" for i in range(1, 100)]
     
     rows = []
