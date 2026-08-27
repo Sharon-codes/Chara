@@ -63,7 +63,7 @@ Chara achieves a **+0.267 absolute improvement in OOD C-index** over the next-be
 pip install --upgrade chara-survival
 ```
 
-### 1-Line Python Inference (Auto-Downloads from Hugging Face Hub)
+### 1-Line Python Inference & Complete API
 
 ```python
 import chara
@@ -72,7 +72,7 @@ import pandas as pd
 # 1. Load the frozen pretrained model (auto-fetches from Hugging Face Hub)
 model = chara.load_model()
 
-# 2. Ingest your patient cohort CSV (or load sample mock cohort for instant testing)
+# 2. Ingest your patient cohort CSV (or load synthetic test cohort)
 cohort_df = chara.load_sample_cohort(n_patients=12)
 
 # 3. Generate 1-Click Structured Clinical Summary DataFrame
@@ -80,8 +80,21 @@ summary_df = model.predict_dataframe(cohort_df)
 print(summary_df)
 # Output columns: [Risk_Score, Risk_Stratification, 1_Year_Survival_Prob, 3_Year_Survival_Prob, 5_Year_Survival_Prob]
 
-# 4. View Top Prognostic Biomarkers
-print(model.get_biomarkers(n=5))
+# 4. Single-Patient Evaluation
+patient_prognosis = model.predict_patient(cohort_df.iloc[0])
+print(patient_prognosis)
+
+# 5. Native Harrell's Concordance Index (C-Index)
+c_index = chara.concordance_index(
+    risk_scores=summary_df["Risk_Score"], 
+    time=[12, 24, 36, 48, 60, ...], 
+    event=[1, 0, 1, 0, 1, ...]
+)
+print(f"C-Index: {c_index:.4f}")
+
+# 6. Plot Publication-Grade Kaplan-Meier Curves & Biomarkers
+model.plot_survival(cohort_df, save_path="km_survival.png")
+model.plot_biomarkers(top_n=10, save_path="biomarkers.png")
 ```
 
 ### Direct Hugging Face Hub Loading
