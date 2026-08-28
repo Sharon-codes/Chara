@@ -121,13 +121,16 @@ class CharaModel:
     def predict_dataframe(self, expression) -> pd.DataFrame:
         """
         Runs end-to-end survival inference and returns a structured clinical DataFrame.
-        Columns: [Risk_Score, Risk_Stratification, 1_Year_Survival_Prob, 3_Year_Survival_Prob, 5_Year_Survival_Prob]
+        Columns: [Risk_Score, Hazard_Ratio, Risk_Stratification, Median_Survival_Months, Survival_1Year, Survival_3Year, Survival_5Year]
         """
         curves, times, risks = self.predict_survival_curves(expression)
         
-        # Calculate risk categories
+        # Calculate risk categories & hazard ratios
         categories = []
-        for r in risks:
+        hazard_ratios = np.round(np.exp(risks * 0.85), 3)
+        median_surv = []
+
+        for idx, r in enumerate(risks):
             if r < -0.5:
                 categories.append("Low Risk")
             elif r <= 0.5:
@@ -137,6 +140,14 @@ class CharaModel:
             else:
                 categories.append("Critical Risk")
                 
+            # Estimate median survival time (months where S(t) crosses 0.50)
+            curve = curves[idx]
+            crossed = np.where(curve <= 0.50)[0]
+            if len(crossed) > 0:
+                median_surv.append(f"{times[crossed[0]]:.1f} mo")
+            else:
+                median_surv.append("> 60.0 mo")
+                
         # Extract 1-Year (month 12), 3-Year (month 36), 5-Year (month 60)
         idx_1y = min(12, len(times) - 1)
         idx_3y = min(36, len(times) - 1)
@@ -144,7 +155,9 @@ class CharaModel:
 
         df = pd.DataFrame({
             "Risk_Score": np.round(risks, 4),
+            "Hazard_Ratio": hazard_ratios,
             "Risk_Stratification": categories,
+            "Median_Survival": median_surv,
             "1_Year_Survival_Prob": np.round(curves[:, idx_1y], 4),
             "3_Year_Survival_Prob": np.round(curves[:, idx_3y], 4),
             "5_Year_Survival_Prob": np.round(curves[:, idx_5y], 4)
@@ -170,6 +183,29 @@ class CharaModel:
         if df.index is not None and len(df.index) > 0 and str(df.index[0]) != "0":
             row["Patient_ID"] = str(df.index[0])
         return row
+
+    def summarize_cohort(self, expression) -> dict:
+        """
+        Computes high-level cohort-wide diagnostic and clinical statistics.
+        """
+        df = self.predict_dataframe(expression)
+        n = len(df)
+        high_critical = ((df["Risk_Stratification"] == "High Risk") | (df["Risk_Stratification"] == "Critical Risk")).sum()
+        
+        all_bio = self.get_biomarkers()
+        top_driver = all_bio[all_bio["Coefficient"] > 0].sort_values("Coefficient", ascending=False).iloc[0]
+        top_protective = all_bio[all_bio["Coefficient"] < 0].sort_values("Coefficient", ascending=True).iloc[0]
+
+        return {
+            "Cohort_Size": n,
+            "Mean_Risk_Score": round(float(df["Risk_Score"].mean()), 4),
+            "Mean_Hazard_Ratio": round(float(df["Hazard_Ratio"].mean()), 3),
+            "High_Risk_Fraction": f"{(high_critical / n) * 100:.1f}%",
+            "Mean_1Year_Survival": f"{df['1_Year_Survival_Prob'].mean() * 100:.1f}%",
+            "Mean_5Year_Survival": f"{df['5_Year_Survival_Prob'].mean() * 100:.1f}%",
+            "Top_Hazard_Driver": f"{top_driver['Gene']} (beta = +{top_driver['Coefficient']:.4f})",
+            "Top_Protective_Marker": f"{top_protective['Gene']} (beta = {top_protective['Coefficient']:.4f})"
+        }
 
     def get_biomarkers(self, n=None) -> pd.DataFrame:
         """

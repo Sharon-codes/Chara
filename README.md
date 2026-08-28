@@ -78,13 +78,18 @@ cohort_df = chara.load_sample_cohort(n_patients=12)
 # 3. Generate 1-Click Structured Clinical Summary DataFrame
 summary_df = model.predict_dataframe(cohort_df)
 print(summary_df)
-# Output columns: [Risk_Score, Risk_Stratification, 1_Year_Survival_Prob, 3_Year_Survival_Prob, 5_Year_Survival_Prob]
+# Output columns: [Risk_Score, Hazard_Ratio, Risk_Stratification, Median_Survival, 1_Year_Survival_Prob, 3_Year_Survival_Prob, 5_Year_Survival_Prob]
 
-# 4. Single-Patient Evaluation
+# 4. Cohort Diagnostic Breakdown
+cohort_stats = model.summarize_cohort(cohort_df)
+print(cohort_stats)
+# Output: {'Cohort_Size': 12, 'Mean_Risk_Score': 0.02, 'Mean_Hazard_Ratio': 1.14, 'High_Risk_Fraction': '25.0%', ...}
+
+# 5. Single-Patient Clinical Prognosis
 patient_prognosis = model.predict_patient(cohort_df.iloc[0])
 print(patient_prognosis)
 
-# 5. Native Harrell's Concordance Index (C-Index)
+# 6. Native Harrell's Concordance Index (C-Index)
 c_index = chara.concordance_index(
     risk_scores=summary_df["Risk_Score"], 
     time=[12, 24, 36, 48, 60, ...], 
@@ -92,7 +97,7 @@ c_index = chara.concordance_index(
 )
 print(f"C-Index: {c_index:.4f}")
 
-# 6. Plot Publication-Grade Kaplan-Meier Curves & Biomarkers
+# 7. Plot Publication-Grade Kaplan-Meier Curves & Biomarkers
 model.plot_survival(cohort_df, save_path="km_survival.png")
 model.plot_biomarkers(top_n=10, save_path="biomarkers.png")
 ```
