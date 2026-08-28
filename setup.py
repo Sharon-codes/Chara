@@ -5,7 +5,7 @@ README = Path(__file__).with_name("README.md").read_text(encoding="utf-8")
 
 setup(
     name="chara-survival",
-    version="0.2.1",
+    version="0.2.2",
     description="Thermodynamic Graph Laplacian survival inference for out-of-distribution transcriptomic oncology",
     long_description=README,
     long_description_content_type="text/markdown",
