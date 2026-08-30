@@ -96,7 +96,11 @@ print(cohort_stats)
 patient_prognosis = model.predict_patient(cohort_df.iloc[0])
 print(patient_prognosis)
 
-# 6. Native Harrell's Concordance Index (C-Index)
+# 6. Export predictions as a JSON string (great for APIs)
+json_results = model.predict_json(cohort_df)
+print(json_results)
+
+# 7. Native Harrell's Concordance Index (C-Index)
 c_index = chara.concordance_index(
     risk_scores=summary_df["Risk_Score"], 
     time=[12, 24, 36, 48, 60, ...], 
@@ -104,7 +108,7 @@ c_index = chara.concordance_index(
 )
 print(f"C-Index: {c_index:.4f}")
 
-# 7. Plot Publication-Grade Kaplan-Meier Curves & Biomarkers
+# 8. Plot Publication-Grade Kaplan-Meier Curves & Biomarkers
 model.plot_survival(cohort_df, save_path="km_survival.png")
 model.plot_biomarkers(top_n=10, save_path="biomarkers.png")
 ```

@@ -164,6 +164,13 @@ class CharaModel:
         }, index=expression.index if isinstance(expression, pd.DataFrame) else None)
         return df
 
+    def predict_json(self, expression) -> str:
+        """
+        Runs survival prediction and returns results as a formatted JSON string.
+        """
+        df = self.predict_dataframe(expression)
+        return df.reset_index().rename(columns={"index": "Patient_ID"}).to_json(orient="records", indent=2)
+
     def predict_patient(self, expression_data) -> dict:
         """
         Single-patient survival evaluation helper.
