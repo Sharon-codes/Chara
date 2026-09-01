@@ -214,6 +214,33 @@ class CharaModel:
             "Top_Protective_Marker": f"{top_protective['Gene']} (beta = {top_protective['Coefficient']:.4f})"
         }
 
+    def evaluate_benchmark(self, expression, times, events) -> dict:
+        """
+        Computes formal survival analysis benchmark metrics on a test cohort:
+        - Harrell's Concordance Index (C-Index)
+        - 1-Year, 3-Year, 5-Year Brier Calibration Scores
+        """
+        from .metrics import concordance_index, brier_score_at_time
+        curves, timeline, risks = self.predict_survival_curves(expression)
+        
+        c_idx = concordance_index(risks, times, events)
+        
+        idx_1y = min(12, len(timeline) - 1)
+        idx_3y = min(36, len(timeline) - 1)
+        idx_5y = min(60, len(timeline) - 1)
+        
+        brier_1y = brier_score_at_time(curves[:, idx_1y], times, events, eval_time=12.0)
+        brier_3y = brier_score_at_time(curves[:, idx_3y], times, events, eval_time=36.0)
+        brier_5y = brier_score_at_time(curves[:, idx_5y], times, events, eval_time=60.0)
+        
+        return {
+            "C_Index": round(c_idx, 4),
+            "Brier_Score_1Year": round(brier_1y, 4),
+            "Brier_Score_3Year": round(brier_3y, 4),
+            "Brier_Score_5Year": round(brier_5y, 4),
+            "Evaluated_Patients": len(risks)
+        }
+
     def get_biomarkers(self, n=None) -> pd.DataFrame:
         """
         Returns active biomarker genes with their regularized Cox hazard coefficients.

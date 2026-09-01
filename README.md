@@ -100,13 +100,14 @@ print(patient_prognosis)
 json_results = model.predict_json(cohort_df)
 print(json_results)
 
-# 7. Native Harrell's Concordance Index (C-Index)
-c_index = chara.concordance_index(
-    risk_scores=summary_df["Risk_Score"], 
-    time=[12, 24, 36, 48, 60, ...], 
-    event=[1, 0, 1, 0, 1, ...]
+# 7. Complete Cohort Benchmark (C-Index & 1/3/5-Year Brier Scores)
+benchmark_metrics = model.evaluate_benchmark(
+    cohort_df,
+    times=[12, 24, 36, 48, 60, ...],
+    events=[1, 0, 1, 0, 1, ...]
 )
-print(f"C-Index: {c_index:.4f}")
+print(benchmark_metrics)
+# Output: {'C_Index': 0.7311, 'Brier_Score_1Year': 0.112, 'Brier_Score_3Year': 0.148, 'Brier_Score_5Year': 0.165, ...}
 
 # 8. Plot Publication-Grade Kaplan-Meier Curves & Biomarkers
 model.plot_survival(cohort_df, save_path="km_survival.png")
