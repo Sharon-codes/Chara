@@ -17,10 +17,10 @@
 
 ### ⚡ Highlights & Key Capabilities
 - **Zero-Shot Platform Invariance:** Direct transfer from RNA-Seq (TCGA) to Microarray (GEO) with **0.7311 C-index** and **0.8195 5-Year AUC** without fine-tuning.
-- **Biophysically Grounded:** Powered by MARTINI 3 molecular dynamics simulations & heat kernel Laplacians $H_t = \exp(-tL)$.
+- **Biophysically Grounded:** Powered by 6.0 $\mu\text{s}$ of MARTINI 3 coarse-grained molecular dynamics trajectories across 4 hallmark oncogenic targets (KRAS G12D, c-MYC/MAX, PTPN11/SHP2, and Mutant TP53) & heat kernel Laplacians $H_t = \exp(-tL)$.
 - **1-Click Clinical Reporting:** Structured DataFrames with patient risk scores, relative hazard ratios, and estimated median survival timelines.
 - **Publication-Ready Visualization:** Built-in APIs to render risk-stratified Kaplan-Meier survival curves and biomarker weight charts.
-- **🤗 Hugging Face Hub Integrated:** Auto-downloads frozen weights directly on first import.
+- **🤗 Hugging Face Hub Integrated:** Auto-downloads frozen 4,337-gene consensus model weights directly on first import.
 
 </div>
 
