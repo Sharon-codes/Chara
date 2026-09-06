@@ -3,7 +3,7 @@
 from .model import CharaModel, load_sample_cohort
 from .preprocessing import scale_external_expression, align_expression
 from .graph import laplacian_from_edges, heat_kernel, exponential_chara_laplacian
-from .metrics import concordance_index, brier_score_at_time
+from .metrics import concordance_index, brier_score_at_time, integrated_brier_score
 
 def load_model(path_or_repo=None):
     """Convenience helper to load CharaModel from file path or Hugging Face Hub."""
@@ -15,6 +15,7 @@ __all__ = [
     "load_sample_cohort",
     "concordance_index",
     "brier_score_at_time",
+    "integrated_brier_score",
     "scale_external_expression",
     "align_expression",
     "laplacian_from_edges",
@@ -23,4 +24,4 @@ __all__ = [
     "__version__",
 ]
 
-__version__ = "0.2.6"
+__version__ = "0.2.7"

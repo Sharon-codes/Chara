@@ -219,8 +219,9 @@ class CharaModel:
         Computes formal survival analysis benchmark metrics on a test cohort:
         - Harrell's Concordance Index (C-Index)
         - 1-Year, 3-Year, 5-Year Brier Calibration Scores
+        - Integrated Brier Score (IBS) across the survival horizon
         """
-        from .metrics import concordance_index, brier_score_at_time
+        from .metrics import concordance_index, brier_score_at_time, integrated_brier_score
         curves, timeline, risks = self.predict_survival_curves(expression)
         
         c_idx = concordance_index(risks, times, events)
@@ -232,12 +233,14 @@ class CharaModel:
         brier_1y = brier_score_at_time(curves[:, idx_1y], times, events, eval_time=12.0)
         brier_3y = brier_score_at_time(curves[:, idx_3y], times, events, eval_time=36.0)
         brier_5y = brier_score_at_time(curves[:, idx_5y], times, events, eval_time=60.0)
+        ibs = integrated_brier_score(curves, times, events, time_grid=timeline)
         
         return {
             "C_Index": round(c_idx, 4),
             "Brier_Score_1Year": round(brier_1y, 4),
             "Brier_Score_3Year": round(brier_3y, 4),
             "Brier_Score_5Year": round(brier_5y, 4),
+            "Integrated_Brier_Score": round(ibs, 4),
             "Evaluated_Patients": len(risks)
         }
 

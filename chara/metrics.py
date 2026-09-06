@@ -107,3 +107,43 @@ def brier_score_at_time(survival_probs_at_t, time, event, eval_time=60.0) -> flo
         return float(np.mean((probs - 0.5) ** 2))
         
     return float(np.mean(scores))
+
+
+def integrated_brier_score(survival_curves, time, event, time_grid=None) -> float:
+    """
+    Computes the Integrated Brier Score (IBS) across a survival timeline grid.
+    
+    Parameters:
+    -----------
+    survival_curves : 2D array-like of shape (n_patients, n_time_points)
+        Predicted survival probability trajectories.
+    time : 1D array-like of shape (n_patients,)
+        Observed survival times.
+    event : 1D array-like of shape (n_patients,)
+        Censoring indicator (1 = event, 0 = censored).
+    time_grid : 1D array-like, optional
+        Time points corresponding to columns of survival_curves. Defaults to [12, 24, 36, 48, 60].
+        
+    Returns:
+    --------
+    ibs : float
+        Integrated Brier Score averaged across the time horizon.
+    """
+    curves = np.asarray(survival_curves, dtype=float)
+    times = np.asarray(time, dtype=float)
+    events = np.asarray(event, dtype=bool) if event is not None else np.ones_like(times, dtype=bool)
+    
+    if time_grid is None:
+        time_grid = np.linspace(1.0, max(60.0, np.max(times)), curves.shape[1])
+    else:
+        time_grid = np.asarray(time_grid, dtype=float)
+        
+    brier_scores = []
+    for idx, t_eval in enumerate(time_grid):
+        if idx < curves.shape[1]:
+            brier_scores.append(brier_score_at_time(curves[:, idx], times, events, eval_time=t_eval))
+            
+    if len(brier_scores) == 0:
+        return 0.0
+    return float(np.mean(brier_scores))
+
