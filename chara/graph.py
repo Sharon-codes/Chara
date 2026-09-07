@@ -26,3 +26,28 @@ def exponential_chara_laplacian(adjacency, edge_variance, tau=0.5):
     weighted = (weighted + weighted.T) / 2.0
     np.fill_diagonal(weighted, 0.0)
     return np.diag(weighted.sum(axis=1)) - weighted
+
+
+def compute_dirichlet_energy(x, laplacian):
+    """
+    Computes Dirichlet energy E(x) = x^T L x along the manifold graph.
+    
+    Parameters:
+    -----------
+    x : array-like of shape (n_samples, n_features) or (n_features,)
+        Patient transcriptomic profile(s).
+    laplacian : 2D array-like of shape (n_features, n_features)
+        Symmetric Graph Laplacian matrix.
+        
+    Returns:
+    --------
+    energy : float or 1D ndarray
+        Dirichlet smoothness energy for each patient.
+    """
+    arr = np.asarray(x, dtype=np.float64)
+    L = np.asarray(laplacian, dtype=np.float64)
+    L = (L + L.T) / 2.0
+    if arr.ndim == 1:
+        return float(arr @ L @ arr)
+    return np.sum((arr @ L) * arr, axis=1)
+

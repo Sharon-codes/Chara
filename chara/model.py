@@ -244,6 +244,14 @@ class CharaModel:
             "Evaluated_Patients": len(risks)
         }
 
+    def dirichlet_energy(self, expression, laplacian):
+        """
+        Computes Dirichlet energy E(x) = x^T L x for the aligned patient transcriptomic profile(s).
+        """
+        from .graph import compute_dirichlet_energy
+        x, _, _ = self.align_and_scale(expression)
+        return compute_dirichlet_energy(x, laplacian)
+
     def get_biomarkers(self, n=None) -> pd.DataFrame:
         """
         Returns active biomarker genes with their regularized Cox hazard coefficients.

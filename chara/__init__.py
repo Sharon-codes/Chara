@@ -2,7 +2,7 @@
 
 from .model import CharaModel, load_sample_cohort
 from .preprocessing import scale_external_expression, align_expression
-from .graph import laplacian_from_edges, heat_kernel, exponential_chara_laplacian
+from .graph import laplacian_from_edges, heat_kernel, exponential_chara_laplacian, compute_dirichlet_energy
 from .metrics import concordance_index, brier_score_at_time, integrated_brier_score
 
 def load_model(path_or_repo=None):
@@ -16,6 +16,7 @@ __all__ = [
     "concordance_index",
     "brier_score_at_time",
     "integrated_brier_score",
+    "compute_dirichlet_energy",
     "scale_external_expression",
     "align_expression",
     "laplacian_from_edges",
@@ -24,4 +25,4 @@ __all__ = [
     "__version__",
 ]
 
-__version__ = "0.2.7"
+__version__ = "0.2.8"
