@@ -1,0 +1,660 @@
+{
+  "environment": {
+    "python_version": "3.14.3 (tags/v3.14.3:323c59a, Feb  3 2026, 16:04:56) [MSC v.1944 64 bit (AMD64)]",
+    "mdanalysis_version": "2.10.0",
+    "os": "Windows 11"
+  },
+  "systems": {
+    "KRAS_G12D": {
+      "system_name": "KRAS_G12D",
+      "topologies": {
+        "molecule_0.itp": {
+          "num_beads": 394,
+          "num_residues": 170,
+          "first_residue": "1 GLY",
+          "last_residue": "170 LYS",
+          "elastic_bonds_count": 1333
+        },
+        "molecule_1.itp": {
+          "num_beads": 394,
+          "num_residues": 170,
+          "first_residue": "1 GLY",
+          "last_residue": "170 LYS",
+          "elastic_bonds_count": 1336
+        }
+      },
+      "total_topology_beads": 788,
+      "total_topology_residues": 340,
+      "replicates": {
+        "rep1": {
+          "exists": true,
+          "paths": {
+            "production_xtc": "E:\\Sharon\\data\\md_runs\\KRAS_G12D\\rep1\\production.xtc",
+            "production_centered_xtc": "E:\\Sharon\\data\\md_runs\\KRAS_G12D\\rep1\\production_centered.xtc",
+            "production_tpr": "E:\\Sharon\\data\\md_runs\\KRAS_G12D\\rep1\\production.tpr",
+            "production_log": "E:\\Sharon\\data\\md_runs\\KRAS_G12D\\rep1\\production.log"
+          },
+          "hashes": {
+            "production_centered_xtc": {
+              "sha256": "5f2e232ddc57ee2f296e0c47ab9c3c551b490332215126398c3690fd2e2c3c51",
+              "is_partial": false,
+              "bytes_hashed": 3431288,
+              "total_bytes": 3431288
+            },
+            "production_xtc": {
+              "sha256": "1b134572dbc0da94c26a1f85bf6bae864371034cc648f20fcf40d1e8a7d0c9c6",
+              "is_partial": true,
+              "bytes_hashed": 10485760,
+              "total_bytes": 70047808
+            }
+          },
+          "log_params": {
+            "gmx_version": "2026.3-conda_forge",
+            "dt_ps": 0.02,
+            "nsteps": 25000000,
+            "tcoupl": "V",
+            "pcoupl": "C",
+            "ref_t_k": null,
+            "ref_p_bar": null,
+            "ld_seed": "-1381252161",
+            "total_sim_time_ns": 500.0
+          },
+          "trajectory_info": {
+            "n_atoms": 788,
+            "n_frames": 1001,
+            "start_time_ps": 0.0,
+            "end_time_ps": 500000.0,
+            "dt_ps": 500.0,
+            "dimensions_frame0": [
+              126.4231948852539,
+              126.4231948852539,
+              126.4231948852539
+            ]
+          }
+        },
+        "rep2": {
+          "exists": true,
+          "paths": {
+            "production_xtc": "E:\\Sharon\\data\\md_runs\\KRAS_G12D\\rep2\\production.xtc",
+            "production_centered_xtc": "E:\\Sharon\\data\\md_runs\\KRAS_G12D\\rep2\\production_centered.xtc",
+            "production_tpr": "E:\\Sharon\\data\\md_runs\\KRAS_G12D\\rep2\\production.tpr",
+            "production_log": "E:\\Sharon\\data\\md_runs\\KRAS_G12D\\rep2\\production.log"
+          },
+          "hashes": {
+            "production_centered_xtc": {
+              "sha256": "0c7cfff69bd995bfd0716cce2090db18ef3c7b517518e90b9ef50425f1000e6e",
+              "is_partial": false,
+              "bytes_hashed": 3432432,
+              "total_bytes": 3432432
+            },
+            "production_xtc": {
+              "sha256": "b86a186cd801523c933f7763f485f6917a48ff154b904d58883ce6b04806f9ad",
+              "is_partial": true,
+              "bytes_hashed": 10485760,
+              "total_bytes": 69505920
+            }
+          },
+          "log_params": {
+            "gmx_version": "2026.3-conda_forge",
+            "dt_ps": 0.02,
+            "nsteps": 25000000,
+            "tcoupl": "V",
+            "pcoupl": "C",
+            "ref_t_k": null,
+            "ref_p_bar": null,
+            "ld_seed": "-10913129",
+            "total_sim_time_ns": 500.0
+          },
+          "trajectory_info": {
+            "n_atoms": 788,
+            "n_frames": 1001,
+            "start_time_ps": 0.0,
+            "end_time_ps": 500000.0,
+            "dt_ps": 500.0,
+            "dimensions_frame0": [
+              126.37749481201172,
+              126.37749481201172,
+              126.3775634765625
+            ]
+          }
+        },
+        "rep3": {
+          "exists": true,
+          "paths": {
+            "production_xtc": "E:\\Sharon\\data\\md_runs\\KRAS_G12D\\rep3\\production.xtc",
+            "production_centered_xtc": "E:\\Sharon\\data\\md_runs\\KRAS_G12D\\rep3\\production_centered.xtc",
+            "production_tpr": "E:\\Sharon\\data\\md_runs\\KRAS_G12D\\rep3\\production.tpr",
+            "production_log": "E:\\Sharon\\data\\md_runs\\KRAS_G12D\\rep3\\production.log"
+          },
+          "hashes": {
+            "production_centered_xtc": {
+              "sha256": "2f5750a9c4b0714c87a1874dcfd22cf40e52f5509a80ccc7cce025dd41c09c94",
+              "is_partial": false,
+              "bytes_hashed": 3431960,
+              "total_bytes": 3431960
+            },
+            "production_xtc": {
+              "sha256": "ff6c1fea2ab2d72758fabc880820c8ae3d72147a335836d0c668641644600273",
+              "is_partial": true,
+              "bytes_hashed": 10485760,
+              "total_bytes": 69744120
+            }
+          },
+          "log_params": {
+            "gmx_version": "2026.3-conda_forge",
+            "dt_ps": 0.02,
+            "nsteps": 25000000,
+            "tcoupl": "V",
+            "pcoupl": "C",
+            "ref_t_k": null,
+            "ref_p_bar": null,
+            "ld_seed": "-72493061",
+            "total_sim_time_ns": 500.0
+          },
+          "trajectory_info": {
+            "n_atoms": 788,
+            "n_frames": 1001,
+            "start_time_ps": 0.0,
+            "end_time_ps": 500000.0,
+            "dt_ps": 500.0,
+            "dimensions_frame0": [
+              126.48899841308594,
+              126.48899841308594,
+              126.48904418945312
+            ]
+          }
+        }
+      }
+    },
+    "PTPN11": {
+      "system_name": "PTPN11",
+      "topologies": {
+        "molecule_0.itp": {
+          "num_beads": 1280,
+          "num_residues": 536,
+          "first_residue": "1 MET",
+          "last_residue": "536 HIS",
+          "elastic_bonds_count": 4248
+        }
+      },
+      "total_topology_beads": 1280,
+      "total_topology_residues": 536,
+      "replicates": {
+        "rep1": {
+          "exists": true,
+          "paths": {
+            "production_xtc": "E:\\Sharon\\data\\md_runs\\PTPN11\\rep1\\production.xtc",
+            "production_centered_xtc": "E:\\Sharon\\data\\md_runs\\PTPN11\\rep1\\production_centered.xtc",
+            "production_tpr": "E:\\Sharon\\data\\md_runs\\PTPN11\\rep1\\production.tpr",
+            "production_log": "E:\\Sharon\\data\\md_runs\\PTPN11\\rep1\\production.log"
+          },
+          "hashes": {
+            "production_centered_xtc": {
+              "sha256": "7ebf06fb8b83de627401b6e222e0bdd7df38f9a12cc7800248ec417cc24c8480",
+              "is_partial": false,
+              "bytes_hashed": 5492516,
+              "total_bytes": 5492516
+            },
+            "production_xtc": {
+              "sha256": "dc2f95e8cf7638175dbc7cc6f32f9c68ae628d840d5dc03b24a846629a754736",
+              "is_partial": true,
+              "bytes_hashed": 10485760,
+              "total_bytes": 101307780
+            }
+          },
+          "log_params": {
+            "gmx_version": "2026.3-conda_forge",
+            "dt_ps": 0.02,
+            "nsteps": 25000000,
+            "tcoupl": "V",
+            "pcoupl": "C",
+            "ref_t_k": null,
+            "ref_p_bar": null,
+            "ld_seed": "-268435779",
+            "total_sim_time_ns": 500.0
+          },
+          "trajectory_info": {
+            "n_atoms": 1280,
+            "n_frames": 996,
+            "start_time_ps": 0.0,
+            "end_time_ps": 500000.0,
+            "dt_ps": 500.0,
+            "dimensions_frame0": [
+              129.1396942138672,
+              129.1396942138672,
+              129.1397705078125
+            ]
+          }
+        },
+        "rep2": {
+          "exists": true,
+          "paths": {
+            "production_xtc": "E:\\Sharon\\data\\md_runs\\PTPN11\\rep2\\production.xtc",
+            "production_centered_xtc": "E:\\Sharon\\data\\md_runs\\PTPN11\\rep2\\production_centered.xtc",
+            "production_tpr": "E:\\Sharon\\data\\md_runs\\PTPN11\\rep2\\production.tpr",
+            "production_log": "E:\\Sharon\\data\\md_runs\\PTPN11\\rep2\\production.log"
+          },
+          "hashes": {
+            "production_centered_xtc": {
+              "sha256": "2bb805771e9dbf892236a857a8f0ca6e9c82499211b8a8bc140b0399903e1113",
+              "is_partial": false,
+              "bytes_hashed": 5531304,
+              "total_bytes": 5531304
+            },
+            "production_xtc": {
+              "sha256": "435bcea050c97b1f2e7e420e905300c887582f83bc00380df625a3a0fcc6bd48",
+              "is_partial": true,
+              "bytes_hashed": 10485760,
+              "total_bytes": 100082308
+            }
+          },
+          "log_params": {
+            "gmx_version": "2026.3-conda_forge",
+            "dt_ps": 0.02,
+            "nsteps": 25000000,
+            "tcoupl": "V",
+            "pcoupl": "C",
+            "ref_t_k": null,
+            "ref_p_bar": null,
+            "ld_seed": "1002",
+            "total_sim_time_ns": 500.0
+          },
+          "trajectory_info": {
+            "n_atoms": 1280,
+            "n_frames": 1001,
+            "start_time_ps": 0.0,
+            "end_time_ps": 500000.0,
+            "dt_ps": 500.0,
+            "dimensions_frame0": [
+              129.1396942138672,
+              129.1396942138672,
+              129.1397705078125
+            ]
+          }
+        },
+        "rep3": {
+          "exists": true,
+          "paths": {
+            "production_xtc": "E:\\Sharon\\data\\md_runs\\PTPN11\\rep3\\production.xtc",
+            "production_centered_xtc": "E:\\Sharon\\data\\md_runs\\PTPN11\\rep3\\production_centered.xtc",
+            "production_tpr": "E:\\Sharon\\data\\md_runs\\PTPN11\\rep3\\production.tpr",
+            "production_log": "E:\\Sharon\\data\\md_runs\\PTPN11\\rep3\\production.log"
+          },
+          "hashes": {
+            "production_centered_xtc": {
+              "sha256": "8c2499d7a4cb705e069934aa38d5306d70dfd73b45ad3ad3a07a426c1cd263af",
+              "is_partial": false,
+              "bytes_hashed": 5528492,
+              "total_bytes": 5528492
+            },
+            "production_xtc": {
+              "sha256": "ecc0e5300439ed747dd1b33f69f3faa11976a3a06784e7c7deee52648cbef6aa",
+              "is_partial": true,
+              "bytes_hashed": 10485760,
+              "total_bytes": 100556132
+            }
+          },
+          "log_params": {
+            "gmx_version": "2026.3-conda_forge",
+            "dt_ps": 0.02,
+            "nsteps": 25000000,
+            "tcoupl": "V",
+            "pcoupl": "C",
+            "ref_t_k": null,
+            "ref_p_bar": null,
+            "ld_seed": "1003",
+            "total_sim_time_ns": 500.0
+          },
+          "trajectory_info": {
+            "n_atoms": 1280,
+            "n_frames": 1001,
+            "start_time_ps": 0.0,
+            "end_time_ps": 500000.0,
+            "dt_ps": 500.0,
+            "dimensions_frame0": [
+              129.1396942138672,
+              129.1396942138672,
+              129.1397705078125
+            ]
+          }
+        }
+      }
+    },
+    "Mut_p53": {
+      "system_name": "Mut_p53",
+      "topologies": {
+        "molecule_0.itp": {
+          "num_beads": 506,
+          "num_residues": 219,
+          "first_residue": "1 SER",
+          "last_residue": "219 THR",
+          "elastic_bonds_count": 1625
+        },
+        "molecule_1.itp": {
+          "num_beads": 506,
+          "num_residues": 219,
+          "first_residue": "1 SER",
+          "last_residue": "219 THR",
+          "elastic_bonds_count": 1631
+        }
+      },
+      "total_topology_beads": 1012,
+      "total_topology_residues": 438,
+      "replicates": {
+        "rep1": {
+          "exists": true,
+          "paths": {
+            "production_xtc": "E:\\Sharon\\data\\md_runs\\Mut_p53\\rep1\\production.xtc",
+            "production_centered_xtc": "E:\\Sharon\\data\\md_runs\\Mut_p53\\rep1\\production_centered.xtc",
+            "production_tpr": "E:\\Sharon\\data\\md_runs\\Mut_p53\\rep1\\production.tpr",
+            "production_log": "E:\\Sharon\\data\\md_runs\\Mut_p53\\rep1\\production.log"
+          },
+          "hashes": {
+            "production_centered_xtc": {
+              "sha256": "12be5cf29c0f4646b4cc2aada872c079ec9fd722251dd14124d518583ce5a603",
+              "is_partial": false,
+              "bytes_hashed": 4407348,
+              "total_bytes": 4407348
+            },
+            "production_xtc": {
+              "sha256": "ec65aa10ab2b949970b917b6c28f05aa93d414bb9f5c2040afafe217b55e9c67",
+              "is_partial": true,
+              "bytes_hashed": 10485760,
+              "total_bytes": 408885152
+            }
+          },
+          "log_params": {
+            "gmx_version": "2026.3-conda_forge",
+            "dt_ps": 0.02,
+            "nsteps": 25000000,
+            "tcoupl": "V",
+            "pcoupl": "C",
+            "ref_t_k": null,
+            "ref_p_bar": null,
+            "ld_seed": "-545530117",
+            "total_sim_time_ns": 500.0
+          },
+          "trajectory_info": {
+            "n_atoms": 1012,
+            "n_frames": 1001,
+            "start_time_ps": 0.0,
+            "end_time_ps": 500000.0,
+            "dt_ps": 500.0,
+            "dimensions_frame0": [
+              227.53329467773438,
+              227.53329467773438,
+              227.5333251953125
+            ]
+          }
+        },
+        "rep2": {
+          "exists": true,
+          "paths": {
+            "production_xtc": "E:\\Sharon\\data\\md_runs\\Mut_p53\\rep2\\production.xtc",
+            "production_centered_xtc": "E:\\Sharon\\data\\md_runs\\Mut_p53\\rep2\\production_centered.xtc",
+            "production_tpr": "E:\\Sharon\\data\\md_runs\\Mut_p53\\rep2\\production.tpr",
+            "production_log": "E:\\Sharon\\data\\md_runs\\Mut_p53\\rep2\\production.log"
+          },
+          "hashes": {
+            "production_centered_xtc": {
+              "sha256": "fd0cfb73376eae1176202e229e021eb52971077bce0ff4366646561a92cbcbbd",
+              "is_partial": false,
+              "bytes_hashed": 4407312,
+              "total_bytes": 4407312
+            },
+            "production_xtc": {
+              "sha256": "1964b59c7d1654bb052a1b153cb500a277ac5c574da75b06c8bf6ce722a99990",
+              "is_partial": true,
+              "bytes_hashed": 10485760,
+              "total_bytes": 409438360
+            }
+          },
+          "log_params": {
+            "gmx_version": "2026.3-conda_forge",
+            "dt_ps": 0.02,
+            "nsteps": 25000000,
+            "tcoupl": "V",
+            "pcoupl": "C",
+            "ref_t_k": null,
+            "ref_p_bar": null,
+            "ld_seed": "-889733634",
+            "total_sim_time_ns": 500.0
+          },
+          "trajectory_info": {
+            "n_atoms": 1012,
+            "n_frames": 1001,
+            "start_time_ps": 0.0,
+            "end_time_ps": 500000.0,
+            "dt_ps": 500.0,
+            "dimensions_frame0": [
+              227.88540649414062,
+              227.88540649414062,
+              227.885498046875
+            ]
+          }
+        },
+        "rep3": {
+          "exists": true,
+          "paths": {
+            "production_xtc": "E:\\Sharon\\data\\md_runs\\Mut_p53\\rep3\\production.xtc",
+            "production_centered_xtc": "E:\\Sharon\\data\\md_runs\\Mut_p53\\rep3\\production_centered.xtc",
+            "production_tpr": "E:\\Sharon\\data\\md_runs\\Mut_p53\\rep3\\production.tpr",
+            "production_log": "E:\\Sharon\\data\\md_runs\\Mut_p53\\rep3\\production.log"
+          },
+          "hashes": {
+            "production_centered_xtc": {
+              "sha256": "e41f8e678c3ee2c38f60d7a0c455135d6fbfc85310b237e17392a87fa5f912ad",
+              "is_partial": false,
+              "bytes_hashed": 4409376,
+              "total_bytes": 4409376
+            },
+            "production_xtc": {
+              "sha256": "8ed382ef6367f2a9bbdf0d4c8bb1ba9af5c52eb27c0cfe53fa318e3202e162be",
+              "is_partial": true,
+              "bytes_hashed": 10485760,
+              "total_bytes": 407635060
+            }
+          },
+          "log_params": {
+            "gmx_version": "2026.3-conda_forge",
+            "dt_ps": 0.02,
+            "nsteps": 25000000,
+            "tcoupl": "V",
+            "pcoupl": "C",
+            "ref_t_k": null,
+            "ref_p_bar": null,
+            "ld_seed": "-8445953",
+            "total_sim_time_ns": 500.0
+          },
+          "trajectory_info": {
+            "n_atoms": 1012,
+            "n_frames": 1001,
+            "start_time_ps": 0.0,
+            "end_time_ps": 500000.0,
+            "dt_ps": 500.0,
+            "dimensions_frame0": [
+              228.26119995117188,
+              228.26119995117188,
+              228.26116943359375
+            ]
+          }
+        }
+      }
+    },
+    "cMYC_MAX": {
+      "system_name": "cMYC_MAX",
+      "topologies": {
+        "molecule_0.itp": {
+          "num_beads": 206,
+          "num_residues": 88,
+          "first_residue": "1 GLY",
+          "last_residue": "88 CYS",
+          "elastic_bonds_count": 508
+        },
+        "molecule_1.itp": {
+          "num_beads": 200,
+          "num_residues": 83,
+          "first_residue": "1 ASP",
+          "last_residue": "83 CYS",
+          "elastic_bonds_count": 498
+        },
+        "molecule_2.itp": {
+          "num_beads": 206,
+          "num_residues": 88,
+          "first_residue": "1 GLY",
+          "last_residue": "88 CYS",
+          "elastic_bonds_count": 499
+        },
+        "molecule_3.itp": {
+          "num_beads": 200,
+          "num_residues": 83,
+          "first_residue": "1 ASP",
+          "last_residue": "83 CYS",
+          "elastic_bonds_count": 495
+        }
+      },
+      "total_topology_beads": 812,
+      "total_topology_residues": 342,
+      "replicates": {
+        "rep1": {
+          "exists": true,
+          "paths": {
+            "production_xtc": "E:\\Sharon\\data\\md_runs\\cMYC_MAX\\rep1\\production.xtc",
+            "production_centered_xtc": "E:\\Sharon\\data\\md_runs\\cMYC_MAX\\rep1\\production_centered.xtc",
+            "production_tpr": "E:\\Sharon\\data\\md_runs\\cMYC_MAX\\rep1\\production.tpr",
+            "production_log": "E:\\Sharon\\data\\md_runs\\cMYC_MAX\\rep1\\production.log"
+          },
+          "hashes": {
+            "production_centered_xtc": {
+              "sha256": "ab925656ea90f042b9ef2d54efacdc7fc76f6106f37672679702e9abd318a8a6",
+              "is_partial": false,
+              "bytes_hashed": 3558444,
+              "total_bytes": 3558444
+            },
+            "production_xtc": {
+              "sha256": "8ec58d6e4889ee52e1634b598dd01810f528232fb774b910c14ed4ff0c396f73",
+              "is_partial": true,
+              "bytes_hashed": 10485760,
+              "total_bytes": 240368288
+            }
+          },
+          "log_params": {
+            "gmx_version": "2026.3-conda_forge",
+            "dt_ps": 0.02,
+            "nsteps": 25000000,
+            "tcoupl": "V",
+            "pcoupl": "C",
+            "ref_t_k": null,
+            "ref_p_bar": null,
+            "ld_seed": "-553648145",
+            "total_sim_time_ns": 500.0
+          },
+          "trajectory_info": {
+            "n_atoms": 812,
+            "n_frames": 1001,
+            "start_time_ps": 0.0,
+            "end_time_ps": 500000.0,
+            "dt_ps": 500.0,
+            "dimensions_frame0": [
+              190.02479553222656,
+              190.02479553222656,
+              190.0247802734375
+            ]
+          }
+        },
+        "rep2": {
+          "exists": true,
+          "paths": {
+            "production_xtc": "E:\\Sharon\\data\\md_runs\\cMYC_MAX\\rep2\\production.xtc",
+            "production_centered_xtc": "E:\\Sharon\\data\\md_runs\\cMYC_MAX\\rep2\\production_centered.xtc",
+            "production_tpr": "E:\\Sharon\\data\\md_runs\\cMYC_MAX\\rep2\\production.tpr",
+            "production_log": "E:\\Sharon\\data\\md_runs\\cMYC_MAX\\rep2\\production.log"
+          },
+          "hashes": {
+            "production_centered_xtc": {
+              "sha256": "c5d2c459799ec5d652c42fff22905b8396fd716beb9f4b378ffaf61e5e18ac4e",
+              "is_partial": false,
+              "bytes_hashed": 3561904,
+              "total_bytes": 3561904
+            },
+            "production_xtc": {
+              "sha256": "67341ba160d8ce44c35556d7a51b55d3ab049ee10f9caeb6cd9e36c38fda4fbf",
+              "is_partial": true,
+              "bytes_hashed": 10485760,
+              "total_bytes": 240888676
+            }
+          },
+          "log_params": {
+            "gmx_version": "2026.3-conda_forge",
+            "dt_ps": 0.02,
+            "nsteps": 25000000,
+            "tcoupl": "V",
+            "pcoupl": "C",
+            "ref_t_k": null,
+            "ref_p_bar": null,
+            "ld_seed": "1592654783",
+            "total_sim_time_ns": 500.0
+          },
+          "trajectory_info": {
+            "n_atoms": 812,
+            "n_frames": 1001,
+            "start_time_ps": 0.0,
+            "end_time_ps": 500000.0,
+            "dt_ps": 500.0,
+            "dimensions_frame0": [
+              190.248291015625,
+              190.248291015625,
+              190.24838256835938
+            ]
+          }
+        },
+        "rep3": {
+          "exists": true,
+          "paths": {
+            "production_xtc": "E:\\Sharon\\data\\md_runs\\cMYC_MAX\\rep3\\production.xtc",
+            "production_centered_xtc": "E:\\Sharon\\data\\md_runs\\cMYC_MAX\\rep3\\production_centered.xtc",
+            "production_tpr": "E:\\Sharon\\data\\md_runs\\cMYC_MAX\\rep3\\production.tpr",
+            "production_log": "E:\\Sharon\\data\\md_runs\\cMYC_MAX\\rep3\\production.log"
+          },
+          "hashes": {
+            "production_centered_xtc": {
+              "sha256": "5194095a0998e1504903ef3d4d8d25b200e7fe3b50913c6929cd6b8bf87c9635",
+              "is_partial": false,
+              "bytes_hashed": 3558944,
+              "total_bytes": 3558944
+            },
+            "production_xtc": {
+              "sha256": "69843f28c971c930a98a5f64622a22309fa7a398151aa65cb3cf6fc75e226280",
+              "is_partial": true,
+              "bytes_hashed": 10485760,
+              "total_bytes": 240314448
+            }
+          },
+          "log_params": {
+            "gmx_version": "2026.3-conda_forge",
+            "dt_ps": 0.02,
+            "nsteps": 25000000,
+            "tcoupl": "V",
+            "pcoupl": "C",
+            "ref_t_k": null,
+            "ref_p_bar": null,
+            "ld_seed": "2128737462",
+            "total_sim_time_ns": 500.0
+          },
+          "trajectory_info": {
+            "n_atoms": 812,
+            "n_frames": 1001,
+            "start_time_ps": 0.0,
+            "end_time_ps": 500000.0,
+            "dt_ps": 500.0,
+            "dimensions_frame0": [
+              190.1396942138672,
+              190.1396942138672,
+              190.13967895507812
+            ]
+          }
+        }
+      }
+    }
+  }
+}

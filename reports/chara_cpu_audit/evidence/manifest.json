@@ -1,0 +1,287 @@
+{
+  "root": "E:\\Sharon",
+  "git": {
+    "commit_hash": "b415d67f0019e5e42281c6c96a68cce9044b20d2",
+    "branch": "main",
+    "is_dirty": true,
+    "dirty_files": [
+      "D scripts/generate_master_pptx.py",
+      "D scripts/render_md_video.py",
+      "?? cmyc_max_simulation.mp4",
+      "?? kras_g12d_simulation.mp4",
+      "?? mut_tp53_simulation.mp4",
+      "?? ptpn11_shp2_simulation.mp4",
+      "?? reports/",
+      "?? tools/"
+    ]
+  },
+  "system": {
+    "os": "Windows",
+    "os_release": "11",
+    "os_version": "10.0.26200",
+    "architecture": "AMD64",
+    "processor": "Intel64 Family 6 Model 186 Stepping 3, GenuineIntel",
+    "python_version": "3.14.3",
+    "python_executable": "C:\\Python314\\python.exe",
+    "thread_env": {
+      "OMP_NUM_THREADS": "Not set (default)",
+      "MKL_NUM_THREADS": "Not set (default)",
+      "OPENBLAS_NUM_THREADS": "Not set (default)",
+      "VECLIB_MAXIMUM_THREADS": "Not set (default)",
+      "NUMEXPR_NUM_THREADS": "Not set (default)"
+    },
+    "packages": {
+      "numpy": "2.4.6",
+      "pandas": "2.3.3",
+      "scipy": "1.17.1",
+      "sklearn": "1.9.0",
+      "sksurv": "0.28.0",
+      "lifelines": "0.30.3",
+      "joblib": "1.5.3",
+      "torch": "2.12.0+cpu",
+      "gseapy": "1.3.1"
+    }
+  },
+  "inventory": {
+    "TCGA-LUAD_expression.csv": {
+      "exists": true,
+      "size_bytes": 44606764,
+      "sha256": "c8b74fbef4651767979964ff1f39f146501b27dcae908caa9104f5fb418970be",
+      "modified_iso": "1786533056.5227654"
+    },
+    "TCGA-LUAD_survival.csv": {
+      "exists": true,
+      "size_bytes": 17081,
+      "sha256": "cb85ee7d1944a311e5373430f98df3627d6760adf7bba383c13d05f540abc71b",
+      "modified_iso": "1786533056.5455914"
+    },
+    "TCGA-PAAD_expression.csv": {
+      "exists": true,
+      "size_bytes": 15868961,
+      "sha256": "2c460bbce2562196e301815e15c2667e215c2739801230412139415dbfc3dca1",
+      "modified_iso": "1786533057.0337834"
+    },
+    "TCGA-PAAD_survival.csv": {
+      "exists": true,
+      "size_bytes": 3659,
+      "sha256": "78c5ff82aa42b8dcd70e80db42407f8ada7b05beb96f4f4f40687cce6996002e",
+      "modified_iso": "1786533057.0465727"
+    },
+    "Laplacian_STRING.csv": {
+      "exists": true,
+      "size_bytes": 108524327,
+      "sha256": "9f3b071e4fd8992b88c8e381b58f21d200a80b384845c1ea663c2765cfe645c8",
+      "modified_iso": "1786533162.3335316"
+    },
+    "Laplacian_STRING_4337.csv": {
+      "exists": true,
+      "size_bytes": 75563486,
+      "sha256": "88093f7804546815880896c42030e22535f24079ea97dbc36706729f5c4a2a40",
+      "modified_iso": "1787048107.6341925"
+    },
+    "Laplacian_Chara.csv": {
+      "exists": true,
+      "size_bytes": 108558540,
+      "sha256": "fc19a4f0c183da4e8bf51cfbe02d4f14edae1476e982d7f2270ac538c0090992",
+      "modified_iso": "1787039736.2115965"
+    },
+    "Laplacian_Chara_4337.csv": {
+      "exists": true,
+      "size_bytes": 75571555,
+      "sha256": "d06690320db9dd391a503369bdcfdb76f07c97243436bafa2d06130b87db536c",
+      "modified_iso": "1787048129.5972004"
+    },
+    "intersecting_genes_4337.txt": {
+      "exists": true,
+      "size_bytes": 32085,
+      "sha256": "c39b8fff08a0a88e388523a179a264526fa6f7fd625e321921c317418b3794a9",
+      "modified_iso": "1787246287.5774941"
+    },
+    "frontier_benchmark_results.csv": {
+      "exists": true,
+      "size_bytes": 438,
+      "sha256": "7cb9fda0a70ebe575318395ffc0e841c4135180e7afabca276673643f41f1124",
+      "modified_iso": "1787051312.7651508"
+    },
+    "chara_model_4337.pkl": {
+      "exists": true,
+      "size_bytes": 5305757,
+      "sha256": "fcee66731374f88a4f4f3c1c69b9c40fb5131cc6768fc6a26c451487eb4c474a",
+      "modified_iso": "1787049421.6752708"
+    },
+    "chara_model.pkl": {
+      "exists": true,
+      "size_bytes": 4204803,
+      "sha256": "3c175f2a80b436c935d4a4737ff3c73f489e7f4864d97466827f00d3fbe6ad37",
+      "modified_iso": "1787039784.8483086"
+    },
+    "data/raw/4OBE.pdb": {
+      "exists": true,
+      "size_bytes": 759730,
+      "sha256": "99e24709f3972dbdc536740a788f4da1084bbf0f6bacba6fa845f8b6ec369b28",
+      "modified_iso": "1787246287.56868"
+    },
+    "data/raw/1NKP.pdb": {
+      "exists": true,
+      "size_bytes": 437142,
+      "sha256": "5a56d8287240883c7eef4b06c80b82dffd879cae5e06e873fea82ab4158f53d5",
+      "modified_iso": "1787246287.5514865"
+    },
+    "data/raw/2J1X.pdb": {
+      "exists": true,
+      "size_bytes": 338414,
+      "sha256": "220ed4c88ac43b4ce01ea816a55bd5dbe1e37c634d26327a6daac7f0f84f3302",
+      "modified_iso": "1787246287.5514865"
+    },
+    "data/raw/4DGP.pdb": {
+      "exists": true,
+      "size_bytes": 379496,
+      "sha256": "94e801a82fedba4752acaa707494dd34ede35ea6eb140a3a84b1fc7c318ad943",
+      "modified_iso": "1787246287.5612178"
+    },
+    "data/processed/KRAS_4OBE_clean.pdb": {
+      "exists": true,
+      "size_bytes": 441670,
+      "sha256": "4c13f521aef5d36bfc8d923fad66022011dc023d83e6fab16272e54437c08322",
+      "modified_iso": "1787246287.4855497"
+    },
+    "data/processed/c-MYC_1NKP_clean.pdb": {
+      "exists": true,
+      "size_bytes": 669306,
+      "sha256": "4b8ad06a8d4ec5d436c04f1d8be097825603af03f0633f3efa4206a315065c60",
+      "modified_iso": "1787246287.5017025"
+    },
+    "data/processed/p53_2J1X_clean.pdb": {
+      "exists": true,
+      "size_bytes": 555486,
+      "sha256": "fb8b6bb2f06dd9516eea1626f53f7492d934b9363c4ed074bb69a39a3f88b25f",
+      "modified_iso": "1787246287.5430446"
+    },
+    "data/processed/PTPN11_4DGP_clean.pdb": {
+      "exists": true,
+      "size_bytes": 705108,
+      "sha256": "e93d6411755ea1dcb77c2206f0684c3b0fc43187bd77542e7a4e5937cc5aa45c",
+      "modified_iso": "1787246287.4934819"
+    },
+    "setup.py": {
+      "exists": true,
+      "size_bytes": 1956,
+      "sha256": "c65448fd5cc6f2c311d6c2cc598b48bba1398c67517d600e84d37be85506b07d",
+      "modified_iso": "1788783700.922981"
+    },
+    "pyproject.toml": {
+      "exists": true,
+      "size_bytes": 97,
+      "sha256": "717ffbb955ebb2e488c0137c4ff227cc6892d269cc1754da00a1df79c749a310",
+      "modified_iso": "1787246287.5785003"
+    },
+    "README.md": {
+      "exists": true,
+      "size_bytes": 9274,
+      "sha256": "1673bb577cb755a21f0f32d6f5e66957a743004cece38071046d55a2bbd2cfdb",
+      "modified_iso": "1788421275.0303872"
+    },
+    "chara/__init__.py": {
+      "exists": true,
+      "size_bytes": 966,
+      "sha256": "da0214481dfb30b53bb9a22f69cdda12ead93fd6f1b6111a007196b8c9fe7832",
+      "modified_iso": "1788783700.9189973"
+    },
+    "chara/model.py": {
+      "exists": true,
+      "size_bytes": 17083,
+      "sha256": "aeeb9b3485dd38e70aae88e96eb1def5441a316a75051499d5bc6956942ad8b3",
+      "modified_iso": "1788783700.919593"
+    },
+    "chara/graph.py": {
+      "exists": true,
+      "size_bytes": 2078,
+      "sha256": "c8593cf40bfbae0c9415b0fc582f3ca1ad8868bf01149058b105d56d4079db6c",
+      "modified_iso": "1788783700.919593"
+    },
+    "chara/metrics.py": {
+      "exists": true,
+      "size_bytes": 5236,
+      "sha256": "6c02ee52bbfce5679e76548d90f36bd3618954167c850174e3257ad1071cfa76",
+      "modified_iso": "1788709946.4653323"
+    },
+    "chara/preprocessing.py": {
+      "exists": true,
+      "size_bytes": 1363,
+      "sha256": "e913c907edf308520ea8321471c5a75119137082d4c9f6167dcb477896d4824f",
+      "modified_iso": "1787834735.7599692"
+    },
+    "scripts/01_phase1_prep.py": {
+      "exists": true,
+      "size_bytes": 5484,
+      "sha256": "2f84ef631cc9e5dce31813a32419fddac2fc6fd6ed635222cdf4c25b0b58bc99",
+      "modified_iso": "1787246287.5982087"
+    },
+    "scripts/02_phase2_cg.py": {
+      "exists": true,
+      "size_bytes": 9952,
+      "sha256": "de883680f8bb8acc3dca9d41d59609cc927c120cb8ac286bb731b0d5997a9c92",
+      "modified_iso": "1787246287.6043358"
+    },
+    "scripts/03_phase3_gromacs.py": {
+      "exists": true,
+      "size_bytes": 14212,
+      "sha256": "9d19990c9edb80034da9d87796e53c5c8962425a9f1deb2a76d12e654c63b124",
+      "modified_iso": "1787246287.6104615"
+    },
+    "scripts/03_generate_chara.py": {
+      "exists": true,
+      "size_bytes": 4383,
+      "sha256": "9b378a7fc449ace7aa44253e78b4564172b9551b627fc9d7f596ef6f71b0e6eb",
+      "modified_iso": "1787246287.6101437"
+    },
+    "scripts/04_chara_ood_validation.py": {
+      "exists": true,
+      "size_bytes": 10483,
+      "sha256": "f1c775ffd51e10ee1e0cf906b2be2ba9e676fc33969fb2ef52fec1a3f1bb7c63",
+      "modified_iso": "1787246287.6104615"
+    },
+    "scripts/05_adversarial_poisoning.py": {
+      "exists": true,
+      "size_bytes": 14212,
+      "sha256": "ed5bc3901fc7d7a5e4abde3315c0821031a44821f80d2c9f2819cce0a2ee47eb",
+      "modified_iso": "1787246287.618344"
+    },
+    "scripts/06_dirichlet_energy.py": {
+      "exists": true,
+      "size_bytes": 5429,
+      "sha256": "bb1da19ef72ac0dae35d78c95638b7d6de998ae45145675fa209f7ffaa708b53",
+      "modified_iso": "1787246287.618344"
+    },
+    "scripts/07_biological_gsea.py": {
+      "exists": true,
+      "size_bytes": 11444,
+      "sha256": "1849cb3bd3226224dd87762e6c88bd53d613419d0a85a1c4a10aaae1b6eb1022",
+      "modified_iso": "1787246287.618344"
+    },
+    "scripts/09_zeroshot_external_validation.py": {
+      "exists": true,
+      "size_bytes": 14482,
+      "sha256": "fa3617250617f7c1b53462e80c330d4faaeb0fcd3fcd7265f5a8a63732c662ce",
+      "modified_iso": "1787246287.6267705"
+    },
+    "scripts/17_generate_contact_matrices.py": {
+      "exists": true,
+      "size_bytes": 1970,
+      "sha256": "a629224cd2498f7f71b60cea302ae5399fa774196196c1a3356cdc9b785bad27",
+      "modified_iso": "1787246287.6616924"
+    },
+    "scripts/benchmark_frontiers.py": {
+      "exists": true,
+      "size_bytes": 4750,
+      "sha256": "77119c95bbb9ce09e5463e25dd9cc1139a42ed426ee00a64f03b7e956e7e6d3a",
+      "modified_iso": "1787246287.667479"
+    },
+    "scripts/01_master_cagpr_validation.py": {
+      "exists": true,
+      "size_bytes": 9801,
+      "sha256": "6dbc119a2e517d2eefe5acf66a147fc9eab860c0b6f151ba6c63183d2e9e0763",
+      "modified_iso": "1787246287.5966282"
+    }
+  }
+}

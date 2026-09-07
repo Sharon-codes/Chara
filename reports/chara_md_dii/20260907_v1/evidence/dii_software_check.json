@@ -1,0 +1,141 @@
+{
+  "status": "PASSED",
+  "dadapy_version": "0.3.4",
+  "dadapy_module_path": "E:\\Sharon\\.venv_dii\\Lib\\site-packages\\dadapy\\__init__.py",
+  "python_version": "3.11.15 (main, Apr  7 2026, 20:47:24) [MSC v.1944 64 bit (AMD64)]",
+  "python_executable": "E:\\Sharon\\.venv_dii\\Scripts\\python.exe",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "synthetic_test_params": {
+    "N": 60,
+    "D_source": 6,
+    "D_target": 2,
+    "random_seed": 42
+  },
+  "initial_dii": 0.3658288083441447,
+  "optimized_dii": 0.3658288083441447,
+  "optimized_weights": [
+    1.4609567820922857,
+    1.4463986400060216,
+    1.049219944892725,
+    1.0282470289723964,
+    0.9935174428747491,
+    0.9684581100637423
+  ],
+  "backward_elimination_subsets": {
+    "1": {
+      "active_feature_count": 6,
+      "active_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "dii": 0.2563213126905476,
+      "weights": [
+        1.4855018608395005,
+        1.4714879385207018,
+        1.0315354858413692,
+        1.0144308641191284,
+        0.9863170443481472,
+        0.9460448362864665
+      ]
+    },
+    "2": {
+      "active_feature_count": 5,
+      "active_indices": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "dii": 0.20907626131834095,
+      "weights": [
+        1.5262380406672595,
+        1.495532420638501,
+        0.9902728756645508,
+        0.9818673334525349,
+        0.980527520564661,
+        0.0
+      ]
+    },
+    "3": {
+      "active_feature_count": 4,
+      "active_indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "dii": 0.19346552887182775,
+      "weights": [
+        1.5630501050684857,
+        1.5120406274593954,
+        0.9504989690205202,
+        0.9448520034914576,
+        0.0,
+        0.0
+      ]
+    },
+    "4": {
+      "active_feature_count": 3,
+      "active_indices": [
+        0,
+        1,
+        2
+      ],
+      "dii": 0.13812198504618017,
+      "weights": [
+        1.5768563140007488,
+        1.5191844068937495,
+        0.9258047430269372,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "5": {
+      "active_feature_count": 2,
+      "active_indices": [
+        0,
+        1
+      ],
+      "dii": 0.0783381400982491,
+      "weights": [
+        1.577962090573919,
+        1.5203488439179218,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "6": {
+      "active_feature_count": 1,
+      "active_indices": [
+        0
+      ],
+      "dii": 0.5784582975298957,
+      "weights": [
+        1.5813016081983982,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "history_keys": [
+    "dii_per_epoch",
+    "weights_per_epoch"
+  ],
+  "finite_checks": {
+    "initial_dii_finite": true,
+    "optimized_dii_finite": true,
+    "weights_finite": true,
+    "elimination_diis_finite": true
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "execution_time_seconds": 252.28525185585022,
+  "screening_margin_threshold": 0.02,
+  "tcga_luad_development": {
+    "individual_folds": [
+      {
+        "fold": 1,
+        "n_train": 401,
+        "n_test": 101,
+        "events_test": 37,
+        "m1_clinical_c": 0.6897528321318228,
+        "m2_clin_coxnet_c": 0.6833161688980433,
+        "m3_clin_chara_c": 0.684346035015448,
+        "delta_m2_minus_m1": -0.00643666323377956,
+        "delta_m3_minus_m1": -0.005406797116374817,
+        "delta_m3_minus_m2": 0.001029866117404743,
+        "diag_coxnet_only_c": 0.6091658084449022,
+        "diag_chara_only_c": 0.606076210092688
+      },
+      {
+        "fold": 2,
+        "n_train": 401,
+        "n_test": 101,
+        "events_test": 37,
+        "m1_clinical_c": 0.6564540431943747,
+        "m2_clin_coxnet_c": 0.6664992466097438,
+        "m3_clin_chara_c": 0.6629834254143646,
+        "delta_m2_minus_m1": 0.010045203415369075,
+        "delta_m3_minus_m1": 0.006529382219989888,
+        "delta_m3_minus_m2": -0.0035158211953791874,
+        "diag_coxnet_only_c": 0.6278252134605726,
+        "diag_chara_only_c": 0.6212958312405826
+      },
+      {
+        "fold": 3,
+        "n_train": 402,
+        "n_test": 100,
+        "events_test": 36,
+        "m1_clinical_c": 0.6832151300236406,
+        "m2_clin_coxnet_c": 0.6832151300236406,
+        "m3_clin_chara_c": 0.6832151300236406,
+        "delta_m2_minus_m1": 0.0,
+        "delta_m3_minus_m1": 0.0,
+        "delta_m3_minus_m2": 0.0,
+        "diag_coxnet_only_c": 0.6725768321513003,
+        "diag_chara_only_c": 0.6897163120567376
+      },
+      {
+        "fold": 4,
+        "n_train": 402,
+        "n_test": 100,
+        "events_test": 36,
+        "m1_clinical_c": 0.6885849552866912,
+        "m2_clin_coxnet_c": 0.7117306680694372,
+        "m3_clin_chara_c": 0.7117306680694372,
+        "delta_m2_minus_m1": 0.02314571278274602,
+        "delta_m3_minus_m1": 0.02314571278274602,
+        "delta_m3_minus_m2": 0.0,
+        "diag_coxnet_only_c": 0.5865334034718569,
+        "diag_chara_only_c": 0.5807469752761705
+      },
+      {
+        "fold": 5,
+        "n_train": 402,
+        "n_test": 100,
+        "events_test": 36,
+        "m1_clinical_c": 0.6760402377686329,
+        "m2_clin_coxnet_c": 0.6181984453589392,
+        "m3_clin_chara_c": 0.594421582075903,
+        "delta_m2_minus_m1": -0.05784179240969367,
+        "delta_m3_minus_m1": -0.08161865569272986,
+        "delta_m3_minus_m2": -0.023776863283036187,
+        "diag_coxnet_only_c": 0.557384545038866,
+        "diag_chara_only_c": 0.557384545038866
+      }
+    ],
+    "pooled_within_fold_aggregate": {
+      "m1_clinical_pooled_c": 0.6782734109405584,
+      "m2_clin_coxnet_pooled_c": 0.6706500463582982,
+      "m3_clin_chara_pooled_c": 0.6647779952611518,
+      "delta_m2_minus_m1": -0.007623364582260206,
+      "delta_m3_minus_m1": -0.013495415679406597,
+      "delta_m3_minus_m2": -0.005872051097146391,
+      "total_within_fold_pairs": 9707
+    }
+  },
+  "gse31210_external_luad": {
+    "cohort": "GSE31210",
+    "n_samples": 226,
+    "n_events": 35,
+    "valid_bootstrap_draws": 2000,
+    "point_estimates": {
+      "m1_clinical": 0.686797301638291,
+      "m2_clin_coxnet": 0.672020558946354,
+      "m3_clin_chara": 0.6853517507227754,
+      "delta_m2_minus_m1": -0.014776742691936962,
+      "delta_m3_minus_m1": -0.00144555091551557,
+      "delta_m3_minus_m2": 0.013331191776421392
+    },
+    "bootstrap_summary": {
+      "m1_clinical": {
+        "mean": 0.6872542877490444,
+        "ci_95": [
+          0.5798795692959404,
+          0.787448182788939
+        ]
+      },
+      "m2_clin_coxnet": {
+        "mean": 0.6721500956142384,
+        "ci_95": [
+          0.5829147957912099,
+          0.7554834456350253
+        ]
+      },
+      "m3_clin_chara": {
+        "mean": 0.6857003130365278,
+        "ci_95": [
+          0.602615505648693,
+          0.764046057106731
+        ]
+      }
+    },
+    "paired_differences": {
+      "m2_minus_m1": {
+        "mean_delta": -0.015104192134805978,
+        "ci_95": [
+          -0.1478485677586321,
+          0.13126708607720625
+        ],
+        "p_value_two_sided": 0.829
+      },
+      "m3_minus_m1": {
+        "mean_delta": -0.00155397471251662,
+        "ci_95": [
+          -0.13386890996193543,
+          0.1387582854110893
+        ],
+        "p_value_two_sided": 0.973
+      },
+      "m3_minus_m2": {
+        "mean_delta": 0.013550217422289358,
+        "ci_95": [
+          -0.0033478636856367344,
+          0.030967674152830426
+        ],
+        "p_value_two_sided": 0.104
+      }
+    }
+  },
+  "tcga_paad_stress_test": {
+    "cohort": "TCGA-PAAD",
+    "n_samples": 177,
+    "n_events": 93,
+    "valid_bootstrap_draws": 2000,
+    "point_estimates": {
+      "m1_clinical": 0.5561551613592648,
+      "m2_clin_coxnet": 0.6013036973712331,
+      "m3_clin_chara": 0.600662534729643,
+      "delta_m2_minus_m1": 0.04514853601196833,
+      "delta_m3_minus_m1": 0.044507373370378245,
+      "delta_m3_minus_m2": -0.0006411626415900873
+    },
+    "bootstrap_summary": {
+      "m1_clinical": {
+        "mean": 0.5574396595876162,
+        "ci_95": [
+          0.4922455694384568,
+          0.6237679527651682
+        ]
+      },
+      "m2_clin_coxnet": {
+        "mean": 0.602525232894106,
+        "ci_95": [
+          0.537560341870119,
+          0.6694692867276699
+        ]
+      },
+      "m3_clin_chara": {
+        "mean": 0.6016620070572097,
+        "ci_95": [
+          0.5381588386115255,
+          0.6666077583262974
+        ]
+      }
+    },
+    "paired_differences": {
+      "m2_minus_m1": {
+        "mean_delta": 0.04508557330648984,
+        "ci_95": [
+          0.010147055707896877,
+          0.08172928273928881
+        ],
+        "p_value_two_sided": 0.015
+      },
+      "m3_minus_m1": {
+        "mean_delta": 0.044222347469593574,
+        "ci_95": [
+          0.007433206059145861,
+          0.08135283714593936
+        ],
+        "p_value_two_sided": 0.022
+      },
+      "m3_minus_m2": {
+        "mean_delta": -0.0008632258368962612,
+        "ci_95": [
+          -0.011025785340597566,
+          0.009525111080012591
+        ],
+        "p_value_two_sided": 0.873
+      }
+    }
+  }
+}

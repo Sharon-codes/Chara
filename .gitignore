@@ -39,9 +39,20 @@ debug_output.txt
 dssp_in_*
 
 # Virtual environments
-.venv/
+.venv*/
 venv/
 env/
+
+# Heavy binary data, archives & media
+*.zip
+*.npz
+*.mp4
+data/md_runs/
+reports/**/staging/
+reports/**/extracted_data/
+reports/**/evidence_staging/
+reports/**/archive_staging/
+reports/**/evidence/raw_predictions/
 
 # Caches
 geo_cache/

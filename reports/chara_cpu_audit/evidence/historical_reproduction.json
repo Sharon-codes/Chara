@@ -1,0 +1,131 @@
+{
+  "frontier_benchmark": {
+    "historical_csv": [
+      {
+        "model": "Elastic Net Coxnet",
+        "c_index": 0.5248152059134108,
+        "auc_1y": 0.4664012705592416,
+        "auc_3y": 0.4080681860843322,
+        "auc_5y": 0.2427971118443435
+      },
+      {
+        "model": "Random Survival Forest",
+        "c_index": 0.404083069341781,
+        "auc_1y": 0.417507615002786,
+        "auc_3y": 0.365741529180811,
+        "auc_5y": 0.4841814794402872
+      },
+      {
+        "model": "DeepSurv",
+        "c_index": 0.5536782822949665,
+        "auc_1y": 0.5464959644715701,
+        "auc_3y": 0.3937166476023486,
+        "auc_5y": 0.3121886559094719
+      },
+      {
+        "model": "Clinical Cox-PH",
+        "c_index": 0.5,
+        "auc_1y": 0.5,
+        "auc_3y": 0.5,
+        "auc_5y": 0.5
+      },
+      {
+        "model": "Chara",
+        "c_index": 0.7310806054206266,
+        "auc_1y": 0.7462654395690997,
+        "auc_3y": 0.7826368713999061,
+        "auc_5y": 0.819489873476839
+      }
+    ],
+    "reproduced_benchmarks": [
+      {
+        "model": "Elastic Net Coxnet",
+        "c_index": 0.5248152059134108,
+        "auc_1y": 0.46640127055924163,
+        "auc_3y": 0.40806818608433226,
+        "auc_5y": 0.2427971118443435
+      },
+      {
+        "model": "Random Survival Forest",
+        "c_index": 0.40408306934178106,
+        "auc_1y": 0.41750761500278605,
+        "auc_3y": 0.36574152918081104,
+        "auc_5y": 0.4841814794402872
+      },
+      {
+        "model": "DeepSurv",
+        "c_index": 0.5536782822949665,
+        "auc_1y": 0.5464959644715701,
+        "auc_3y": 0.3937166476023486,
+        "auc_5y": 0.3121886559094719
+      },
+      {
+        "model": "Clinical Cox-PH (Constant Dummy)",
+        "c_index": 0.5,
+        "auc_1y": 0.5,
+        "auc_3y": 0.5,
+        "auc_5y": 0.5
+      },
+      {
+        "model": "Chara (As Evaluated: raw X)",
+        "c_index": 0.7310806054206266,
+        "auc_1y": 0.7462654395690997,
+        "auc_3y": 0.7826368713999061,
+        "auc_5y": 0.819489873476839
+      },
+      {
+        "model": "Chara (With Test-Time W filter)",
+        "c_index": 0.7289686730024639,
+        "auc_1y": 0.742170101649045,
+        "auc_3y": 0.7747294030161676,
+        "auc_5y": 0.809082254565254
+      }
+    ],
+    "dummy_clinical_variance": 0.0,
+    "chara_nonzero_coefficients": 58,
+    "chara_alpha_index": 32,
+    "chara_alpha_value": 0.1858894155993931
+  },
+  "gse31210_zeroshot": {
+    "n_patients": 226,
+    "n_genes": 4337,
+    "alpha_index": 32,
+    "c_index_raw_expression": 0.6225505942820431,
+    "c_index_smoothed_expression": 0.6244779955027305,
+    "event_count": 35,
+    "censoring_rate": 0.8451327433628318
+  },
+  "paad_ood": {
+    "n_paad_samples": 177,
+    "paad_events": 93,
+    "c_index_paad_raw": 0.6099593930326993,
+    "c_index_paad_smoothed": 0.6101731139132294,
+    "target_leakage_note": "In scripts/04_chara_ood_validation.py line 230, hyperparameter tau was selected by maximizing Chara_PAAD (the target evaluation cohort)."
+  },
+  "synthetic_cagpr": {
+    "KRAS_G12D": {
+      "mse_global": 28.535134979448006,
+      "mse_hybrid": 25.60123471634842,
+      "mse_red_pct": 10.28171152935735,
+      "note": "Computed on synthetic N=250 Gaussian samples with hardcoded ground-truth beta on S_nodes, not patient survival data"
+    },
+    "Mut_p53": {
+      "mse_global": 28.553498234404646,
+      "mse_hybrid": 27.537468682596092,
+      "mse_red_pct": 3.558336507378703,
+      "note": "Computed on synthetic N=250 Gaussian samples with hardcoded ground-truth beta on S_nodes, not patient survival data"
+    },
+    "PTPN11": {
+      "mse_global": 33.396200596682256,
+      "mse_hybrid": 32.510458512561144,
+      "mse_red_pct": 2.6522241102154185,
+      "note": "Computed on synthetic N=250 Gaussian samples with hardcoded ground-truth beta on S_nodes, not patient survival data"
+    },
+    "cMYC_MAX": {
+      "mse_global": 30.462409128534315,
+      "mse_hybrid": 29.741452283236093,
+      "mse_red_pct": 2.3667098759529734,
+      "note": "Computed on synthetic N=250 Gaussian samples with hardcoded ground-truth beta on S_nodes, not patient survival data"
+    }
+  }
+}

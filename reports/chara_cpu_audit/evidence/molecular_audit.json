@@ -1,0 +1,217 @@
+{
+  "systems": {
+    "KRAS": {
+      "system": "KRAS",
+      "pdb_id": "4OBE",
+      "raw_total_residues": 339,
+      "clean_total_residues": 340,
+      "chains": [
+        "A",
+        "B"
+      ],
+      "residue_range": "1 to 170",
+      "residue_12_identity": [
+        "ALA",
+        "ALA"
+      ],
+      "claimed_G12D_present": false,
+      "actual_mutation_introduced": false,
+      "claimed_SEP181_present": false,
+      "residue_181_exists_in_construct": false,
+      "raw_heterogens": [
+        "GDP",
+        "HOH",
+        "MG"
+      ],
+      "clean_heterogens": [],
+      "notes": "4OBE crystal structure is KRAS catalytic domain (residues 1-169, with residue 12 as ALA). Residue 181 is in disordered hypervariable tail, entirely absent from construct."
+    },
+    "cMYC_MAX": {
+      "system": "c-MYC/MAX",
+      "pdb_id": "1NKP",
+      "raw_total_residues": 411,
+      "clean_total_residues": 418,
+      "chains": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H"
+      ],
+      "claimed_TPO58_present": false,
+      "res58_present_in_construct": true,
+      "res58_identity": [
+        "GLN",
+        "THR",
+        "GLN",
+        "THR"
+      ],
+      "raw_heterogens": [
+        "HOH"
+      ],
+      "clean_heterogens": [],
+      "notes": "1NKP is the bHLH-LZ domain (c-Myc ~355-437, Max ~22-102) bound to DNA. The N-terminal TAD containing Thr58 is absent from the construct. DNA duplex was stripped."
+    },
+    "Mut_p53": {
+      "system": "Mutant p53",
+      "pdb_id": "2J1X",
+      "raw_total_residues": 390,
+      "clean_total_residues": 438,
+      "chains": [
+        "A",
+        "B"
+      ],
+      "residue_range": "1 to 219 (corresponding to core domain 94-312)",
+      "claimed_R273H_present": false,
+      "claimed_SEP392_present": false,
+      "residue_392_exists_in_construct": false,
+      "raw_heterogens": [
+        "HOH",
+        "ZN"
+      ],
+      "clean_heterogens": [],
+      "notes": "2J1X is a core domain construct (residues 94-312) containing stabilizing mutations M133L, V203A, N239Y, N268D. R273H was not introduced. Ser392 is in the C-terminal regulatory domain, absent from construct. Zinc cofactor was stripped."
+    },
+    "PTPN11": {
+      "system": "PTPN11 (SHP2)",
+      "pdb_id": "4DGP",
+      "raw_total_residues": 499,
+      "clean_total_residues": 536,
+      "chains": [
+        "A"
+      ],
+      "residue_range": "1 to 536",
+      "claimed_PTR542_present": false,
+      "residue_542_exists_in_construct": false,
+      "raw_heterogens": [
+        "HOH"
+      ],
+      "clean_heterogens": [],
+      "notes": "4DGP represents SHP2 autoinhibited form (1-528 plus C-term His-tag up to 536). Tyr542 resides in the disordered C-terminal tail (529-593), not present in this crystal structure."
+    }
+  },
+  "trajectories": {
+    "runs": {
+      "KRAS_G12D": {
+        "rep1": {
+          "completed": true,
+          "nsteps": 25000000,
+          "timestep_ps": 0.02,
+          "total_time_ns": 500.0,
+          "xtc_bytes": 70047808,
+          "wall_time_s": 3839647238.225,
+          "gmx_version": ":-) GROMACS - gmx mdrun, 2026.3-conda_forge (-:"
+        },
+        "rep2": {
+          "completed": true,
+          "nsteps": 25000000,
+          "timestep_ps": 0.02,
+          "total_time_ns": 500.0,
+          "xtc_bytes": 69505920,
+          "wall_time_s": 4064222940.94,
+          "gmx_version": ":-) GROMACS - gmx mdrun, 2026.3-conda_forge (-:"
+        },
+        "rep3": {
+          "completed": true,
+          "nsteps": 25000000,
+          "timestep_ps": 0.02,
+          "total_time_ns": 500.0,
+          "xtc_bytes": 69744120,
+          "wall_time_s": 3963735932.752,
+          "gmx_version": ":-) GROMACS - gmx mdrun, 2026.3-conda_forge (-:"
+        }
+      },
+      "cMYC_MAX": {
+        "rep1": {
+          "completed": true,
+          "nsteps": 25000000,
+          "timestep_ps": 0.02,
+          "total_time_ns": 500.0,
+          "xtc_bytes": 240368288,
+          "wall_time_s": 13392126796.644,
+          "gmx_version": ":-) GROMACS - gmx mdrun, 2026.3-conda_forge (-:"
+        },
+        "rep2": {
+          "completed": true,
+          "nsteps": 25000000,
+          "timestep_ps": 0.02,
+          "total_time_ns": 500.0,
+          "xtc_bytes": 240888676,
+          "wall_time_s": 13422816479.454,
+          "gmx_version": ":-) GROMACS - gmx mdrun, 2026.3-conda_forge (-:"
+        },
+        "rep3": {
+          "completed": true,
+          "nsteps": 25000000,
+          "timestep_ps": 0.02,
+          "total_time_ns": 500.0,
+          "xtc_bytes": 240314448,
+          "wall_time_s": 13483600170.192,
+          "gmx_version": ":-) GROMACS - gmx mdrun, 2026.3-conda_forge (-:"
+        }
+      },
+      "Mut_p53": {
+        "rep1": {
+          "completed": true,
+          "nsteps": 25000000,
+          "timestep_ps": 0.02,
+          "total_time_ns": 500.0,
+          "xtc_bytes": 408885152,
+          "wall_time_s": 22904354562.132,
+          "gmx_version": ":-) GROMACS - gmx mdrun, 2026.3-conda_forge (-:"
+        },
+        "rep2": {
+          "completed": true,
+          "nsteps": 25000000,
+          "timestep_ps": 0.02,
+          "total_time_ns": 500.0,
+          "xtc_bytes": 409438360,
+          "wall_time_s": 22481564910.053,
+          "gmx_version": ":-) GROMACS - gmx mdrun, 2026.3-conda_forge (-:"
+        },
+        "rep3": {
+          "completed": true,
+          "nsteps": 25000000,
+          "timestep_ps": 0.02,
+          "total_time_ns": 500.0,
+          "xtc_bytes": 407635060,
+          "wall_time_s": 21482818709.328,
+          "gmx_version": ":-) GROMACS - gmx mdrun, 2026.3-conda_forge (-:"
+        }
+      },
+      "PTPN11": {
+        "rep1": {
+          "completed": true,
+          "nsteps": 25000000,
+          "timestep_ps": 0.02,
+          "total_time_ns": 500.0,
+          "xtc_bytes": 101307780,
+          "wall_time_s": 4513679773.223,
+          "gmx_version": ":-) GROMACS - gmx mdrun, 2026.3-conda_forge (-:"
+        },
+        "rep2": {
+          "completed": true,
+          "nsteps": 25000000,
+          "timestep_ps": 0.02,
+          "total_time_ns": 500.0,
+          "xtc_bytes": 100082308,
+          "wall_time_s": 6111706484.527,
+          "gmx_version": ":-) GROMACS - gmx mdrun, 2026.3-conda_forge (-:"
+        },
+        "rep3": {
+          "completed": true,
+          "nsteps": 25000000,
+          "timestep_ps": 0.02,
+          "total_time_ns": 500.0,
+          "xtc_bytes": 100556132,
+          "wall_time_s": 6018097196.011,
+          "gmx_version": ":-) GROMACS - gmx mdrun, 2026.3-conda_forge (-:"
+        }
+      }
+    },
+    "total_completed_sampling_ns": 6000.0
+  }
+}

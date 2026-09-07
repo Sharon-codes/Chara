@@ -1,0 +1,39 @@
+<svg width="750" height="360" xmlns="http://www.w3.org/2000/svg" style="background:#0f172a; border-radius:8px; font-family:sans-serif;">
+<text x="375.0" y="25" fill="#f8fafc" font-size="14" font-weight="bold" text-anchor="middle">Figure 4: Reconstruction Error Breakdown: Directly Restrained vs Unrestrained Targets</text>
+<line x1="80" y1="253.2" x2="570" y2="253.2" stroke="#334155" stroke-width="1" stroke-dasharray="2,2"/>
+<text x="72" y="257.2" fill="#94a3b8" font-size="10" text-anchor="end">0.02 nm</text>
+<line x1="80" y1="196.3" x2="570" y2="196.3" stroke="#334155" stroke-width="1" stroke-dasharray="2,2"/>
+<text x="72" y="200.3" fill="#94a3b8" font-size="10" text-anchor="end">0.04 nm</text>
+<line x1="80" y1="139.5" x2="570" y2="139.5" stroke="#334155" stroke-width="1" stroke-dasharray="2,2"/>
+<text x="72" y="143.5" fill="#94a3b8" font-size="10" text-anchor="end">0.06 nm</text>
+<line x1="80" y1="82.6" x2="570" y2="82.6" stroke="#334155" stroke-width="1" stroke-dasharray="2,2"/>
+<text x="72" y="86.6" fill="#94a3b8" font-size="10" text-anchor="end">0.08 nm</text>
+<text x="141.2" y="330" fill="#cbd5e1" font-size="11" font-weight="bold" text-anchor="middle">Fold 1 (rep3)</text>
+<rect x="92.2" y="191.5" width="22.1" height="118.5" fill="#64748b" rx="2"/>
+<rect x="118.3" y="194.0" width="22.1" height="116.0" fill="#38bdf8" rx="2"/>
+<rect x="152.3" y="108.5" width="22.1" height="201.5" fill="#94a3b8" rx="2"/>
+<rect x="178.4" y="129.8" width="22.1" height="180.2" fill="#10b981" rx="2"/>
+<text x="263.8" y="330" fill="#cbd5e1" font-size="11" font-weight="bold" text-anchor="middle">Fold 2 (rep2)</text>
+<rect x="214.8" y="182.9" width="22.1" height="127.1" fill="#64748b" rx="2"/>
+<rect x="240.8" y="180.7" width="22.1" height="129.3" fill="#38bdf8" rx="2"/>
+<rect x="274.9" y="62.8" width="22.1" height="247.2" fill="#94a3b8" rx="2"/>
+<rect x="300.9" y="81.2" width="22.1" height="228.8" fill="#10b981" rx="2"/>
+<text x="386.2" y="330" fill="#cbd5e1" font-size="11" font-weight="bold" text-anchor="middle">Fold 3 (rep1)</text>
+<rect x="337.2" y="183.8" width="22.1" height="126.2" fill="#64748b" rx="2"/>
+<rect x="363.3" y="187.2" width="22.1" height="122.8" fill="#38bdf8" rx="2"/>
+<rect x="397.4" y="78.0" width="22.1" height="232.0" fill="#94a3b8" rx="2"/>
+<rect x="423.4" y="99.6" width="22.1" height="210.4" fill="#10b981" rx="2"/>
+<text x="508.8" y="330" fill="#cbd5e1" font-size="11" font-weight="bold" text-anchor="middle">Pooled Mean</text>
+<rect x="459.8" y="186.1" width="22.1" height="123.9" fill="#64748b" rx="2"/>
+<rect x="485.8" y="187.3" width="22.1" height="122.7" fill="#38bdf8" rx="2"/>
+<rect x="519.9" y="83.1" width="22.1" height="226.9" fill="#94a3b8" rx="2"/>
+<rect x="545.9" y="103.5" width="22.1" height="206.5" fill="#10b981" rx="2"/>
+<rect x="585" y="60" width="14" height="14" fill="#64748b" rx="2"/>
+<text x="607" y="71" fill="#e2e8f0" font-size="10">Restrained: Mean Baseline</text>
+<rect x="585" y="86" width="14" height="14" fill="#38bdf8" rx="2"/>
+<text x="607" y="97" fill="#e2e8f0" font-size="10">Restrained: M8 Robust</text>
+<rect x="585" y="112" width="14" height="14" fill="#94a3b8" rx="2"/>
+<text x="607" y="123" fill="#e2e8f0" font-size="10">Unrestrained: Mean Baseline</text>
+<rect x="585" y="138" width="14" height="14" fill="#10b981" rx="2"/>
+<text x="607" y="149" fill="#e2e8f0" font-size="10">Unrestrained: M8 Robust</text>
+</svg>

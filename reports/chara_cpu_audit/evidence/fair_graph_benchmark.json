@@ -1,0 +1,491 @@
+{
+  "execution_time_seconds": 163.37045669555664,
+  "cohort_sizes": {
+    "luad_train": 376,
+    "luad_train_events": 136,
+    "luad_test": 126,
+    "luad_test_events": 46,
+    "paad_samples": 177,
+    "paad_events": 93,
+    "gse31210_samples": 226,
+    "gse31210_events": 35
+  },
+  "model_metadata": {
+    "No Graph (Vanilla Coxnet)": {
+      "alpha_index": 25,
+      "alpha": 0.10033442631398955,
+      "nonzero_genes": 83
+    },
+    "Ordinary STRING": {
+      "alpha_index": 26,
+      "alpha": 0.09162564866539194,
+      "nonzero_genes": 85
+    },
+    "Chara (Retrained)": {
+      "alpha_index": 22,
+      "alpha": 0.1120037174393183,
+      "nonzero_genes": 56
+    },
+    "Hash-Weighted STRING (Seed 42)": {
+      "alpha_index": 25,
+      "alpha": 0.09235357004873924,
+      "nonzero_genes": 84
+    },
+    "Shuffled Graph Control": {
+      "alpha_index": 27,
+      "alpha": 0.0870170163817428,
+      "nonzero_genes": 90
+    },
+    "Frozen Historical Chara (chara_model_4337.pkl)": {
+      "alpha_index": 32,
+      "alpha": 0.1858894155993931,
+      "nonzero_genes": 58
+    }
+  },
+  "point_metrics_smoothed_test": {
+    "TCGA_LUAD_Test": {
+      "No Graph (Vanilla Coxnet)": {
+        "c_index": 0.5529743048222457,
+        "auc_1y": 0.5390637412913596,
+        "auc_3y": 0.5452156001328332,
+        "auc_5y": 0.44913652035828416
+      },
+      "Ordinary STRING": {
+        "c_index": 0.5596620908130939,
+        "auc_1y": 0.5416112771357305,
+        "auc_3y": 0.5453181920369823,
+        "auc_5y": 0.4560027616006852
+      },
+      "Chara (Retrained)": {
+        "c_index": 0.5656458993312214,
+        "auc_1y": 0.5539482396499633,
+        "auc_3y": 0.5495599300524536,
+        "auc_5y": 0.4486496291668449
+      },
+      "Hash-Weighted STRING (Seed 42)": {
+        "c_index": 0.5547342485040478,
+        "auc_1y": 0.5412648514580715,
+        "auc_3y": 0.5557568093729496,
+        "auc_5y": 0.4607450167123896
+      },
+      "Shuffled Graph Control": {
+        "c_index": 0.562126011967617,
+        "auc_1y": 0.5436988704032789,
+        "auc_3y": 0.5212526704063779,
+        "auc_5y": 0.39711842462910196
+      },
+      "Frozen Historical Chara (chara_model_4337.pkl)": {
+        "c_index": 0.7289686730024639,
+        "auc_1y": 0.742170101649045,
+        "auc_3y": 0.7747294030161676,
+        "auc_5y": 0.809082254565254
+      }
+    },
+    "TCGA_PAAD_OOD": {
+      "No Graph (Vanilla Coxnet)": {
+        "c_index": 0.5861295148536012,
+        "auc_1y": NaN,
+        "auc_3y": NaN,
+        "auc_5y": NaN
+      },
+      "Ordinary STRING": {
+        "c_index": 0.5862363752938662,
+        "auc_1y": NaN,
+        "auc_3y": NaN,
+        "auc_5y": NaN
+      },
+      "Chara (Retrained)": {
+        "c_index": 0.5847403291301561,
+        "auc_1y": NaN,
+        "auc_3y": NaN,
+        "auc_5y": NaN
+      },
+      "Hash-Weighted STRING (Seed 42)": {
+        "c_index": 0.5828168412053858,
+        "auc_1y": NaN,
+        "auc_3y": NaN,
+        "auc_5y": NaN
+      },
+      "Shuffled Graph Control": {
+        "c_index": 0.5876255610173113,
+        "auc_1y": NaN,
+        "auc_3y": NaN,
+        "auc_5y": NaN
+      },
+      "Frozen Historical Chara (chara_model_4337.pkl)": {
+        "c_index": 0.6101731139132294,
+        "auc_1y": NaN,
+        "auc_3y": NaN,
+        "auc_5y": NaN
+      }
+    },
+    "GSE31210_External": {
+      "No Graph (Vanilla Coxnet)": {
+        "c_index": 0.6186957918406681,
+        "auc_1y": 0.7448994315578703,
+        "auc_3y": 0.6055765036024583,
+        "auc_5y": 0.6666159959506706
+      },
+      "Ordinary STRING": {
+        "c_index": 0.5955669771924189,
+        "auc_1y": 0.7314683193243352,
+        "auc_3y": 0.5779055931066716,
+        "auc_5y": 0.6457903417702422
+      },
+      "Chara (Retrained)": {
+        "c_index": 0.6032765820751687,
+        "auc_1y": 0.747087141694557,
+        "auc_3y": 0.5817116226478969,
+        "auc_5y": 0.6473996382603155
+      },
+      "Hash-Weighted STRING (Seed 42)": {
+        "c_index": 0.6056858336010279,
+        "auc_1y": 0.7176400807809693,
+        "auc_3y": 0.5803881042333519,
+        "auc_5y": 0.6550669902283808
+      },
+      "Shuffled Graph Control": {
+        "c_index": 0.6350787022165114,
+        "auc_1y": 0.7966771327137632,
+        "auc_3y": 0.6117557290461527,
+        "auc_5y": 0.6756548820088235
+      },
+      "Frozen Historical Chara (chara_model_4337.pkl)": {
+        "c_index": 0.6244779955027305,
+        "auc_1y": 0.6816805480936552,
+        "auc_3y": 0.5908685184240249,
+        "auc_5y": 0.7043777630287366
+      }
+    }
+  },
+  "point_metrics_raw_expression_test": {
+    "TCGA_LUAD_Test": {
+      "No Graph (Vanilla Coxnet)": {
+        "c_index": 0.5529743048222457,
+        "auc_1y": 0.5390637412913596,
+        "auc_3y": 0.5452156001328332,
+        "auc_5y": 0.44913652035828416
+      },
+      "Ordinary STRING": {
+        "c_index": 0.5607180570221753,
+        "auc_1y": 0.5439097509515973,
+        "auc_3y": 0.5509941836736962,
+        "auc_5y": 0.4560027616006852
+      },
+      "Chara (Retrained)": {
+        "c_index": 0.5624780007039775,
+        "auc_1y": 0.5513165932061053,
+        "auc_3y": 0.5472566605885522,
+        "auc_5y": 0.444752514905709
+      },
+      "Hash-Weighted STRING (Seed 42)": {
+        "c_index": 0.5526223160858853,
+        "auc_1y": 0.5358603967746862,
+        "auc_3y": 0.5557246771887212,
+        "auc_5y": 0.46422885603503855
+      },
+      "Shuffled Graph Control": {
+        "c_index": 0.5600140795494544,
+        "auc_1y": 0.5459489375614938,
+        "auc_3y": 0.5225358302055044,
+        "auc_5y": 0.3958100605010497
+      },
+      "Frozen Historical Chara (chara_model_4337.pkl)": {
+        "c_index": 0.7310806054206266,
+        "auc_1y": 0.7462654395690997,
+        "auc_3y": 0.7826368713999061,
+        "auc_5y": 0.819489873476839
+      }
+    },
+    "TCGA_PAAD_OOD": {
+      "No Graph (Vanilla Coxnet)": {
+        "c_index": 0.5861295148536012,
+        "auc_1y": NaN,
+        "auc_3y": NaN,
+        "auc_5y": NaN
+      },
+      "Ordinary STRING": {
+        "c_index": 0.5857020730925412,
+        "auc_1y": NaN,
+        "auc_3y": NaN,
+        "auc_5y": NaN
+      },
+      "Chara (Retrained)": {
+        "c_index": 0.5854883522120111,
+        "auc_1y": NaN,
+        "auc_3y": NaN,
+        "auc_5y": NaN
+      },
+      "Hash-Weighted STRING (Seed 42)": {
+        "c_index": 0.5847403291301561,
+        "auc_1y": NaN,
+        "auc_3y": NaN,
+        "auc_5y": NaN
+      },
+      "Shuffled Graph Control": {
+        "c_index": 0.5862363752938662,
+        "auc_1y": NaN,
+        "auc_3y": NaN,
+        "auc_5y": NaN
+      },
+      "Frozen Historical Chara (chara_model_4337.pkl)": {
+        "c_index": 0.6099593930326993,
+        "auc_1y": NaN,
+        "auc_3y": NaN,
+        "auc_5y": NaN
+      }
+    },
+    "GSE31210_External": {
+      "No Graph (Vanilla Coxnet)": {
+        "c_index": 0.6186957918406681,
+        "auc_1y": 0.7448994315578703,
+        "auc_3y": 0.6055765036024583,
+        "auc_5y": 0.6666159959506706
+      },
+      "Ordinary STRING": {
+        "c_index": 0.596370061034372,
+        "auc_1y": 0.7264103775758822,
+        "auc_3y": 0.5807185190999185,
+        "auc_5y": 0.6435824752241639
+      },
+      "Chara (Retrained)": {
+        "c_index": 0.5987793125602313,
+        "auc_1y": 0.7327550791958293,
+        "auc_3y": 0.5776292625448354,
+        "auc_5y": 0.639429556173184
+      },
+      "Hash-Weighted STRING (Seed 42)": {
+        "c_index": 0.603115965306778,
+        "auc_1y": 0.7092652619052124,
+        "auc_3y": 0.5835975622639356,
+        "auc_5y": 0.6489561212485837
+      },
+      "Shuffled Graph Control": {
+        "c_index": 0.6297783488596209,
+        "auc_1y": 0.7996684182026705,
+        "auc_3y": 0.6089467677804544,
+        "auc_5y": 0.6686806942239141
+      },
+      "Frozen Historical Chara (chara_model_4337.pkl)": {
+        "c_index": 0.6225505942820431,
+        "auc_1y": 0.6783030969863407,
+        "auc_3y": 0.5956662824926171,
+        "auc_5y": 0.7017870063385445
+      }
+    }
+  },
+  "bootstrap_ci_95": {
+    "TCGA_LUAD_Test": {
+      "No Graph (Vanilla Coxnet)": {
+        "mean": 0.5530789767567698,
+        "ci_95": [
+          0.44484589571495614,
+          0.6555239714025102
+        ]
+      },
+      "Ordinary STRING": {
+        "mean": 0.559813119344438,
+        "ci_95": [
+          0.4535010372439334,
+          0.6655826749964207
+        ]
+      },
+      "Chara (Retrained)": {
+        "mean": 0.5657622884561273,
+        "ci_95": [
+          0.4570380756279578,
+          0.6669767693781772
+        ]
+      },
+      "Hash-Weighted STRING (Seed 42)": {
+        "mean": 0.554967420464133,
+        "ci_95": [
+          0.448061484791319,
+          0.6585251962433417
+        ]
+      },
+      "Shuffled Graph Control": {
+        "mean": 0.5624687836279463,
+        "ci_95": [
+          0.45315363342570386,
+          0.6671015423505463
+        ]
+      },
+      "Frozen Historical Chara (chara_model_4337.pkl)": {
+        "mean": 0.7289252492507946,
+        "ci_95": [
+          0.6432037046353406,
+          0.8086521031598896
+        ]
+      }
+    },
+    "TCGA_PAAD_OOD": {
+      "No Graph (Vanilla Coxnet)": {
+        "mean": 0.5865311645675754,
+        "ci_95": [
+          0.5216545913295297,
+          0.6510689711482941
+        ]
+      },
+      "Ordinary STRING": {
+        "mean": 0.586594246026076,
+        "ci_95": [
+          0.5198261006453032,
+          0.6517063131145189
+        ]
+      },
+      "Chara (Retrained)": {
+        "mean": 0.5851685649553455,
+        "ci_95": [
+          0.5187986172045937,
+          0.6506946867312557
+        ]
+      },
+      "Hash-Weighted STRING (Seed 42)": {
+        "mean": 0.5830871885890648,
+        "ci_95": [
+          0.5167498473246479,
+          0.6473818041253688
+        ]
+      },
+      "Shuffled Graph Control": {
+        "mean": 0.587859795161883,
+        "ci_95": [
+          0.5228226187574436,
+          0.6505335105834811
+        ]
+      },
+      "Frozen Historical Chara (chara_model_4337.pkl)": {
+        "mean": 0.6107601271596091,
+        "ci_95": [
+          0.5469326123069108,
+          0.6713968113036622
+        ]
+      }
+    },
+    "GSE31210_External": {
+      "No Graph (Vanilla Coxnet)": {
+        "mean": 0.6179929241808745,
+        "ci_95": [
+          0.5140613797381041,
+          0.7158920253013253
+        ]
+      },
+      "Ordinary STRING": {
+        "mean": 0.5949176525725006,
+        "ci_95": [
+          0.48794135917066045,
+          0.6912281680606156
+        ]
+      },
+      "Chara (Retrained)": {
+        "mean": 0.6024857356364446,
+        "ci_95": [
+          0.5008491896706616,
+          0.6976588774476703
+        ]
+      },
+      "Hash-Weighted STRING (Seed 42)": {
+        "mean": 0.6049965407765351,
+        "ci_95": [
+          0.49935737574023553,
+          0.7018886777882978
+        ]
+      },
+      "Shuffled Graph Control": {
+        "mean": 0.6343271001614803,
+        "ci_95": [
+          0.5373057786006659,
+          0.7279893757013297
+        ]
+      },
+      "Frozen Historical Chara (chara_model_4337.pkl)": {
+        "mean": 0.6253981368971699,
+        "ci_95": [
+          0.5303549110471136,
+          0.7212870673443628
+        ]
+      }
+    }
+  },
+  "paired_differences": {
+    "TCGA_LUAD_Test": {
+      "Chara_vs_STRING": {
+        "mean_delta": 0.005949169111689402,
+        "ci_95": [
+          -0.01606155870820792,
+          0.02870078646572358
+        ],
+        "p_value_two_tailed": 0.629
+      },
+      "Chara_vs_NoGraph": {
+        "mean_delta": 0.012683311699357594,
+        "ci_95": [
+          -0.008944247438928271,
+          0.03373180675303189
+        ],
+        "p_value_two_tailed": 0.242
+      },
+      "STRING_vs_NoGraph": {
+        "mean_delta": 0.006734142587668192,
+        "ci_95": [
+          -0.010282684462795266,
+          0.022968977153749882
+        ],
+        "p_value_two_tailed": 0.436
+      }
+    },
+    "TCGA_PAAD_OOD": {
+      "Chara_vs_STRING": {
+        "mean_delta": -0.0014256810707304393,
+        "ci_95": [
+          -0.019792657728900744,
+          0.016435363702498394
+        ],
+        "p_value_two_tailed": 0.869
+      },
+      "Chara_vs_NoGraph": {
+        "mean_delta": -0.0013625996122298614,
+        "ci_95": [
+          -0.01935894058365955,
+          0.01612409036935783
+        ],
+        "p_value_two_tailed": 0.899
+      },
+      "STRING_vs_NoGraph": {
+        "mean_delta": 6.308145850057797e-05,
+        "ci_95": [
+          -0.009031799154128975,
+          0.00831753992079103
+        ],
+        "p_value_two_tailed": 0.958
+      }
+    },
+    "GSE31210_External": {
+      "Chara_vs_STRING": {
+        "mean_delta": 0.007568083063944083,
+        "ci_95": [
+          -0.020596539476932317,
+          0.03527887847236721
+        ],
+        "p_value_two_tailed": 0.613
+      },
+      "Chara_vs_NoGraph": {
+        "mean_delta": -0.015507188544429952,
+        "ci_95": [
+          -0.04797941281775865,
+          0.015393159032828788
+        ],
+        "p_value_two_tailed": 0.337
+      },
+      "STRING_vs_NoGraph": {
+        "mean_delta": -0.023075271608374037,
+        "ci_95": [
+          -0.04210568409827546,
+          -0.006330473871168596
+        ],
+        "p_value_two_tailed": 0.008
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "execution_timestamp": "2026-09-07 20:05:51",
+  "total_metric_rows": 984,
+  "total_paired_diff_rows": 72,
+  "systems_completed": [
+    "KRAS_G12D",
+    "PTPN11",
+    "Mut_p53",
+    "cMYC_MAX"
+  ]
+}

@@ -1,0 +1,154 @@
+#!/usr/bin/env python3
+"""
+tools/chara_md_pilot/02_protocol_freeze.py
+
+Locks the experimental protocol, dataset definitions, candidate/target splits,
+model configurations, and decision thresholds prior to scoring outer test folds.
+Saves: reports/chara_md_pilot/20260907_v1/evidence/protocol_specification.json
+"""
+
+import json
+from pathlib import Path
+
+OUT_DIR = Path("E:/Sharon/reports/chara_md_pilot/20260907_v1/evidence")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+PROTOCOL = {
+    "protocol_version": "1.0-frozen",
+    "timestamp_locked": "2026-09-07T19:38:00+05:30",
+    "core_research_question": (
+        "Can a small set of residue-pair distances reconstruct other, unobserved "
+        "distance changes in an independent simulation of the same molecular system? "
+        "Does selecting measurements using a worst-case transfer objective across independent "
+        "training runs improve that reconstruction compared with established alternatives?"
+    ),
+    "pilot_system": {
+        "label": "KRAS_G12D",
+        "canonical_construct": "KRAS(G12A) homodimer from PDB 4OBE (Martini 3 coarse-grained)",
+        "residues_per_chain": 170,
+        "primary_construct_chain": "A",
+        "total_chains": 2,
+        "independent_replicates": {
+            "rep1": {"seed": -1381252161, "frames": 1001, "total_ns": 500.0},
+            "rep2": {"seed": -10913129, "frames": 1001, "total_ns": 500.0},
+            "rep3": {"seed": -72493061, "frames": 1001, "total_ns": 500.0}
+        }
+    },
+    "preprocessing_and_equilibration": {
+        "trajectory_file": "production_centered.xtc",
+        "coordinate_definition": "Martini coarse-grained backbone (BB) beads",
+        "distance_unit": "nanometers (nm)",
+        "frame_interval_ps": 500.0,
+        "primary_equilibration_discard_fraction": 0.10,
+        "primary_frames_discarded": 100,
+        "primary_production_frames_retained": 901,
+        "sensitivity_equilibration_discard_fraction": 0.20,
+        "sensitivity_frames_discarded": 200,
+        "sensitivity_production_frames_retained": 801
+    },
+    "measurement_space": {
+        "eligible_pair_criteria": [
+            "Intra-chain Chain A residue pairs",
+            "Non-local sequence separation: |i - j| >= 4",
+            "Reference distance at frame 0: d_ij(0) <= 2.0 nm (20.0 Angstroms)"
+        ],
+        "total_eligible_pairs": 6881,
+        "candidate_pool_C_size": 1000,
+        "target_pool_T_size": 1000,
+        "disjoint_guarantee": "C intersection T is strictly empty (C cap T = empty)",
+        "split_seed": 42
+    },
+    "measurement_budgets_k": [5, 10, 20],
+    "primary_budget_k": 10,
+    "outer_evaluation_folds": {
+        "fold_1": {"train": ["rep1", "rep2"], "test": "rep3"},
+        "fold_2": {"train": ["rep1", "rep3"], "test": "rep2"},
+        "fold_3": {"train": ["rep2", "rep3"], "test": "rep1"}
+    },
+    "common_decoder": {
+        "model_family": "Multi-output Ridge Regression",
+        "loss": "Mean Squared Error (MSE) on original distance units (nm)",
+        "intercept": True,
+        "feature_standardization": "Fitted strictly on development runs, applied to test",
+        "regularization_grid_lambda": [1e-4, 1e-2, 1.0, 10.0, 100.0],
+        "tuning_strategy": "Inner cross-run validation across the two development runs"
+    },
+    "evaluated_selectors": [
+        {
+            "id": "m1_mean",
+            "name": "Training-Mean Baseline",
+            "type": "constant",
+            "description": "Predicts the static mean of each target from development runs (time-invariant)."
+        },
+        {
+            "id": "m2_random",
+            "name": "Random Candidate Selection",
+            "type": "random",
+            "description": "Randomly selects k candidate features from C across 20 fixed seeds (1..20)."
+        },
+        {
+            "id": "m3_variance",
+            "name": "Highest Variance Selection",
+            "type": "heuristic",
+            "description": "Selects top-k candidate features with largest variance in training runs."
+        },
+        {
+            "id": "m4_pca_qr",
+            "name": "PCA with Pivoted-QR Selection",
+            "type": "matrix_factorization",
+            "description": "Extracts top-k PCA loadings of C in training runs, performs column-pivoted QR."
+        },
+        {
+            "id": "m5_info_imbalance",
+            "name": "Information Imbalance (DII-equivalent)",
+            "type": "information_theory",
+            "description": "Greedy forward selection minimizing distance information imbalance to target panel."
+        },
+        {
+            "id": "m6_pooled_greedy",
+            "name": "Ordinary Pooled-Training Greedy Selector",
+            "type": "greedy_pooled",
+            "description": "Greedy forward selection minimizing pooled development MSE."
+        },
+        {
+            "id": "m7_mean_transfer",
+            "name": "Matched Mean-Transfer Selector",
+            "type": "greedy_mean_transfer",
+            "description": "Greedy forward selection minimizing J_mean = (E_1_to_2 + E_2_to_1) / 2."
+        },
+        {
+            "id": "m8_robust_transfer",
+            "name": "Proposed Worst-Transfer (Robust) Selector",
+            "type": "greedy_worst_transfer",
+            "description": "Greedy forward selection minimizing J_robust = max(E_1_to_2, E_2_to_1)."
+        },
+        {
+            "id": "m9_graph_assisted",
+            "name": "Graph-Assisted Robust Selector",
+            "type": "graph_regularized",
+            "description": "Chara exponential Laplacian heat kernel diffusion prior combined with robust transfer."
+        }
+    ],
+    "negative_controls": [
+        {
+            "id": "temporal_shift_negative_control",
+            "shift_frames": 150,
+            "description": "Circularly shifts test candidate inputs by 150 frames (75 ns) relative to targets."
+        }
+    ],
+    "decision_thresholds": {
+        "practical_pilot_margin": 0.05,  # >= 5% reduction in RMSE over strongest non-proposed baseline at k=10
+        "positive_skill": True,         # Skill > 0 (1 - SSE / SSE_mean > 0)
+        "consistent_direction": True    # Improvement must hold across all 3 held-out test runs
+    }
+}
+
+def main():
+    spec_path = OUT_DIR / "protocol_specification.json"
+    with open(spec_path, "w", encoding="utf-8") as f:
+        json.dump(PROTOCOL, f, indent=2)
+    print(f"[OK] Experimental protocol successfully frozen: {spec_path}")
+    print(f"     File size: {spec_path.stat().st_size / 1024.0:.1f} KB")
+
+if __name__ == "__main__":
+    main()

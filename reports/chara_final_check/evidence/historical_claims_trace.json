@@ -1,0 +1,58 @@
+{
+  "cohort": "TCGA-LUAD",
+  "total_patients": 502,
+  "total_events": 182,
+  "censored_count": 320,
+  "all_patient_ids_sha256": "aa04ba7279b33cfa910d9197033440b237344c09e1cc128224be5e06c3b6cc6d",
+  "split": {
+    "strategy": "Stratified train_test_split (75/25, random_state=4337)",
+    "train_count": 376,
+    "train_events": 136,
+    "train_patient_ids_sha256": "14a71ca58e79bf36c3805ab2ec17c8fbb92589203c29c79be4055680119c1906",
+    "test_count": 126,
+    "test_events": 46,
+    "test_patient_ids_sha256": "e1223abc3781f4c5e6dea3d9dc92f62017dc9b129d19448fbbede4ed95179644"
+  },
+  "claims_investigated": {
+    "clinical_c_index_0_6799": {
+      "claimed_value": 0.6799,
+      "recalculated_value": 0.679866244280183,
+      "status": "VERIFIED (on this specific 75/25 split)",
+      "observations_fit": 376,
+      "observations_scored": 126,
+      "covariates": [
+        "age",
+        "sex",
+        "stage"
+      ],
+      "penalizer": 0.01,
+      "model_type": "CoxPHFitter",
+      "notes": "Legitimate fit of clinical covariates on train_idx, evaluated on test_idx."
+    },
+    "combined_c_index_0_7448": {
+      "claimed_value": 0.7448,
+      "recalculated_value": 0.7448081661386836,
+      "status": "CONTRADICTED / OUTCOME LEAKAGE DETECTED",
+      "observations_fit": 376,
+      "observations_scored": 126,
+      "gene_score_source": "chara_model_4337.pkl",
+      "leakage_mechanism": "chara_model_4337.pkl was trained in scripts/10c_retrain_chara_model.py on ALL 502 PATIENTS simultaneously. Therefore, the 126 evaluation patients in test_idx had already been seen by the model that produced chara_risk. The C-index of 0.7448 was an in-sample resubstitution artifact, not a true held-out prediction.",
+      "scaler_leakage": "StandardScaler was applied to chara_x across all 502 patients before splitting."
+    },
+    "lrt_p_value_1_85e_31": {
+      "claimed_value": 1.85e-31,
+      "recalculated_p_value": 1.8524278899734717e-31,
+      "recalculated_stat": 136.1475301819578,
+      "log_likelihood_clinical": -679.1118803573872,
+      "log_likelihood_combined": -611.0381152664083,
+      "degrees_of_freedom": 1,
+      "status": "REPORTED_ONLY / METHODOLOGICALLY INVALID FOR HELD-OUT GENERALIZATION",
+      "invalidity_reasons": [
+        "The LRT was computed strictly ON THE TRAINING SET (df_train_comb, 376 patients), measuring in-sample fit.",
+        "chara_risk was already fit to survival outcomes in-sample on those same patients.",
+        "An in-sample LRT p-value does not measure or establish held-out predictive improvement.",
+        "Treating a regularized score selected from 4,337 candidate genes as a standard 1-df asymptotic variable violates the null distribution assumptions of Wilks theorem."
+      ]
+    }
+  }
+}
