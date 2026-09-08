@@ -106,7 +106,7 @@ async def predict_api_fastapi(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 # Mount static asset directories if they exist
-for folder in ["data", "assets", "screenshots"]:
+for folder in ["data", "assets", "screenshots", "reports"]:
     dir_path = ROOT / folder
     if dir_path.is_dir():
         app.mount(f"/{folder}", StaticFiles(directory=str(dir_path)), name=folder)

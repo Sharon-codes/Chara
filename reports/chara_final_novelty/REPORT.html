@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CHARA Final Novelty Evidence & Confirmation Panel Report</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #1e293b; background: #f8fafc; margin: 0; padding: 30px; }
+.container { max-width: 1100px; margin: 0 auto; background: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+h1 { color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px; margin-top: 0; }
+h2 { color: #1e293b; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-top: 30px; }
+h3 { color: #334155; margin-top: 20px; }
+table { border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 13px; }
+th, td { border: 1px solid #cbd5e1; padding: 8px 12px; text-align: left; }
+th { background-color: #f1f5f9; color: #0f172a; font-weight: 600; }
+tr:nth-child(even) { background-color: #f8fafc; }
+.pass { color: #16a34a; font-weight: bold; background: #dcfce7; padding: 3px 8px; border-radius: 4px; display: inline-block; }
+.fail { color: #dc2626; font-weight: bold; background: #fee2e2; padding: 3px 8px; border-radius: 4px; display: inline-block; }
+.inconclusive { color: #d97706; font-weight: bold; background: #fef3c7; padding: 3px 8px; border-radius: 4px; display: inline-block; }
+.card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 20px; margin: 20px 0; }
+.badge { font-size: 11px; padding: 2px 6px; border-radius: 3px; font-weight: bold; }
+.meta-label { font-weight: 600; color: #475569; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>CHARA Final Novelty Evidence & Confirmation Panel Report</h1>
+<p><span class="meta-label">Evaluation Timestamp:</span> 2026-09-08 17:47:19 UTC | <span class="meta-label">Environment:</span> Python 3.11 CPU Standalone</p>
+
+<div class="card">
+<h3>Executive Research Decision</h3>
+<p><strong>Status:</strong> <span class="fail">NOT_SUPPORTED_ON_CONFIRMATION_PANEL</span></p>
+<p><strong>Primary Robustness Outcome:</strong> Observed mean worst-run transfer difference &Delta;<sub>worst</sub> = <strong>-0.0020</strong> (95% CI: [-0.0261, +0.0288] across 5,000 paired protein-cluster bootstrap draws). Protein-level wins: <strong>3</strong>, ties: <strong>0</strong>, losses: <strong>9</strong>.</p>
+<p><strong>Defensible Boundary:</strong> Isolates the transfer aggregation rule (worst-run minimax vs mean transfer). QR/PCA remains a strong baseline when properly rank-tuned. The primary claim applies strictly to same-time reconstruction across independent simulation runs of the same protein.</p>
+</div>
+
+<h2>1. Operational Gate Evaluation</h2>
+<table>
+<thead>
+<tr>
+<th>Gate</th>
+<th>Requirement</th>
+<th>Observed Point Estimate</th>
+<th>95% Cluster Bootstrap CI</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Gate 1: Robustness Gain</strong></td>
+<td>&Delta;<sub>worst</sub> &ge; +0.02 with 95% CI lower &gt; 0</td>
+<td>-0.0020</td>
+<td>[-0.0261, +0.0288]</td>
+<td><span class="fail">FAIL</span></td>
+</tr>
+<tr>
+<td><strong>Gate 2: Mean Tradeoff Control</strong></td>
+<td>&Delta;<sub>mean</sub> 95% CI lower &gt; -0.01</td>
+<td>-0.0036</td>
+<td>[-0.0165, +0.0100]</td>
+<td><span class="fail">FAIL</span></td>
+</tr>
+<tr>
+<td><strong>Gate 3: Tuned QR Margin</strong></td>
+<td>Historical +0.05 gain over tuned QR (CI lower &gt; 0)</td>
+<td>+0.1424</td>
+<td>[+0.0358, +0.2599]</td>
+<td><span class="pass">PASS</span></td>
+</tr>
+</tbody>
+</table>
+
+<h2>2. Visual Evidence: Forest Plot</h2>
+<div style="text-align: center; margin: 30px 0;">
+<svg width="750" height="420" xmlns="http://www.w3.org/2000/svg" style="background:#ffffff; font-family:sans-serif;">
+<text x="375.0" y="25" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e293b">Protein-Level & Aggregate Worst-Run Transfer Difference (W[M8] - W[M7])</text>
+<line x1="337.9898100477055" y1="40" x2="337.9898100477055" y2="360" stroke="#94a3b8" stroke-dasharray="4,4" stroke-width="1.5"/>
+<text x="337.9898100477055" y="375" text-anchor="middle" font-size="10" fill="#64748b">0.0 (Null)</text>
+<line x1="394.29329002762273" y1="40" x2="394.29329002762273" y2="360" stroke="#f59e0b" stroke-dasharray="2,2" stroke-width="1.5"/>
+<text x="394.29329002762273" y="375" text-anchor="middle" font-size="10" fill="#d97706">+0.02 (Gate 1)</text>
+<text x="110" y="62.28571428571429" text-anchor="end" font-size="11" fill="#334155">1bxy_A</text>
+<circle cx="286.8150873370272" cy="58.28571428571429" r="5" fill="#ef4444" stroke="#0f172a" stroke-width="0.8"/>
+<text x="294.8150873370272" y="61.28571428571429" font-size="10" fill="#ef4444">-0.018</text>
+<text x="110" y="85.14285714285714" text-anchor="end" font-size="11" fill="#334155">4xo1_A</text>
+<circle cx="204.45521996987583" cy="81.14285714285714" r="5" fill="#ef4444" stroke="#0f172a" stroke-width="0.8"/>
+<text x="212.45521996987583" y="84.14285714285714" font-size="10" fill="#ef4444">-0.047</text>
+<text x="110" y="108.0" text-anchor="end" font-size="11" fill="#334155">1i2t_A</text>
+<circle cx="276.9582273642671" cy="104.0" r="5" fill="#ef4444" stroke="#0f172a" stroke-width="0.8"/>
+<text x="284.9582273642671" y="107.0" font-size="10" fill="#ef4444">-0.022</text>
+<text x="110" y="130.85714285714286" text-anchor="end" font-size="11" fill="#334155">1l2p_A</text>
+<circle cx="205.49873154948727" cy="126.85714285714286" r="5" fill="#ef4444" stroke="#0f172a" stroke-width="0.8"/>
+<text x="213.49873154948727" y="129.85714285714286" font-size="10" fill="#ef4444">-0.047</text>
+<text x="110" y="153.71428571428572" text-anchor="end" font-size="11" fill="#334155">1uoy_A</text>
+<circle cx="298.8479798693485" cy="149.71428571428572" r="5" fill="#ef4444" stroke="#0f172a" stroke-width="0.8"/>
+<text x="306.8479798693485" y="152.71428571428572" font-size="10" fill="#ef4444">-0.014</text>
+<text x="110" y="176.57142857142858" text-anchor="end" font-size="11" fill="#334155">1yu5_X</text>
+<circle cx="615.46702760534" cy="172.57142857142858" r="5" fill="#10b981" stroke="#0f172a" stroke-width="0.8"/>
+<text x="623.46702760534" y="175.57142857142858" font-size="10" fill="#10b981">+0.099</text>
+<text x="110" y="199.42857142857142" text-anchor="end" font-size="11" fill="#334155">2yzt_A</text>
+<circle cx="220.173569121251" cy="195.42857142857142" r="5" fill="#ef4444" stroke="#0f172a" stroke-width="0.8"/>
+<text x="228.173569121251" y="198.42857142857142" font-size="10" fill="#ef4444">-0.042</text>
+<text x="110" y="222.28571428571428" text-anchor="end" font-size="11" fill="#334155">6l34_A</text>
+<circle cx="337.91802408472563" cy="218.28571428571428" r="5" fill="#ef4444" stroke="#0f172a" stroke-width="0.8"/>
+<text x="345.91802408472563" y="221.28571428571428" font-size="10" fill="#ef4444">-0.000</text>
+<text x="110" y="245.14285714285717" text-anchor="end" font-size="11" fill="#334155">4zmk_A</text>
+<circle cx="242.90759839877938" cy="241.14285714285717" r="5" fill="#ef4444" stroke="#0f172a" stroke-width="0.8"/>
+<text x="250.90759839877938" y="244.14285714285717" font-size="10" fill="#ef4444">-0.034</text>
+<text x="110" y="268.0" text-anchor="end" font-size="11" fill="#334155">6jv8_A</text>
+<circle cx="615.5447800301242" cy="264.0" r="5" fill="#10b981" stroke="#0f172a" stroke-width="0.8"/>
+<text x="623.5447800301242" y="267.0" font-size="10" fill="#10b981">+0.099</text>
+<text x="110" y="290.8571428571429" text-anchor="end" font-size="11" fill="#334155">1vcc_A</text>
+<circle cx="374.66481834650085" cy="286.8571428571429" r="5" fill="#10b981" stroke="#0f172a" stroke-width="0.8"/>
+<text x="382.66481834650085" y="289.8571428571429" font-size="10" fill="#10b981">+0.013</text>
+<text x="110" y="313.7142857142857" text-anchor="end" font-size="11" fill="#334155">3mx7_A</text>
+<circle cx="310.27527826050436" cy="309.7142857142857" r="5" fill="#ef4444" stroke="#0f172a" stroke-width="0.8"/>
+<text x="318.27527826050436" y="312.7142857142857" font-size="10" fill="#ef4444">-0.010</text>
+<line x1="120" y1="333.7142857142857" x2="700" y2="333.7142857142857" stroke="#cbd5e1" stroke-width="1"/>
+<text x="110" y="345.7142857142857" text-anchor="end" font-size="12" font-weight="bold" fill="#0f172a">Panel Aggregate</text>
+<line x1="264.50987122797403" y1="341.7142857142857" x2="418.9762570977549" y2="341.7142857142857" stroke="#2563eb" stroke-width="3"/>
+<circle cx="332.46052849476916" cy="341.7142857142857" r="6" fill="#2563eb"/>
+<text x="426.9762570977549" y="345.7142857142857" font-size="11" font-weight="bold" fill="#2563eb">-0.002 [-0.026, +0.029]</text>
+</svg>
+</div>
+
+<h2>3. Per-Protein Summary Table (Primary Budget k=10)</h2>
+<table>
+<thead>
+<tr>
+<th>Protein ID</th>
+<th>Length</th>
+<th>Class</th>
+<th>M8 Worst (W)</th>
+<th>M8 Mean</th>
+<th>M7 Worst (W)</th>
+<th>M7 Mean</th>
+<th>Tuned QR Worst</th>
+<th>Tuned QR Mean</th>
+<th>&Delta;<sub>worst</sub> (M8 - M7)</th>
+<th>&Delta;<sub>mean</sub> (M8 - M7)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1bxy_A</strong></td>
+<td>60</td>
+<td>"Alpha and beta proteins </td>
+<td>0.3049</td>
+<td>0.3446</td>
+<td>0.3231</td>
+<td>0.3414</td>
+<td>0.3844</td>
+<td>0.4235</td>
+<td style="color:#dc2626">-0.0182</td>
+<td style="color:#16a34a">+0.0032</td>
+</tr>
+<tr>
+<td><strong>4xo1_A</strong></td>
+<td>60</td>
+<td>"-"</td>
+<td>0.3947</td>
+<td>0.5359</td>
+<td>0.4421</td>
+<td>0.5820</td>
+<td>0.1899</td>
+<td>0.4018</td>
+<td style="color:#dc2626">-0.0474</td>
+<td style="color:#dc2626">-0.0461</td>
+</tr>
+<tr>
+<td><strong>1i2t_A</strong></td>
+<td>61</td>
+<td>"All alpha proteins"</td>
+<td>0.3084</td>
+<td>0.3929</td>
+<td>0.3301</td>
+<td>0.4004</td>
+<td>0.3501</td>
+<td>0.3923</td>
+<td style="color:#dc2626">-0.0217</td>
+<td style="color:#dc2626">-0.0075</td>
+</tr>
+<tr>
+<td><strong>1l2p_A</strong></td>
+<td>61</td>
+<td>"Membrane and cell surfac</td>
+<td>0.2153</td>
+<td>0.3598</td>
+<td>0.2623</td>
+<td>0.3982</td>
+<td>0.0668</td>
+<td>0.2317</td>
+<td style="color:#dc2626">-0.0471</td>
+<td style="color:#dc2626">-0.0384</td>
+</tr>
+<tr>
+<td><strong>1uoy_A</strong></td>
+<td>64</td>
+<td>"Small proteins"</td>
+<td>0.5712</td>
+<td>0.6086</td>
+<td>0.5851</td>
+<td>0.6185</td>
+<td>0.0349</td>
+<td>0.1778</td>
+<td style="color:#dc2626">-0.0139</td>
+<td style="color:#dc2626">-0.0099</td>
+</tr>
+<tr>
+<td><strong>1yu5_X</strong></td>
+<td>67</td>
+<td>"All alpha proteins"</td>
+<td>0.4343</td>
+<td>0.5097</td>
+<td>0.3358</td>
+<td>0.4807</td>
+<td>-0.0096</td>
+<td>0.2577</td>
+<td style="color:#16a34a">+0.0986</td>
+<td style="color:#16a34a">+0.0290</td>
+</tr>
+<tr>
+<td><strong>2yzt_A</strong></td>
+<td>67</td>
+<td>"-"</td>
+<td>0.4774</td>
+<td>0.6920</td>
+<td>0.5192</td>
+<td>0.7063</td>
+<td>0.0898</td>
+<td>0.3711</td>
+<td style="color:#dc2626">-0.0419</td>
+<td style="color:#dc2626">-0.0143</td>
+</tr>
+<tr>
+<td><strong>6l34_A</strong></td>
+<td>68</td>
+<td>"All alpha proteins"</td>
+<td>0.1019</td>
+<td>0.3173</td>
+<td>0.1020</td>
+<td>0.3190</td>
+<td>0.1334</td>
+<td>0.3580</td>
+<td style="color:#dc2626">-0.0000</td>
+<td style="color:#dc2626">-0.0017</td>
+</tr>
+<tr>
+<td><strong>4zmk_A</strong></td>
+<td>71</td>
+<td>"-"</td>
+<td>0.2386</td>
+<td>0.3135</td>
+<td>0.2724</td>
+<td>0.3178</td>
+<td>0.1561</td>
+<td>0.2521</td>
+<td style="color:#dc2626">-0.0338</td>
+<td style="color:#dc2626">-0.0043</td>
+</tr>
+<tr>
+<td><strong>6jv8_A</strong></td>
+<td>76</td>
+<td>"-"</td>
+<td>0.1585</td>
+<td>0.5426</td>
+<td>0.0599</td>
+<td>0.5036</td>
+<td>0.0945</td>
+<td>0.2851</td>
+<td style="color:#16a34a">+0.0986</td>
+<td style="color:#16a34a">+0.0390</td>
+</tr>
+<tr>
+<td><strong>1vcc_A</strong></td>
+<td>77</td>
+<td>"Alpha and beta proteins </td>
+<td>0.2957</td>
+<td>0.3322</td>
+<td>0.2826</td>
+<td>0.3244</td>
+<td>0.2514</td>
+<td>0.2808</td>
+<td style="color:#16a34a">+0.0130</td>
+<td style="color:#16a34a">+0.0077</td>
+</tr>
+<tr>
+<td><strong>3mx7_A</strong></td>
+<td>90</td>
+<td>"-"</td>
+<td>0.1246</td>
+<td>0.2437</td>
+<td>0.1345</td>
+<td>0.2438</td>
+<td>0.1751</td>
+<td>0.2742</td>
+<td style="color:#dc2626">-0.0098</td>
+<td style="color:#dc2626">-0.0001</td>
+</tr>
+</tbody>
+</table>
+
+<h2>4. Method Comparison across Panel (k=10)</h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Panel Mean Worst Run (W)</th>
+<th>Panel Mean Skill</th>
+<th>Min Observed Skill</th>
+<th>Max Observed Skill</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>M8_ROBUST_TRANSFER</strong></td>
+<td>0.3021</td>
+<td>0.4327</td>
+<td>0.1019</td>
+<td>0.9063</td>
+</tr>
+<tr>
+<td><strong>M7_MEAN_TRANSFER</strong></td>
+<td>0.3041</td>
+<td>0.4363</td>
+<td>0.0599</td>
+<td>0.9099</td>
+</tr>
+<tr>
+<td><strong>M5_DEVELOPMENT_TUNED_PCA_QR</strong></td>
+<td>0.1597</td>
+<td>0.3088</td>
+<td>-0.0096</td>
+<td>0.8579</td>
+</tr>
+<tr>
+<td><strong>M4_BUDGET_MATCHED_PCA_QR</strong></td>
+<td>0.1613</td>
+<td>0.3056</td>
+<td>-0.0096</td>
+<td>0.8579</td>
+</tr>
+<tr>
+<td><strong>M6_POOLED_ERROR_GREEDY</strong></td>
+<td>0.3299</td>
+<td>0.4497</td>
+<td>0.1042</td>
+<td>0.8998</td>
+</tr>
+<tr>
+<td><strong>M10_INFORMATION_IMBALANCE</strong></td>
+<td>0.2332</td>
+<td>0.3691</td>
+<td>-0.0037</td>
+<td>0.8929</td>
+</tr>
+<tr>
+<td><strong>M3_MEAN_WITHIN_RUN_VARIANCE</strong></td>
+<td>0.1800</td>
+<td>0.3445</td>
+<td>-0.1633</td>
+<td>0.8874</td>
+</tr>
+<tr>
+<td><strong>M3b_POOLED_DEVELOPMENT_VARIANCE</strong></td>
+<td>0.2265</td>
+<td>0.3625</td>
+<td>-0.1633</td>
+<td>0.8815</td>
+</tr>
+<tr>
+<td><strong>M2_UNIFORM_RANDOM_MEAN_20SEEDS</strong></td>
+<td>0.0307</td>
+<td>0.1396</td>
+<td>-0.3315</td>
+<td>0.4000</td>
+</tr>
+</tbody>
+</table>
+
+<h2>5. Literature Prior Art Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Citation</th>
+<th>Task & Objective</th>
+<th>Overlap with CHARA</th>
+<th>Exact Distinction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Manohar et al., Data-Driven Sparse Sensor Pla...</strong></td>
+<td>QR factorization with column pivoting (DEIM/Q-DEIM) on truncated spatial POD/PCA...</td>
+<td>Sparse point sensor placement from PCA basis modes coupled with least-...</td>
+<td>Pivots purely on static spatial variance modes from a single pooled dataset; lac...</td>
+</tr>
+<tr>
+<td><strong>Glielmo et al., Ranking the information conte...</strong></td>
+<td>Information Imbalance Delta(A -> B) = 2/N sum(r_i^B | r_i^A = 1) - 1/N, evaluati...</td>
+<td>Assessing subsets of pairwise molecular distances for structural infor...</td>
+<td>Non-differentiable rank metric for manifold distance comparison; does not optimi...</td>
+</tr>
+<tr>
+<td><strong>Wild et al., Automatic feature selection and ...</strong></td>
+<td>Differentiable Information Imbalance (DII): continuous softmax kernel relaxing r...</td>
+<td>Automated selection and weighting of molecular distance features to pr...</td>
+<td>Optimizes continuous weights via gradient descent on soft rank kernel within a s...</td>
+</tr>
+<tr>
+<td><strong>Wu and Noe, Variational approach for learning...</strong></td>
+<td>Maximizing Rayleigh quotient / VAMP score across time-lagged covariance matrices...</td>
+<td>Feature selection and coordinate projection for molecular simulation t...</td>
+<td>Optimizes propagation of Markovian transition operators (kinetics), not static s...</td>
+</tr>
+<tr>
+<td><strong>Clark et al., Sensor Selection for Reconstruc...</strong></td>
+<td>Convex relaxation of optimal experiment design (D-optimal and A-optimal) combine...</td>
+<td>Greedy and convex sparse sensor subset selection for field reconstruct...</td>
+<td>Operates on stationary low-rank modes; lacks cross-run transfer objectives or wo...</td>
+</tr>
+<tr>
+<td><strong>Sagawa et al., Distributionally Robust Neural...</strong></td>
+<td>Group Distributionally Robust Optimization (Group DRO): min_theta max_{g in G} E...</td>
+<td>Minimax optimization over discrete predefined training environments/gr...</td>
+<td>Optimizes neural network parameters via stochastic gradient descent across group...</td>
+</tr>
+<tr>
+<td><strong>Arjovsky et al., Invariant Risk Minimization,...</strong></td>
+<td>Minimizing empirical risk subject to an invariance constraint on the linear clas...</td>
+<td>Formulation of multi-environment training to achieve robustness agains...</td>
+<td>IRM seeks an invariant representation via gradient penalties on linear decoders;...</td>
+</tr>
+<tr>
+<td><strong>Saito et al., Data-driven surface reconstruct...</strong></td>
+<td>Greedy sensor placement maximizing determinant of measurement matrix coupled wit...</td>
+<td>Greedy sparse sensor selection coupled to linear/ridge decoders for fu...</td>
+<td>Evaluates sensors within steady or quasi-steady fluid regimes; does not evaluate...</td>
+</tr>
+<tr>
+<td><strong>Joshi and Boyd, Sensor Selection via Convex O...</strong></td>
+<td>Minimizing error covariance volume/trace (log det(sum z_i a_i a_i^T)^-1) via sem...</td>
+<td>Formal convex mathematical formulation of sparse sensor subset selecti...</td>
+<td>Assumes a known stationary linear forward measurement matrix A; does not address...</td>
+</tr>
+<tr>
+<td><strong>Ben-Tal, El Ghaoui, and Nemirovski, Robust Op...</strong></td>
+<td>Minimax robust counterpart formulation: min_x max_{u in U} f(x, u)...</td>
+<td>Foundational mathematical formulation of worst-case minimax risk...</td>
+<td>Foundational mathematical theory rather than an empirical sensor selection algor...</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</body>
+</html>

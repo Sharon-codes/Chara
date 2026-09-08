@@ -1,4 +1,3 @@
-
 # Heavy binaries and raw research files not needed by the frontend bundle
 *.pkl
 *.npz
@@ -6,6 +5,24 @@
 *.pdf
 data/raw/
 data/processed/
-reports/
+data/external_atlas/
+data/final_novelty/
 tools/
 scratch/
+
+# Heavy intermediate research report folders (over 4 GB) not needed by the static web release
+reports/chara_closure/
+reports/chara_cpu_audit/
+reports/chara_final_check/
+reports/chara_final_evidence/
+reports/chara_gromacs_resolution/
+reports/chara_md_dii/
+reports/chara_md_followup/
+reports/chara_md_pilot/
+reports/chara_md_review/
+reports/chara_sparse_monitoring/
+reports/staging_*/
+reports/**/models/
+reports/**/predictions/
+reports/**/figures/
+reports/**/cmyc_retained_numerical_evidence.npz

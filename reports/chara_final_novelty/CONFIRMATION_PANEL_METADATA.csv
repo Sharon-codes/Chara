@@ -1,0 +1,15 @@
+ATLAS_ID,length,PDB_resolution,refinement_method,organism,protein_name,SCOP_class,CATH_class,alpha%,beta%,coil%,non_redundant_protein,no_contact,role
+1bxy_A,60,1.9,-,T. thermophilus,50S ribosomal protein L30,"""Alpha and beta proteins (a+b)""","""Alpha Beta""",32,27,42,True,True,primary
+4xo1_A,60,1.802,-,E. coli,Protein GnsA,"""-""","""-""",45,40,15,True,True,primary
+1i2t_A,61,1.04,-,H. sapiens,E3 ubiquitin-protein ligase UBR5,"""All alpha proteins""","""Mainly Alpha""",82,0,18,True,True,primary
+1l2p_A,61,1.55,-,E. coli,ATP synthase subunit b,"""Membrane and cell surface proteins and peptides""","""Mainly Alpha""",95,0,5,True,True,primary
+1uoy_A,64,1.5,-,P. brevicompactum,Bubble protein,"""Small proteins""","""Mainly Beta""",5,28,67,True,True,primary
+1yu5_X,67,1.4,-,G. gallus,Villin-1,"""All alpha proteins""","""Mainly Alpha""",51,0,49,True,True,primary
+2yzt_A,67,1.8,-,T. thermophilus,HicB family protein,"""-""","""Alpha Beta""",22,21,57,True,True,primary
+6l34_A,68,1.996,-,H. sapiens,FACT complex subunit SSRP1,"""All alpha proteins""","""-""",85,0,15,True,True,primary
+4zmk_A,71,1.5,-,S. pombe,Telomere length regulator taz1,"""-""","""-""",72,0,28,True,True,primary
+6jv8_A,76,1.582,-,R. norvegicus,Complement C5,"""-""","""-""",64,0,36,True,True,primary
+1vcc_A,77,1.6,-,V. virus,DNA topoisomerase 1B,"""Alpha and beta proteins (a+b)""","""Alpha Beta""",13,34,53,True,True,primary
+3mx7_A,90,1.76,-,H. sapiens,Fas apoptotic inhibitory molecule 1,"""-""","""Mainly Beta""",0,66,34,True,True,primary
+3onj_A,97,1.92,-,S. cerevisiae,t-SNARE VTI1,"""-""","""Mainly Alpha""",91,0,9,True,True,reserve
+5ydn_A,109,1.6,-,E. phage Mu,Gene product J,"""-""","""-""",68,0,32,True,True,reserve

@@ -49,11 +49,30 @@ env/
 *.npz
 *.mp4
 data/md_runs/
+data/external_atlas/
+data/final_novelty/
 reports/**/staging/
 reports/**/extracted_data/
 reports/**/evidence_staging/
 reports/**/archive_staging/
 reports/**/evidence/raw_predictions/
+
+reports/*
+!reports/chara_external_confirmation/
+!reports/chara_final_novelty/
+reports/chara_external_confirmation/*
+!reports/chara_external_confirmation/20260908_v1/
+reports/chara_external_confirmation/20260908_v1/*
+!reports/chara_external_confirmation/20260908_v1/REPORT.html
+!reports/chara_external_confirmation/20260908_v1/CHARA_INDEPENDENT_BENCHMARK_EVIDENCE.zip
+reports/chara_final_novelty/*
+!reports/chara_final_novelty/REPORT.html
+!reports/chara_final_novelty/CHARA_FINAL_NOVELTY_EVIDENCE.zip
+!reports/chara_final_novelty/*.csv
+!data/*.csv
+!data/*.json
+!data/*.js
+!data/*.svg
 
 # Caches
 geo_cache/
@@ -66,3 +85,12 @@ logs/
 # IDE
 .idea/
 .vscode/
+
+# Temp agent files
+current_user_request*.txt
+get_prompt.py
+scratch_check.py
+test_extract_final_decision/
+data/TCGA*.csv
+scratch/
+tools/
