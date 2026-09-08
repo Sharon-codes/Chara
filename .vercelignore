@@ -1,0 +1,16 @@
+# Ignore Python files from triggering Vercel Python Serverless detection
+pyproject.toml
+requirements.txt
+setup.py
+app.py
+
+# Heavy binaries and raw research files not needed by the frontend bundle
+*.pkl
+*.npz
+*.mp4
+*.pdf
+data/raw/
+data/processed/
+reports/
+tools/
+scratch/

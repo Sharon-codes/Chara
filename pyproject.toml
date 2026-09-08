@@ -1,3 +1,14 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "chara-survival"
+version = "0.2.9"
+description = "Thermodynamic Graph Laplacian survival inference and molecular dynamics distance reconstruction"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Sharon Melhi", email = "sharonmelhi365@gmail.com"}
+]
