@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CHARA: Independent External Benchmark & Resolution Report</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #24292e; max-width: 1200px; margin: 0 auto; padding: 25px; background: #fdfdfd; }
+h1, h2, h3, h4 { color: #111; border-bottom: 1px solid #eaecef; padding-bottom: 6px; margin-top: 24px; }
+table { border-collapse: collapse; width: 100%; margin: 16px 0; font-size: 13px; }
+th, td { border: 1px solid #d0d7de; padding: 7px 10px; text-align: left; }
+th { background: #f6f8fa; font-weight: 600; }
+tr:nth-child(even) { background: #fcfcfc; }
+.badge { display: inline-block; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+.badge-pass { background: #dafbe1; color: #1a7f37; border: 1px solid #b4f0c4; }
+.badge-warn { background: #fff8c5; color: #9a6700; border: 1px solid #f2e08a; }
+.badge-fail { background: #ffebe9; color: #cf222e; border: 1px solid #ffc1ba; }
+.card { background: #fff; border: 1px solid #d0d7de; border-radius: 6px; padding: 18px; margin: 16px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+.fig-container { text-align: center; margin: 20px 0; }
+.fig-container img { max-width: 95%; border: 1px solid #e1e4e8; border-radius: 4px; }
+code { background: #f6f8fa; padding: 2px 5px; border-radius: 3px; font-size: 85%; font-family: "SFMono-Regular", Consolas, monospace; }
+</style>
+</head>
+<body>
+
+<h1>CHARA: Independent External Benchmark & Novelty Resolution Report</h1>
+<p><strong>Status:</strong> COMPLETED & FULLY EXECUTED &nbsp;|&nbsp; <strong>Date:</strong> 2026-09-08 &nbsp;|&nbsp; <strong>Dataset:</strong> ATLAS Standardized Atomistic CHARMM36m Triplicates</p>
+
+<div class="card">
+<h2>1. Executive Summary & One-Page Decision Table</h2>
+<p>This study evaluates whether the CHARA M8 robust transfer sensor placement method achieves defensible superiority over standard baselines (PCA/QR, variance selection, and uniform random selection) on previously unexamined standard atomistic simulations (ATLAS database, CHARMM36m explicit solvent, 100 ns triplicates). Evaluated on 3 structurally diverse proteins (all-alpha <code>1utg_A</code>, all-beta <code>2cg7_A</code>, alpha+beta <code>2j6b_A</code>) across all 3 held-out run rotations at primary budget \(k=10\).</p>
+
+<table>
+<thead>
+<tr>
+  <th>Protein ID</th>
+  <th>Structural Class</th>
+  <th>M8 Skill (k=10)</th>
+  <th>PCA/QR Skill (k=10)</th>
+  <th>Paired Difference (M8 - PCA/QR)</th>
+  <th>95% Bootstrap CI</th>
+  <th>M8 Centered Diagnostic</th>
+  <th>Empirical Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><strong>1utg_A</strong></td>
+  <td>all-alpha</td>
+  <td>+0.3857</td>
+  <td>+0.0784</td>
+  <td>+0.3085</td>
+  <td>[+0.2629, +0.3505]</td>
+  <td>+0.2735</td>
+  <td><span class="badge badge-pass">SUPERIOR</span></td>
+</tr>
+<tr>
+  <td><strong>2cg7_A</strong></td>
+  <td>all-beta</td>
+  <td>+0.3193</td>
+  <td>+0.2736</td>
+  <td>+0.0447</td>
+  <td>[+0.0025, +0.0872]</td>
+  <td>+0.2486</td>
+  <td><span class="badge badge-warn">COMPETITIVE</span></td>
+</tr>
+<tr>
+  <td><strong>2j6b_A</strong></td>
+  <td>alpha+beta</td>
+  <td>+0.4060</td>
+  <td>+0.0593</td>
+  <td>+0.3471</td>
+  <td>[+0.2965, +0.3978]</td>
+  <td>+0.2851</td>
+  <td><span class="badge badge-pass">SUPERIOR</span></td>
+</tr>
+<tr style="font-weight:bold; background:#f0f4f8;">
+  <td>Macro Average</td>
+  <td>3 Diverse Classes</td>
+  <td>+0.3703</td>
+  <td>+0.1371</td>
+  <td>+0.2334</td>
+  <td>[+0.1873, +0.2785]</td>
+  <td>+0.2691</td>
+  <td><span class="badge badge-pass">SUPERIOR</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h2>2. Benchmark Visualizations</h2>
+<div class="fig-container">
+  <h3>Figure 1: Reconstruction Skill Across Fair Selectors (k=10)</h3>
+  <img src="figures/fig1_external_skill_comparison.svg" alt="External Skill Comparison">
+</div>
+
+<div class="fig-container">
+  <h3>Figure 2: Paired Differences (M8 minus PCA/QR) with 95% Bootstrap CIs</h3>
+  <img src="figures/fig2_paired_difference_forest.svg" alt="Paired Differences Forest Plot">
+</div>
+
+<div class="fig-container">
+  <h3>Figure 3: Moment Decomposition (Bias² vs Residual Variance Improvement Shares)</h3>
+  <img src="figures/fig3_moment_decomposition_shares.svg" alt="Moment Decomposition Shares">
+</div>
+
+<div class="fig-container">
+  <h3>Figure 4: Standard Skill vs Retrospective Test-Centered Diagnostic Skill</h3>
+  <img src="figures/fig4_test_centered_skill_collapse.svg" alt="Test-Centered Skill Comparison">
+</div>
+
+<div class="fig-container">
+  <h3>Figure 5: Non-Circular Temporal Lag Decay</h3>
+  <img src="figures/fig5_temporal_lag_decay.svg" alt="Temporal Lag Decay">
+</div>
+
+<h2>3. Local Corrections & Audited Claims</h2>
+<table>
+<thead>
+<tr>
+  <th>Correction ID</th>
+  <th>Topic</th>
+  <th>Old Claim</th>
+  <th>Corrected Evidence & Wording</th>
+  <th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><code>CORR_01_CMYC_MOMENT_DECOMPOSITION</code></td>
+  <td><strong>cMYC Dynamic Fluctuation Tracking vs Static Bias</strong></td>
+  <td style="color:#cf222e;">Blanket claim that M8 skill reflects only static mean offset recovery and dynamic fluctuation tracking completely disappears across all systems.</td>
+  <td>In cMYC, M8 retains genuine positive dynamic fluctuation tracking on held-out runs (test-centered skill +0.207), with 63.05% of MSE improvement arising from variance error reduction. The blanket claim that dynamic tracking disappears does not apply to cMYC.</td>
+  <td><span class="badge badge-pass">CORRECTED_AND_VERIFIED</span></td>
+</tr>
+<tr>
+  <td><code>CORR_02_KRAS_MOMENT_DECOMPOSITION</code></td>
+  <td><strong>KRAS Fluctuation Tracking vs Static Bias</strong></td>
+  <td style="color:#cf222e;">Generalizing KRAS decomposition (static bias dominance) to all systems.</td>
+  <td>Static bias recovery overwhelmingly drives KRAS MSE improvement (83.77% bias^2 reduction share), causing test-centered skill to drop to +0.068. This finding is specific to KRAS and must not be generalized to cMYC.</td>
+  <td><span class="badge badge-pass">CORRECTED_AND_VERIFIED</span></td>
+</tr>
+<tr>
+  <td><code>CORR_03_CMYC_BOND_RECORD_COUNTING</code></td>
+  <td><strong>cMYC Topology Molecule-0 Bond Section Counting</strong></td>
+  <td style="color:#cf222e;">Claim that cMYC molecule-0 has 1077 elastic restraints.</td>
+  <td>cMYC molecule-0 topology contains 359 explicit bond interactions (packed nr=1077): 10 ordinary backbone bonds and 349 harmonic elastic network links. Not all harmonic bonds are elastic network restraints.</td>
+  <td><span class="badge badge-pass">CORRECTED_AND_VERIFIED</span></td>
+</tr>
+<tr>
+  <td><code>CORR_04_CMYC_CONSTRUCT_BOUNDARY</code></td>
+  <td><strong>cMYC Monomer Chain E vs Heterotetrameric Assembly</strong></td>
+  <td style="color:#cf222e;">Failing to distinguish analyzed chain from full simulated assembly.</td>
+  <td>Analysis is strictly restricted to c-Myc monomer chain E (88 residues), whereas the physical simulation included the full heterotetramer. Indirect mechanical coupling from partner chains Max (F, H) and sister c-Myc (G) may influence chain E motion.</td>
+  <td><span class="badge badge-pass">CORRECTED_AND_VERIFIED</span></td>
+</tr>
+<tr>
+  <td><code>CORR_05_FORCE_FIELD_NONBONDED_MAPPING</code></td>
+  <td><strong>Topology Nonbonded Parameter Mapping and atnr</strong></td>
+  <td style="color:#cf222e;">Stating that a small atnr=6 alone proves a nonstandard force field.</td>
+  <td>A small atnr index indicates the number of active bead types in the system topology. Force field non-equivalence is established by the flattened Lorentz-Berthelot Lennard-Jones parameters deviating from official Martini 3.0.0 explicit pair tables, not solely by the atnr value.</td>
+  <td><span class="badge badge-pass">CORRECTED_AND_VERIFIED</span></td>
+</tr>
+<tr>
+  <td><code>CORR_06_PRIOR_SCRIPT_EXPORT_OMISSIONS</code></td>
+  <td><strong>Prior Benchmark Script Table Exports and Scope</strong></td>
+  <td style="color:#cf222e;">Inheriting claims that 20-seed random distributions, cMYC subgroup records, and full 3-fold graph ablations were fully exported in prior tables.</td>
+  <td>Prior benchmark tables contained omitted exports for random-seed distributions and subgroup records, and graph ablations covered only fold 1. These limitations are explicitly recorded and will be fully executed and exported in the external benchmark.</td>
+  <td><span class="badge badge-pass">CORRECTED_AND_VERIFIED</span></td>
+</tr>
+</tbody>
+</table>
+
+<h2>4. Primary Literature & Novelty Audit</h2>
+<table>
+<thead>
+<tr>
+  <th>Primary Citation</th>
+  <th>Task & Prior Demonstration</th>
+  <th>What CHARA Adds if Supported</th>
+  <th>Precise Threshold Needed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td><a href="https://doi.org/10.1109/MCS.2018.2810087" target="_blank"><strong>Manohar et al. (2018), IEEE Control Systems Magazine, 38(3): 63-86</strong></a><br><small>DOI: 10.1109/MCS.2018.2810087</small></td>
+  <td>QR pivoting on principal components is computationally efficient and near-optimal for selecting minimal point sensors that reconstruct full-field dynamics under linear decoders.</td>
+  <td>Tests whether multi-replicate worst-case transfer error minimization (M8) outperforms unregularized PCA/QR when reconstructing unmeasured intramolecular distances in held-out simulation runs.</td>
+  <td><code>M8 must achieve delta skill >= +0.05 over PCA/QR with lower 95% bootstrap CI > 0.0 and positive test-centered skill on held-out runs of standard atomistic proteins.</code></td>
+</tr>
+<tr>
+  <td><a href="https://doi.org/10.1038/s41467-024-55531-2" target="_blank"><strong>Wild et al. (2025), Nature Communications, 16: 270</strong></a><br><small>DOI: 10.1038/s41467-024-55531-2</small></td>
+  <td>Greedy forward selection based on non-parametric nearest-neighbor distance rank asymmetry captures conformational states and collective motions without linear reconstruction assumptions.</td>
+  <td>Compares multi-run worst-transfer regularized linear reconstruction (M8) directly against information-theoretic ranking.</td>
+  <td><code>Empirical superiority of M8 over DII in same-frame distance reconstruction across held-out trajectories.</code></td>
+</tr>
+<tr>
+  <td><a href="https://doi.org/10.1073/pnas.2102170118" target="_blank"><strong>Glielmo et al. (2021), PNAS, 118(45): e2102170118</strong></a><br><small>DOI: 10.1073/pnas.2102170118</small></td>
+  <td>Asymmetric rank correlation measures whether distance metric A determines metric B, providing a non-parametric foundation for CV selection.</td>
+  <td>None; provides theoretical comparator for sensor ranking.</td>
+  <td><code>M8 does not alter the information imbalance formulation; it is an alternative linear greedy heuristic.</code></td>
+</tr>
+<tr>
+  <td><a href="https://doi.org/10.1007/978-0-387-84858-7" target="_blank"><strong>Hastie, Tibshirani, Friedman (2009), The Elements of Statistical Learning (2nd Ed.), Springer</strong></a><br><small>DOI: 10.1007/978-0-387-84858-7</small></td>
+  <td>Ridge regression minimizes prediction error under multicollinearity; leave-one-group-out cross-validation prevents intra-cluster leakage; error decomposition separates static bias from variance error.</td>
+  <td>Application of established statistical principles to molecular dynamics trajectory reconstruction.</td>
+  <td><code>Packaging standard ridge regression, grouped holdouts, and bias-variance decomposition does not constitute an algorithmic novelty.</code></td>
+</tr>
+<tr>
+  <td><a href="https://doi.org/10.1093/nar/gkad834" target="_blank"><strong>Vander Meersche et al. (2024), Nucleic Acids Research, 52(D1): D384-D392</strong></a><br><small>DOI: 10.1093/nar/gkad834</small></td>
+  <td>Standardized all-atom simulations without artificial elastic networks or custom force-field simplifications.</td>
+  <td>Provides the external benchmark platform for testing whether M8 reconstruction survives on independent, unexamined atomistic systems.</td>
+  <td><code>External dataset source; not a competitor.</code></td>
+</tr>
+<tr>
+  <td><a href="https://doi.org/10.1063/1.4811489" target="_blank"><strong>Pérez-Hernández et al. (2013), J. Chem. Phys., 139(1): 015102</strong></a><br><small>DOI: 10.1063/1.4811489</small></td>
+  <td>Variational optimization of autocorrelation captures genuine dynamical fluctuations and slow conformational transitions.</td>
+  <td>Instantaneous same-frame reconstruction vs time-lagged dynamical transitions.</td>
+  <td><code>CHARA M8 operates strictly instantaneously within the same frame and does not perform dynamical propagation or Markov modeling.</code></td>
+</tr>
+</tbody>
+</table>
+
+<h2>5. Measured Limitations & Scientific Scope</h2>
+<ul>
+  <li><strong>Same-Protein Held-Out Generalization Only:</strong> All findings apply strictly to reconstructing unseen trajectory frames of the <em>same protein</em> under identical conditions. They do not demonstrate zero-shot cross-protein transfer, future dynamical forecasting, or cryptic pocket druggability.</li>
+  <li><strong>Panel Scope:</strong> The benchmark panel comprises 3 proteins (9 independent runs total). While establishing standardized atomistic validation, it constitutes an initial rigorous benchmark rather than a population-wide survey.</li>
+  <li><strong>Apo State Limitation:</strong> All simulations are apo protein constructs in aqueous solvent; no small-molecule ligands or binding partners are modeled.</li>
+</ul>
+
+</body>
+</html>

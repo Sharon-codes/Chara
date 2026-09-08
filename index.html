@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chara | Thermodynamic Graph Survival Inference</title>
+    <title>CHARA | Sparse Distance Reconstruction from Molecular Dynamics</title>
+    <meta name="description" content="CHARA studies whether a small set of residue-pair distances can reconstruct other distances in an independent simulation run of the same protein.">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- jsPDF for Professional Multi-Page Vector PDF Report Generation -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
@@ -52,8 +49,6 @@
         .btn-olive:hover:not(:disabled) { background-color: #2d3d21; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(68, 93, 48, 0.32); }
         .btn-outline-clear { background: #ffffff; color: #475569; border: 1px solid rgba(68, 93, 48, 0.25); transition: all 0.2s ease; }
         .btn-outline-clear:hover:not(:disabled) { background: #fee2e2; color: #991b1b; border-color: #f87171; }
-        .upload-dropzone { border: 2px dashed rgba(68, 93, 48, 0.28); background: rgba(247, 249, 244, 0.7); transition: all 0.2s ease; }
-        .upload-dropzone.dragover, .upload-dropzone:hover { border-color: #445d30; background: rgba(234, 240, 226, 0.85); }
         .nav-tab { white-space: nowrap; transition: all 0.2s ease; color: #4b5563; font-weight: 500; }
         .nav-tab:hover { color: #2d3d21; background: rgba(114, 148, 87, 0.08); }
         .nav-tab.active { color: #ffffff !important; font-weight: 600; background: #445d30 !important; box-shadow: 0 4px 12px rgba(68, 93, 48, 0.25); }
@@ -61,22 +56,25 @@
         .tab-page.active { display: block; }
         .glass-footer { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid rgba(68, 93, 48, 0.15); box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.03); }
         
-        /* Model Toggle Pill Styles */
-        .model-pill { cursor: pointer; transition: all 0.2s ease; border: 1px solid rgba(68, 93, 48, 0.2); background: #ffffff; color: #334155; }
-        .model-pill:hover { border-color: #445d30; background: #f7f9f4; }
-        .model-pill.active-chara { background: #445d30 !important; color: #ffffff !important; border-color: #2d3d21 !important; box-shadow: 0 4px 12px rgba(68, 93, 48, 0.3); }
-        .model-pill.active-elastic { background: #be123c !important; color: #ffffff !important; border-color: #9f1239 !important; box-shadow: 0 4px 12px rgba(190, 18, 60, 0.3); }
-        .model-pill.active-clinical { background: #1d4ed8 !important; color: #ffffff !important; border-color: #1e40af !important; box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3); }
-        .model-pill.active-compare { background: #0f172a !important; color: #ffffff !important; border-color: #020617 !important; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.3); }
+        /* Method Pill Selectors */
+        .method-pill { cursor: pointer; transition: all 0.2s ease; border: 1px solid rgba(68, 93, 48, 0.2); background: #ffffff; color: #334155; }
+        .method-pill:hover { border-color: #445d30; background: #f7f9f4; }
+        .method-pill.active-m8 { background: #445d30 !important; color: #ffffff !important; border-color: #2d3d21 !important; box-shadow: 0 4px 12px rgba(68, 93, 48, 0.3); }
+        .method-pill.active-m4 { background: #be123c !important; color: #ffffff !important; border-color: #9f1239 !important; box-shadow: 0 4px 12px rgba(190, 18, 60, 0.3); }
+        .method-pill.active-m1 { background: #475569 !important; color: #ffffff !important; border-color: #334155 !important; box-shadow: 0 4px 12px rgba(71, 85, 105, 0.3); }
+        .method-pill.active-m7 { background: #d97706 !important; color: #ffffff !important; border-color: #b45309 !important; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3); }
+        .method-pill.active-overlay { background: #0f172a !important; color: #ffffff !important; border-color: #020617 !important; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.3); }
     </style>
+    <!-- Source-controlled Pilot Evidence Data File -->
+    <script src="data/chara_pilot_evidence.js"></script>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
 
-    <!-- Header: Blended Large IIT Mandi Logo, CHARA Title, Hugging Face & GitHub Badges -->
+    <!-- Header: Official Logo, Title, Nav Tabs & Links -->
     <header class="w-full border-b border-olive-900/10 bg-parchment-50/95 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex justify-between items-center gap-4">
             
-            <!-- Brand & Seamless Large Logo -->
+            <!-- Brand & Seamless Logo -->
             <div class="flex items-center gap-3.5 cursor-pointer group" onclick="switchTab('home')">
                 <div class="h-14 w-14 sm:h-16 sm:w-16 flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105">
                     <img id="headerLogoImg" src="assets/iit-mandi-logo.png" alt="IIT Mandi" class="h-full w-full object-contain filter drop-shadow-sm">
@@ -98,17 +96,17 @@
                     <i class="fas fa-book-bookmark"></i> Case Studies
                 </button>
                 <button onclick="switchTab('inference')" id="tab-inference" class="nav-tab px-4 py-2.5 rounded-xl flex items-center gap-2">
-                    <i class="fas fa-bolt"></i> Demo &amp; Comparison
+                    <i class="fas fa-magnifying-glass-chart"></i> Explore Saved Results
                 </button>
                 <button onclick="switchTab('team')" id="tab-team" class="nav-tab px-4 py-2.5 rounded-xl flex items-center gap-2">
                     <i class="fas fa-users"></i> Team
                 </button>
             </nav>
 
-            <!-- External Links: Hugging Face + GitHub -->
+            <!-- External Links -->
             <div class="flex items-center gap-2.5">
-                <a href="https://huggingface.co/SharonMelhi/chara-survival" target="_blank" class="hidden sm:flex px-3.5 py-2 text-xs font-mono font-medium rounded-xl border border-amber-600/30 hover:border-amber-600 bg-amber-50/80 hover:bg-amber-100/80 text-amber-900 transition-all items-center gap-1.5 shadow-sm">
-                    <span>🤗</span> <span>Hugging Face</span>
+                <a href="https://huggingface.co/SharonMelhi/chara-survival" target="_blank" title="Earlier survival-analysis prototype (v0.2.9)" class="hidden sm:flex px-3.5 py-2 text-xs font-mono font-medium rounded-xl border border-amber-600/30 hover:border-amber-600 bg-amber-50/80 hover:bg-amber-100/80 text-amber-900 transition-all items-center gap-1.5 shadow-sm">
+                    <span>🤗</span> <span>Hugging Face (Survival Prototype)</span>
                 </a>
                 <a href="https://github.com/Sharon-codes/Chara" target="_blank" class="hidden sm:flex px-3.5 py-2 text-xs font-mono font-medium rounded-xl border border-olive-900/15 hover:border-olive-700 bg-white hover:bg-olive-50 text-olive-900 transition-all items-center gap-2 shadow-sm">
                     <i class="fab fa-github text-sm"></i> GitHub
@@ -133,13 +131,13 @@
                 <i class="fas fa-book-bookmark text-olive-700"></i> Case Studies
             </button>
             <button onclick="switchTab('inference'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-xl font-medium text-sm text-olive-900 hover:bg-olive-100 flex items-center gap-3">
-                <i class="fas fa-bolt text-olive-700"></i> Live Demo &amp; Comparison
+                <i class="fas fa-magnifying-glass-chart text-olive-700"></i> Explore Saved Results
             </button>
             <button onclick="switchTab('team'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-xl font-medium text-sm text-olive-900 hover:bg-olive-100 flex items-center gap-3">
-                <i class="fas fa-users text-olive-700"></i> Research Team
+                <i class="fas fa-users text-olive-700"></i> Team
             </button>
             <a href="https://huggingface.co/SharonMelhi/chara-survival" target="_blank" class="w-full text-center mt-2 py-2.5 rounded-xl bg-amber-600 text-white font-mono text-xs flex items-center justify-center gap-2">
-                <span>🤗</span> Hugging Face Model Hub
+                <span>🤗</span> Hugging Face (Survival Prototype)
             </a>
             <a href="https://github.com/Sharon-codes/Chara" target="_blank" class="w-full text-center py-2.5 rounded-xl bg-olive-800 text-white font-mono text-xs flex items-center justify-center gap-2">
                 <i class="fab fa-github"></i> GitHub Repository
@@ -147,178 +145,178 @@
         </div>
     </header>
 
-    <!-- PAGE 1: OVERVIEW & HOME (STREAMLINED FIT-TO-SCREEN HERO) -->
+    <!-- PAGE 1: OVERVIEW & HOME -->
     <main id="page-home" class="tab-page active flex-grow">
         <section class="max-w-7xl mx-auto px-4 sm:px-6 pt-6 sm:pt-10 pb-12 flex flex-col items-center text-center">
             
-            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-olive-100/80 border border-olive-900/10 text-olive-900 text-[11px] font-mono mb-4 shadow-sm">
+            <!-- Status Label with Pilot Validation Tag -->
+            <div class="inline-flex flex-wrap items-center justify-center gap-2 px-3.5 py-1.5 rounded-full bg-olive-100/80 border border-olive-900/10 text-olive-900 text-[11px] font-mono mb-4 shadow-sm">
                 <i class="fas fa-microscope text-olive-600"></i>
-                Computational and Physical Genomics Laboratory · Indian Institute of Technology Mandi
+                <span>Computational and Physical Genomics Laboratory · Indian Institute of Technology Mandi</span>
+                <span class="px-2 py-0.5 rounded-full bg-olive-200/90 text-olive-900 font-bold ml-1">External pilot · Validation ongoing</span>
             </div>
 
-            <!-- Crisp Hero Title scaled for perfect fit -->
+            <!-- Hero Title -->
             <h1 class="text-3xl sm:text-5xl lg:text-[3.1rem] font-bold tracking-tight text-olive-900 leading-[1.12] mb-4 font-academic max-w-5xl">
-                Thermodynamic Graph Laplacian <br class="hidden sm:inline">
-                Manifold Alignment for Survival Inference
+                Sparse Distance Reconstruction from Molecular Dynamics
             </h1>
 
-            <!-- Concise Subtitle -->
+            <!-- Updated Pilot Description -->
             <p class="text-sm sm:text-base text-slate-700 max-w-3xl font-normal leading-relaxed mb-6">
-                Chara resolves cross-platform transcriptomic domain shift by computing structural heat diffusion kernels across patient gene expression manifolds—enabling a frozen <strong class="text-olive-900 font-semibold underline decoration-olive-500">4,337-gene Cox Proportional Hazards signature</strong> to execute on unseen clinical cohorts with zero data leakage.
+                CHARA studies whether a small set of residue-pair distances can reconstruct other distances in an independent simulation run of the same protein.
             </p>
 
-            <!-- PERFECTLY CENTERED & ALIGNED ACTION BUTTONS (ABOVE THE FOLD) -->
+            <!-- Call to Action Buttons -->
             <div class="flex flex-wrap justify-center items-center gap-4 mb-10 w-full">
                 <button onclick="switchTab('inference')" class="btn-olive px-7 py-3.5 rounded-2xl font-semibold text-sm sm:text-base flex items-center gap-2.5 shadow-md">
-                    <span>Launch Interactive Demo</span>
+                    <span>Explore Saved MD Results</span>
                     <i class="fas fa-arrow-right text-xs"></i>
                 </button>
                 <button onclick="switchTab('benchmarks')" class="px-7 py-3.5 rounded-2xl font-semibold text-olive-900 bg-white hover:bg-olive-50 border border-olive-900/15 text-sm sm:text-base transition-all flex items-center gap-2.5 shadow-sm">
-                    <span>View Benchmark Validation</span>
+                    <span>View Pilot Benchmarks</span>
                     <i class="fas fa-chart-line text-xs"></i>
                 </button>
             </div>
 
-            <!-- Key Metric Cards (Rich, Balanced & Informative) -->
+            <!-- Key Metric Cards (Completed Pilot Counts) -->
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-5xl mb-12">
                 <div class="academic-card p-5 rounded-2xl text-left border-l-4 border-l-olive-600 flex flex-col justify-between h-full academic-card-hover">
                     <div class="flex items-center justify-between gap-2 mb-2">
-                        <span class="text-[10px] font-mono text-olive-700 font-bold uppercase tracking-wider">Frozen Signature</span>
+                        <span class="text-[10px] font-mono text-olive-700 font-bold uppercase tracking-wider">EXTERNAL BENCHMARK</span>
                         <div class="w-7 h-7 rounded-lg bg-olive-100/80 flex items-center justify-center text-olive-700 text-xs flex-shrink-0">
                             <i class="fas fa-dna"></i>
                         </div>
                     </div>
                     <div>
-                        <div class="text-2xl sm:text-3xl font-extrabold text-olive-900 tracking-tight leading-none mb-1.5">4,337 <span class="text-xs font-medium text-slate-600">Genes</span></div>
-                        <p class="text-[11px] text-slate-600 leading-snug">Thermodynamic STRING Laplacian manifold features</p>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-olive-900 tracking-tight leading-none mb-1.5">3 <span class="text-xs font-medium text-slate-600">Proteins</span></div>
+                        <p class="text-[11px] text-slate-600 leading-snug">Structurally diverse classes (all-α, all-β, α+β) from ATLAS CHARMM36m triplicates</p>
                     </div>
                 </div>
 
                 <div class="academic-card p-5 rounded-2xl text-left border-l-4 border-l-olive-700 flex flex-col justify-between h-full academic-card-hover">
                     <div class="flex items-center justify-between gap-2 mb-2">
-                        <span class="text-[10px] font-mono text-olive-700 font-bold uppercase tracking-wider">Concordance Gain</span>
+                        <span class="text-[10px] font-mono text-olive-700 font-bold uppercase tracking-wider">HELD-OUT EVALUATION</span>
                         <div class="w-7 h-7 rounded-lg bg-olive-100/80 flex items-center justify-center text-olive-700 text-xs flex-shrink-0">
-                            <i class="fas fa-chart-line"></i>
+                            <i class="fas fa-rotate"></i>
                         </div>
                     </div>
                     <div>
-                        <div class="text-2xl sm:text-3xl font-extrabold text-olive-900 tracking-tight leading-none mb-1.5">+0.268 <span class="text-xs font-medium text-slate-600">C-Index</span></div>
-                        <p class="text-[11px] text-slate-600 leading-snug">Peak OOD gain over DeepSurv &amp; Random Survival Forest</p>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-olive-900 tracking-tight leading-none mb-1.5">9 <span class="text-xs font-medium text-slate-600">Evaluations</span></div>
+                        <p class="text-[11px] text-slate-600 leading-snug">3 independent held-out run rotations per protein on unseen simulation runs</p>
                     </div>
                 </div>
 
                 <div class="academic-card p-5 rounded-2xl text-left border-l-4 border-l-olive-800 flex flex-col justify-between h-full academic-card-hover">
                     <div class="flex items-center justify-between gap-2 mb-2">
-                        <span class="text-[10px] font-mono text-olive-700 font-bold uppercase tracking-wider">Test Integrity</span>
+                        <span class="text-[10px] font-mono text-olive-700 font-bold uppercase tracking-wider">SENSOR BUDGET</span>
                         <div class="w-7 h-7 rounded-lg bg-olive-100/80 flex items-center justify-center text-olive-700 text-xs flex-shrink-0">
-                            <i class="fas fa-shield-halved"></i>
+                            <i class="fas fa-ruler-combined"></i>
                         </div>
                     </div>
                     <div>
-                        <div class="text-2xl sm:text-3xl font-extrabold text-olive-900 tracking-tight leading-none mb-1.5">Zero <span class="text-xs font-medium text-slate-600">Leakage</span></div>
-                        <p class="text-[11px] text-slate-600 leading-snug">Out-of-sample frozen cohort clinical validation</p>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-olive-900 tracking-tight leading-none mb-1.5">10 <span class="text-xs font-medium text-slate-600">Distances</span></div>
+                        <p class="text-[11px] text-slate-600 leading-snug">Sparse residue-pair measurements selected via multi-run transfer optimization</p>
                     </div>
                 </div>
 
                 <div class="academic-card p-5 rounded-2xl text-left border-l-4 border-l-olive-900 flex flex-col justify-between h-full academic-card-hover">
                     <div class="flex items-center justify-between gap-2 mb-2">
-                        <span class="text-[10px] font-mono text-olive-700 font-bold uppercase tracking-wider">Inference Model</span>
+                        <span class="text-[10px] font-mono text-olive-700 font-bold uppercase tracking-wider">TARGET SCOPE</span>
                         <div class="w-7 h-7 rounded-lg bg-olive-100/80 flex items-center justify-center text-olive-700 text-xs flex-shrink-0">
-                            <i class="fas fa-bolt"></i>
+                            <i class="fas fa-bullseye"></i>
                         </div>
                     </div>
                     <div>
-                        <div class="text-2xl sm:text-3xl font-extrabold text-olive-900 tracking-tight leading-none mb-1.5">58 <span class="text-xs font-medium text-slate-600">Biomarkers</span></div>
-                        <p class="text-[11px] text-slate-600 leading-snug">Active regularized Coxnet hazard coefficients</p>
+                        <div class="text-2xl sm:text-3xl font-extrabold text-olive-900 tracking-tight leading-none mb-1.5">500 <span class="text-xs font-medium text-slate-600">Targets / Fold</span></div>
+                        <p class="text-[11px] text-slate-600 leading-snug">Disjoint intramolecular target distances evaluated on held-out trajectories</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Deep Academic Context Section -->
+            <!-- Research Context Section -->
             <div class="academic-card p-8 sm:p-10 rounded-3xl text-left w-full max-w-6xl mb-12 border-t-4 border-t-olive-800">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 pb-6 border-b border-olive-900/10">
                     <div>
-                        <span class="text-xs font-mono text-olive-700 uppercase tracking-widest block mb-1">BIOPHYSICAL LANDSCAPE</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-olive-900 font-academic">The Challenge of Cross-Platform Transcriptomics</h2>
+                        <span class="text-xs font-mono text-olive-700 uppercase tracking-widest block mb-1">BIOPHYSICAL CONTEXT & METHODOLOGY</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-olive-900 font-academic">The Research Question: Sparse Distance Reconstruction</h2>
                     </div>
                     <span class="px-3 py-1 rounded-full bg-olive-100 text-olive-800 text-xs font-mono">IIT Mandi Research Focus</span>
                 </div>
 
                 <div class="grid md:grid-cols-2 gap-8 text-xs sm:text-sm text-slate-700 leading-relaxed">
                     <div>
-                        <h3 class="font-bold text-olive-900 text-sm sm:text-base mb-2">1. Sequencing Platform Discrepancies</h3>
+                        <h3 class="font-bold text-olive-900 text-sm sm:text-base mb-2">1. The Biophysical Challenge of Trajectory Sampling</h3>
                         <p class="mb-3">
-                            High-throughput transcriptomics has revolutionized cancer prognostics. However, expression measurements vary wildly between Illumina RNA-Seq (HiSeq/NovaSeq), Affymetrix GeneChip Microarrays, and Agilent platforms. Differences in cDNA amplification, read depth, and probe hybridization introduce systematic non-biological shifts.
+                            Molecular dynamics (MD) simulations generate high-dimensional conformational ensembles capturing macromolecular thermal fluctuations. Characterizing conformational dynamics across thousands of atomistic coordinates is computationally intensive.
                         </p>
                         <p>
-                            When a Cox Proportional Hazards model trained on TCGA Illumina data evaluates a local hospital's Affymetrix cohort, hazard predictions breakdown completely, dropping performance to random guessing.
+                            A central biophysical question is whether measuring a small subset of residue-pair distances is sufficient to reconstruct the broader distance matrix in an independent simulation run of the same protein under identical conditions.
                         </p>
                     </div>
 
                     <div>
-                        <h3 class="font-bold text-olive-900 text-sm sm:text-base mb-2">2. Why Traditional Normalization Fails Clinical Testing</h3>
+                        <h3 class="font-bold text-olive-900 text-sm sm:text-base mb-2">2. Multi-Run Transfer vs In-Sample Overfitting</h3>
                         <p class="mb-3">
-                            Algorithms like ComBat or Quantile Normalization rely on pooling training and testing samples together to adjust batch means. In clinical diagnostic practice, patient samples are received individually or in small batches.
+                            Selecting sensor measurements on a single simulation trajectory risks overfitting to transient local fluctuations and temporal autocorrelation. Such in-sample fits frequently fail when transferred to an independent simulation replicate.
                         </p>
                         <p>
-                            Pooling test samples with training data leaks future patient statistics into the diagnostic model—violating out-of-sample machine learning rules and inflating performance metrics unrealistically.
+                            CHARA evaluates transfer selection by using two development runs to select informative distances that minimize transfer prediction error onto an unseen third held-out run, measuring genuine out-of-run generalization.
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- Visual Data Lifecycle Flow -->
+            <!-- Visual Four-Stage Pipeline Flow -->
             <div class="w-full max-w-6xl mb-12 text-left">
-                <h3 class="text-xl sm:text-2xl font-bold text-olive-900 mb-6 font-academic text-center">Chara Thermodynamic Data Lifecycle</h3>
+                <h3 class="text-xl sm:text-2xl font-bold text-olive-900 mb-6 font-academic text-center">Chara Trajectory Distance Reconstruction Pipeline</h3>
                 
                 <div class="grid md:grid-cols-4 gap-4">
                     <div class="academic-card p-5 rounded-2xl border-l-4 border-l-olive-600">
                         <div class="text-xs font-mono text-olive-700 font-bold mb-1">STAGE 1</div>
-                        <h4 class="font-bold text-olive-900 mb-1.5 text-sm">Cohort Input CSV</h4>
-                        <p class="text-xs text-slate-600 leading-relaxed">Unadjusted patient transcriptomic counts (HGNC gene symbols).</p>
+                        <h4 class="font-bold text-olive-900 mb-1.5 text-sm">Extract residue-pair distances from MD trajectories</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">Extracts pairwise inter-residue Cα distances <code class="font-mono text-[11px] bg-olive-100/70 px-1 py-0.5 rounded">d<sub>ij</sub>(t) = ||r<sub>i</sub>(t) - r<sub>j</sub>(t)||<sub>2</sub></code> with sequence separation <code class="font-mono text-[11px]">|i - j| ≥ 3</code>.</p>
                     </div>
 
                     <div class="academic-card p-5 rounded-2xl border-l-4 border-l-olive-700">
                         <div class="text-xs font-mono text-olive-700 font-bold mb-1">STAGE 2</div>
-                        <h4 class="font-bold text-olive-900 mb-1.5 text-sm">Graph Laplacian</h4>
-                        <p class="text-xs text-slate-600 leading-relaxed">Computes Gaussian affinity matrix <strong>W</strong> and degree matrix <strong>D</strong>.</p>
+                        <h4 class="font-bold text-olive-900 mb-1.5 text-sm">Select informative measurements using two development runs</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">Applies greedy transfer search across two independent development runs to pick sensor distances, comparing M8 worst-direction and M7 mean-direction transfer.</p>
                     </div>
 
                     <div class="academic-card p-5 rounded-2xl border-l-4 border-l-olive-800">
                         <div class="text-xs font-mono text-olive-700 font-bold mb-1">STAGE 3</div>
-                        <h4 class="font-bold text-olive-900 mb-1.5 text-sm">Heat Kernel Diffusion</h4>
-                        <p class="text-xs text-slate-600 leading-relaxed">Spectral smoothing kernel <strong>H<sub>t</sub> = exp(-tL)</strong> dissipates platform noise.</p>
+                        <h4 class="font-bold text-olive-900 mb-1.5 text-sm">Fit a distance-reconstruction model on development data</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">Fits a multi-output ridge regression model <code class="font-mono text-[11px] bg-olive-100/70 px-1 py-0.5 rounded">Ŷ = (X - μ<sub>x</sub>)W + μ<sub>y</sub></code>, tuning shrinkage penalty λ across development runs.</p>
                     </div>
 
                     <div class="academic-card p-5 rounded-2xl border-l-4 border-l-olive-900">
                         <div class="text-xs font-mono text-olive-700 font-bold mb-1">STAGE 4</div>
-                        <h4 class="font-bold text-olive-900 mb-1.5 text-sm">Survival Projection</h4>
-                        <p class="text-xs text-slate-600 leading-relaxed">Evaluates risk scores on frozen 4,337-gene Cox PH weights.</p>
+                        <h4 class="font-bold text-olive-900 mb-1.5 text-sm">Evaluate reconstruction in a third, held-out run</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">Evaluates reconstruction on an independent third run using non-dimensional skill <code class="font-mono text-[11px] bg-olive-100/70 px-1 py-0.5 rounded">Skill = 1 - SSE / SSE<sub>base</sub></code> relative to the development mean.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- PyPI & Hugging Face Hub Direct Links -->
+            <!-- Software Links & Earlier Prototype Card -->
             <div class="academic-card p-6 sm:p-7 rounded-3xl w-full max-w-6xl text-left bg-parchment-100/90 border border-olive-900/20 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="flex-1">
                     <div class="flex items-center gap-2 mb-1.5">
-                        <span class="text-xs font-mono text-olive-700 uppercase tracking-widest font-bold">COMMUNITY RELEASES</span>
-                        <span class="px-2 py-0.5 rounded bg-olive-800 text-white font-mono text-[10px] font-bold">chara-survival v0.2.5</span>
-                        <span class="px-2 py-0.5 rounded bg-amber-600 text-white font-mono text-[10px] font-bold">🤗 Hugging Face Hub</span>
+                        <span class="text-xs font-mono text-olive-700 uppercase tracking-widest font-bold">SOFTWARE &amp; RESEARCH PACKAGES</span>
+                        <span class="px-2 py-0.5 rounded bg-slate-700 text-white font-mono text-[10px] font-bold">chara-survival v0.2.9</span>
+                        <span class="px-2 py-0.5 rounded bg-amber-600 text-white font-mono text-[10px] font-bold">Earlier Survival Prototype</span>
                     </div>
-                    <h3 class="text-xl sm:text-2xl font-bold text-olive-900 font-academic mb-1.5">Official PyPI &amp; Hugging Face Model Hub</h3>
+                    <h3 class="text-xl sm:text-2xl font-bold text-olive-900 font-academic mb-1.5">Research Software &amp; Benchmark Scripts</h3>
                     <p class="text-xs text-slate-600 leading-relaxed max-w-2xl">
-                        Load the frozen Chara model weights directly in Python or install the library: <code>pip install --upgrade chara-survival</code>.
+                        <code>chara-survival</code> represents an earlier survival-analysis prototype published on PyPI and Hugging Face. The current molecular dynamics distance reconstruction benchmark pipeline and audit tools are maintained in the repository under <code>tools/chara_external_confirmation/</code>.
                     </p>
                 </div>
                 
-                <!-- Perfectly Centered Action Buttons -->
                 <div class="flex flex-wrap items-center gap-3 flex-shrink-0 self-center">
                     <a href="https://huggingface.co/SharonMelhi/chara-survival" target="_blank" class="px-4 py-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-mono text-xs font-bold transition-all shadow-sm flex items-center gap-2">
-                        <span>🤗</span> <span>Hugging Face Hub</span> <i class="fas fa-external-link-alt text-[10px]"></i>
+                        <span>🤗</span> <span>Hugging Face (Survival Prototype)</span> <i class="fas fa-external-link-alt text-[10px]"></i>
                     </a>
-                    <a href="https://pypi.org/project/chara-survival/" target="_blank" class="px-4 py-3 rounded-xl bg-olive-800 hover:bg-olive-900 text-white font-mono text-xs font-bold transition-all shadow-sm flex items-center gap-2">
-                        <span>PyPI Release</span> <i class="fas fa-external-link-alt text-[10px]"></i>
+                    <a href="https://github.com/Sharon-codes/Chara" target="_blank" class="px-4 py-3 rounded-xl bg-olive-800 hover:bg-olive-900 text-white font-mono text-xs font-bold transition-all shadow-sm flex items-center gap-2">
+                        <i class="fab fa-github"></i> <span>Analysis Code</span> <i class="fas fa-external-link-alt text-[10px]"></i>
                     </a>
                 </div>
             </div>
@@ -326,53 +324,51 @@
         </section>
     </main>
 
-    <!-- PAGE 2: EXPANDED BENCHMARKS & SCIENTIFIC RIGOR -->
+    <!-- PAGE 2: BENCHMARKS SECTION -->
     <main id="page-benchmarks" class="tab-page flex-grow">
         <section class="max-w-7xl mx-auto px-6 py-12">
             
             <div class="text-center mb-12">
-                <span class="text-xs font-mono tracking-widest text-olive-700 uppercase font-bold block mb-2">EMPIRICAL PERFORMANCE & SCIENTIFIC BENCHMARKING</span>
-                <h2 class="text-3xl sm:text-5xl font-extrabold text-olive-900 tracking-tight mb-3 font-academic">Comprehensive Cross-Cohort Benchmarks</h2>
-                <p class="text-slate-600 text-sm sm:text-base max-w-3xl mx-auto">Evaluating Concordance Index (C-Index), 5-Year Time-Dependent AUC, and Brier Error Calibration across 6 international cohorts and multiple physical sequencing platforms.</p>
+                <span class="text-xs font-mono tracking-widest text-olive-700 uppercase font-bold block mb-2">EMPIRICAL MOLECULAR DYNAMICS BENCHMARKS</span>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-olive-900 tracking-tight mb-3 font-academic">Sparse Distance Reconstruction Pilot Benchmarks</h2>
+                <p class="text-slate-600 text-sm sm:text-base max-w-3xl mx-auto">Evaluating M8 Robust Transfer vs M7 Mean Transfer across 3 external benchmark proteins from the ATLAS database across 9 held-out simulation runs.</p>
             </div>
 
-            <!-- Deep Dive: What Was Used for Benchmarking & Why It Matters -->
+            <!-- Deep Dive: Datasets & Context -->
             <div class="academic-card p-8 sm:p-10 rounded-3xl mb-10 border-l-4 border-l-olive-800">
-                <h3 class="text-2xl font-bold text-olive-900 mb-4 font-academic">What Datasets Were Used &amp; Why Benchmarking Matters</h3>
+                <h3 class="text-2xl font-bold text-olive-900 mb-4 font-academic">External Benchmark Systems &amp; Pilot Scope</h3>
                 
                 <div class="grid md:grid-cols-3 gap-6 text-xs text-slate-700 leading-relaxed">
                     <div class="p-4 rounded-xl bg-olive-50/70 border border-olive-900/10">
                         <h4 class="font-bold text-olive-900 text-sm mb-1 flex items-center gap-2">
-                            <i class="fas fa-database text-olive-700"></i> 1. The 6 Multi-Center Cohorts
+                            <i class="fas fa-database text-olive-700"></i> 1. The 3 External Benchmark Systems
                         </h4>
-                        <p class="mb-2">We evaluated Chara on diverse discovery and out-of-distribution test cohorts:</p>
+                        <p class="mb-2">Evaluated on standardized atomistic MD trajectories from the ATLAS database (CHARMM36m, explicit TIP3P solvent, 100 ns triplicates):</p>
                         <ul class="space-y-1 text-slate-600 font-mono text-[11px]">
-                            <li>• <strong>TCGA-PAAD:</strong> RNA-Seq (HiSeq), n=177 (Training)</li>
-                            <li>• <strong>ICGC-PACA (AU):</strong> RNA-Seq, n=269 (Held-out)</li>
-                            <li>• <strong>GSE15471:</strong> Affymetrix HG-U133 Plus 2.0, n=78</li>
-                            <li>• <strong>GSE28735:</strong> GeneChip Human Gene 1.0, n=90</li>
-                            <li>• <strong>GSE57495:</strong> Agilent Human Genome 4x44K, n=63</li>
-                            <li>• <strong>GSE31210:</strong> Zero-Shot Lung Microarray, n=226</li>
+                            <li>• <strong>1utg_A:</strong> Uteroglobin (all-α, 70 res, 1.34 Å)</li>
+                            <li>• <strong>2cg7_A:</strong> Fibronectin type III (all-β, 90 res, 1.20 Å)</li>
+                            <li>• <strong>2j6b_A:</strong> AFV1 viral protein (α+β, 109 res, 1.30 Å)</li>
+                            <li>• <strong>9 Held-Out Runs:</strong> 3 rotation folds per protein</li>
                         </ul>
                     </div>
 
                     <div class="p-4 rounded-xl bg-olive-50/70 border border-olive-900/10">
                         <h4 class="font-bold text-olive-900 text-sm mb-1 flex items-center gap-2">
-                            <i class="fas fa-arrows-split-up-and-left text-olive-700"></i> 2. Why Platform Shift Fails ML
+                            <i class="fas fa-arrows-split-up-and-left text-olive-700"></i> 2. Worst-Direction vs Average Transfer
                         </h4>
-                        <p class="mb-2">Microarrays measure fluorescence from optical probe hybridization with probe saturation limits, whereas RNA-Seq counts cDNA sequencing reads.</p>
+                        <p class="mb-2"><strong>M8 Robust Transfer</strong> selects sensor distances by minimizing the worst-case transfer error between the two development runs (min-max transfer).</p>
                         <p>
-                            Without thermodynamic manifold alignment, conventional machine learning models (DeepSurv, Random Survival Forests) experience <strong>domain collapse</strong>, dropping from ~0.78 C-Index on RNA-Seq to random 0.50 on microarrays.
+                            <strong>M7 Mean Transfer</strong> minimizes average transfer error across development runs. Comparing M8 directly against M7 tests whether worst-direction regularization provides protection against out-of-run transfer failure.
                         </p>
                     </div>
 
                     <div class="p-4 rounded-xl bg-olive-50/70 border border-olive-900/10">
                         <h4 class="font-bold text-olive-900 text-sm mb-1 flex items-center gap-2">
-                            <i class="fas fa-shield-halved text-olive-700"></i> 3. Clinical Trial Zero Leakage
+                            <i class="fas fa-shield-halved text-olive-700"></i> 3. Measured Pilot Limitation Note
                         </h4>
-                        <p class="mb-2">In prospective oncology trials, patients arrive sequentially. Methods that perform batch harmonization (like ComBat) require pooling future test samples with past data, leaking test statistics.</p>
+                        <p class="mb-2"><strong>Limitation Note:</strong> “This three-protein pilot supports further evaluation. Baseline configuration, nested selection/tuning and aggregate uncertainty require correction before claiming method superiority.”</p>
                         <p>
-                            Chara solves this by applying <strong>frozen graph Laplacian smoothing</strong> individually to each incoming cohort without accessing training labels.
+                            Results apply strictly to same-protein held-out trajectory reconstruction under identical conditions and do not establish zero-shot cross-protein transfer or drug binding.
                         </p>
                     </div>
                 </div>
@@ -383,30 +379,30 @@
                 <div class="academic-card p-7 rounded-2xl">
                     <div class="flex items-center gap-2.5 mb-2">
                         <i class="fas fa-circle-question text-olive-700 text-lg"></i>
-                        <h3 class="text-base font-bold text-olive-900">What is Concordance Index (C-Index)?</h3>
+                        <h3 class="text-base font-bold text-olive-900">What is Reconstruction Skill?</h3>
                     </div>
                     <p class="text-xs text-slate-700 leading-relaxed mb-3">
-                        The C-Index measures a survival model's ability to correctly rank patient risk. It evaluates whether a patient who died earlier was correctly assigned a higher risk score than a patient who survived longer.
+                        Reconstruction skill evaluates whether the selected sensor distances predict held-out target distances better than a development-mean constant baseline: <code class="font-mono bg-olive-100 px-1 py-0.5 rounded">Skill = 1 - (SSE / SSE<sub>baseline</sub>)</code>.
                     </p>
                     <ul class="text-xs text-slate-600 space-y-1 font-mono">
-                        <li>• <strong>0.50</strong> = Random guessing (equivalent to a coin flip).</li>
-                        <li>• <strong>0.70+</strong> = Strong clinical utility for patient stratification.</li>
-                        <li>• <strong>0.784 (Chara Peak)</strong> = State-of-the-art predictive discrimination across independent cohorts.</li>
+                        <li>• <strong>Zero:</strong> Matches the development-mean baseline.</li>
+                        <li>• <strong>Higher is better:</strong> Positive skill indicates meaningful trajectory reconstruction.</li>
+                        <li>• <strong>Negative values are worse:</strong> Indicate worse performance than simply predicting the mean.</li>
                     </ul>
                 </div>
 
                 <div class="academic-card p-7 rounded-2xl">
                     <div class="flex items-center gap-2.5 mb-2">
                         <i class="fas fa-circle-question text-olive-700 text-lg"></i>
-                        <h3 class="text-base font-bold text-olive-900">What is Brier Error Score?</h3>
+                        <h3 class="text-base font-bold text-olive-900">What is Retrospective Test-Centered Diagnostic Skill?</h3>
                     </div>
                     <p class="text-xs text-slate-700 leading-relaxed mb-3">
-                        The Brier Score assesses the calibration accuracy of predicted survival probabilities over time. It calculates the mean squared difference between predicted survival probability and actual patient survival status.
+                        A retrospective diagnostic metric computed by centering predictions and targets using the test run's true empirical means: <code class="font-mono bg-olive-100 px-1 py-0.5 rounded">Skill<sub>centered</sub> = 1 - (Var(Y - Ŷ) / Var(Y))</code>.
                     </p>
                     <ul class="text-xs text-slate-600 space-y-1 font-mono">
-                        <li>• <strong>Lower is better</strong> (0.0 represents zero prediction error).</li>
-                        <li>• <strong>Unadjusted models</strong> suffer from error drift (&gt; 0.45) at 5 years.</li>
-                        <li>• <strong>Chara</strong> maintains tight calibration error (&lt; 0.18) across 5 years.</li>
+                        <li>• <strong>Diagnostic purpose:</strong> Isolates dynamic fluctuation tracking from static mean offset recovery.</li>
+                        <li>• <strong>Positive value:</strong> Confirms genuine tracking of trajectory variance.</li>
+                        <li>• <strong>Retrospective:</strong> Uses test means as a post-hoc analytical diagnostic only.</li>
                     </ul>
                 </div>
             </div>
@@ -415,73 +411,78 @@
             <div class="grid lg:grid-cols-12 gap-6 mb-10">
                 <div class="lg:col-span-7 academic-card p-7 rounded-2xl">
                     <h3 class="text-base font-bold text-olive-900 mb-1 flex items-center gap-2">
-                        <i class="fas fa-chart-column text-olive-700"></i> Concordance Index (C-Index) Comparison
+                        <i class="fas fa-chart-column text-olive-700"></i> Reconstruction Skill: M8 vs M7 vs Centered Diagnostic
                     </h3>
-                    <p class="text-[11px] text-slate-500 font-mono mb-4">Comparing Unadjusted Cox vs ComBat vs Chara Laplacian across 5 cohorts</p>
+                    <p class="text-[11px] text-slate-500 font-mono mb-4">Comparing Worst-Direction Transfer (M8) vs Average Transfer (M7) across 3 proteins (k=10 distances)</p>
                     <div class="relative w-full h-[280px]">
-                        <canvas id="benchmarkCIndexChart"></canvas>
+                        <canvas id="benchmarkSkillChart"></canvas>
                     </div>
                 </div>
 
                 <div class="lg:col-span-5 academic-card p-7 rounded-2xl">
                     <h3 class="text-base font-bold text-olive-900 mb-1 flex items-center gap-2">
-                        <i class="fas fa-chart-line text-olive-700"></i> 5-Year Brier Error Score Drift
+                        <i class="fas fa-chart-line text-olive-700"></i> Observed Fold Performance Range (M8, k=10)
                     </h3>
-                    <p class="text-[11px] text-slate-500 font-mono mb-4">Calibration error over time (Lower = Better)</p>
+                    <p class="text-[11px] text-slate-500 font-mono mb-4">Actual observed fold points per protein (No aggregate error bars invented)</p>
                     <div class="relative w-full h-[280px]">
-                        <canvas id="benchmarkBrierChart"></canvas>
+                        <canvas id="benchmarkFoldsChart"></canvas>
                     </div>
                 </div>
             </div>
 
             <!-- Detailed Table -->
             <div class="academic-card p-7 rounded-2xl overflow-x-auto">
-                <h3 class="text-lg font-bold text-olive-900 mb-1">Detailed Cross-Platform Benchmark Table</h3>
-                <p class="text-xs text-slate-600 mb-4">Each cohort represents an independent international study on a different physical platform.</p>
+                <h3 class="text-lg font-bold text-olive-900 mb-1">External Benchmark Pilot Consistency Table</h3>
+                <p class="text-xs text-slate-600 mb-4">Derived from verified benchmark evidence files across 9 independent held-out run rotations (budget k=10 distances, 500 targets/fold).</p>
 
                 <table class="w-full text-left text-xs text-slate-700">
                     <thead class="text-[11px] font-mono text-olive-900 uppercase bg-olive-100/80 border-b border-olive-900/10">
                         <tr>
-                            <th class="p-3">Validation Cohort</th>
-                            <th class="p-3">Platform</th>
-                            <th class="p-3">Sample Size (n)</th>
-                            <th class="p-3">Unadjusted Cox</th>
-                            <th class="p-3">ComBat Adjustment</th>
-                            <th class="p-3 text-olive-900 font-bold bg-olive-200/60">Chara Laplacian (Ours)</th>
+                            <th class="p-3">Protein ID</th>
+                            <th class="p-3">Structural Class</th>
+                            <th class="p-3 text-olive-900 font-bold bg-olive-200/70">M8 Skill (Worst-Dir Transfer)</th>
+                            <th class="p-3">M7 Skill (Average Transfer)</th>
+                            <th class="p-3">M8 Centered Diagnostic</th>
+                            <th class="p-3">Observed Fold Range (M8)</th>
+                            <th class="p-3">Pilot Status</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-olive-900/10 font-mono text-xs">
                         <tr class="hover:bg-olive-50 transition-colors">
-                            <td class="p-3 font-semibold text-olive-900">ICGC-PACA (AU)</td>
-                            <td class="p-3 text-slate-600">RNA-Seq (Illumina HiSeq)</td>
-                            <td class="p-3">n = 269</td>
-                            <td class="p-3 text-rose-700 font-semibold">0.531</td>
-                            <td class="p-3 text-slate-700">0.682</td>
-                            <td class="p-3 text-olive-900 font-bold bg-olive-100/60">0.784 (+0.253)</td>
+                            <td class="p-3 font-semibold text-olive-900">1utg_A (Uteroglobin)</td>
+                            <td class="p-3 text-slate-600 font-sans">all-alpha (70 res)</td>
+                            <td class="p-3 text-olive-900 font-bold bg-olive-100/60">0.385691</td>
+                            <td class="p-3 text-slate-700">0.333865</td>
+                            <td class="p-3 text-slate-700">0.273502</td>
+                            <td class="p-3 text-slate-600">[0.2792, 0.5702]</td>
+                            <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-sans font-semibold">Completed Pilot</span></td>
                         </tr>
                         <tr class="hover:bg-olive-50 transition-colors">
-                            <td class="p-3 font-semibold text-olive-900">GSE15471</td>
-                            <td class="p-3 text-slate-600">Affymetrix HG-U133 Plus 2.0</td>
-                            <td class="p-3">n = 78</td>
-                            <td class="p-3 text-rose-700 font-semibold">0.508</td>
-                            <td class="p-3 text-slate-700">0.641</td>
-                            <td class="p-3 text-olive-900 font-bold bg-olive-100/60">0.762 (+0.254)</td>
+                            <td class="p-3 font-semibold text-olive-900">2cg7_A (Fibronectin III)</td>
+                            <td class="p-3 text-slate-600 font-sans">all-beta (90 res)</td>
+                            <td class="p-3 text-olive-900 font-bold bg-olive-100/60">0.319264</td>
+                            <td class="p-3 text-amber-800 font-bold bg-amber-50/70">0.322845 (+0.0036)</td>
+                            <td class="p-3 text-slate-700">0.248618</td>
+                            <td class="p-3 text-slate-600">[0.1265, 0.4481]</td>
+                            <td class="p-3"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-sans font-semibold">M7 Slightly Higher</span></td>
                         </tr>
                         <tr class="hover:bg-olive-50 transition-colors">
-                            <td class="p-3 font-semibold text-olive-900">GSE28735</td>
-                            <td class="p-3 text-slate-600">GeneChip Human Gene 1.0 ST</td>
-                            <td class="p-3">n = 90</td>
-                            <td class="p-3 text-rose-700 font-semibold">0.522</td>
-                            <td class="p-3 text-slate-700">0.665</td>
-                            <td class="p-3 text-olive-900 font-bold bg-olive-100/60">0.771 (+0.249)</td>
+                            <td class="p-3 font-semibold text-olive-900">2j6b_A (AFV1 Viral Protein)</td>
+                            <td class="p-3 text-slate-600 font-sans">alpha+beta (109 res)</td>
+                            <td class="p-3 text-olive-900 font-bold bg-olive-100/60">0.405957</td>
+                            <td class="p-3 text-slate-700">0.388613</td>
+                            <td class="p-3 text-slate-700">0.285084</td>
+                            <td class="p-3 text-slate-600">[0.3207, 0.4770]</td>
+                            <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-sans font-semibold">Completed Pilot</span></td>
                         </tr>
-                        <tr class="hover:bg-olive-50 transition-colors">
-                            <td class="p-3 font-semibold text-olive-900">GSE57495</td>
-                            <td class="p-3 text-slate-600">Agilent Whole Human Genome</td>
-                            <td class="p-3">n = 63</td>
-                            <td class="p-3 text-rose-700 font-semibold">0.495</td>
-                            <td class="p-3 text-slate-700">0.628</td>
-                            <td class="p-3 text-olive-900 font-bold bg-olive-100/60">0.758 (+0.263)</td>
+                        <tr class="bg-olive-50/60 font-bold">
+                            <td class="p-3 text-olive-900">Macro Mean (3 Systems)</td>
+                            <td class="p-3 text-slate-700 font-sans">3 Diverse Classes</td>
+                            <td class="p-3 text-olive-900 font-bold bg-olive-200/50">0.370304</td>
+                            <td class="p-3 text-slate-800">0.348441</td>
+                            <td class="p-3 text-slate-800">0.269068</td>
+                            <td class="p-3 text-slate-700">[0.1265, 0.5702]</td>
+                            <td class="p-3"><span class="px-2 py-0.5 rounded bg-olive-200 text-olive-900 text-[10px] font-sans font-semibold">Verified Aggregate</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -490,108 +491,108 @@
         </section>
     </main>
 
-    <!-- PAGE 3: CASE STUDIES & PAPER LINKS -->
+    <!-- PAGE 3: CASE STUDIES & RESEARCH PROGRESS CARDS -->
     <main id="page-usecases" class="tab-page flex-grow">
         <section class="max-w-7xl mx-auto px-6 py-12">
             
             <div class="text-center mb-12">
-                <span class="text-xs font-mono tracking-widest text-olive-700 uppercase font-bold block mb-2">CLINICAL APPLICATIONS & LITERATURE CITATIONS</span>
-                <h2 class="text-3xl sm:text-5xl font-extrabold text-olive-900 tracking-tight mb-3 font-academic">Case Studies & Literature Papers</h2>
-                <p class="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto">Real-world oncology applications demonstrating Chara in precision medicine, early cancer detection, and drug discovery.</p>
+                <span class="text-xs font-mono tracking-widest text-olive-700 uppercase font-bold block mb-2">RESEARCH EVOLUTION &amp; CASE STUDIES</span>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-olive-900 tracking-tight mb-3 font-academic">Research Trajectory &amp; Empirical Milestones</h2>
+                <p class="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto">Tracing the scientific progression of CHARA from early cancer target inquiries to rigorous trajectory distance reconstruction.</p>
             </div>
 
-            <!-- Case Studies Grid -->
+            <!-- 4 Research Progress Cards -->
             <div class="grid md:grid-cols-2 gap-6 mb-12">
                 
-                <!-- Case Study 1 -->
+                <!-- Card 1: The Original MD Question -->
                 <div class="academic-card p-7 rounded-2xl border-l-4 border-l-olive-700 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between gap-2 mb-3">
-                            <span class="px-3 py-1 rounded-full bg-olive-100 text-olive-800 text-xs font-mono font-bold whitespace-nowrap">Case Study 1</span>
-                            <span class="text-xs font-mono text-slate-500">Pancreatic Adenocarcinoma</span>
+                            <span class="px-3 py-1 rounded-full bg-olive-100 text-olive-800 text-xs font-mono font-bold whitespace-nowrap">Research Origin</span>
+                            <span class="text-xs font-mono text-slate-500">Cancer Target Inquiry</span>
                         </div>
-                        <h3 class="text-base font-bold text-olive-900 mb-2">Pancreatic Ductal Adenocarcinoma (PDAC) Survival Stratification</h3>
+                        <h3 class="text-base font-bold text-olive-900 mb-2">1. The Original MD Question</h3>
                         <p class="text-xs text-slate-700 leading-relaxed mb-3">
-                            Pancreatic ductal adenocarcinoma is notorious for high inter-patient heterogeneity and low 5-year survival rates (&lt; 9%). Applying models trained on TCGA-PAAD directly to Australian hospital cohorts (ICGC-PACA) traditionally resulted in severe misclassification.
+                            The original research inquiry investigated whether small-molecule compounds could bind cancer-associated proteins (such as c-Myc or mutant p53). The current CHARA study investigates whether a small set of residue-pair distances can reconstruct other distances in an independent simulation run of the same protein.
                         </p>
                         <p class="text-xs text-slate-600 leading-relaxed mb-4">
-                            <strong>Chara Impact:</strong> By constructing a graph Laplacian manifold across 269 ICGC patient expression profiles, Chara successfully aligned the 4,337-gene signature, achieving a <strong>C-Index of 0.784</strong> and clearly stratifying high-risk vs. low-risk survival arms.
+                            <strong>Current Scope:</strong> The current workflow has not answered the original binding question. It establishes quantitative methods for sparse intramolecular distance reconstruction across independent simulation trajectories.
                         </p>
                     </div>
                     <div class="p-3.5 rounded-xl bg-parchment-100 border border-olive-900/10 text-xs text-slate-700 flex items-center justify-between">
-                        <span class="font-mono text-[11px] truncate">Cancer Cell (2017) · TCGA Network</span>
-                        <a href="https://doi.org/10.1016/j.ccell.2017.07.007" target="_blank" class="px-3 py-1 rounded-lg bg-olive-800 hover:bg-olive-900 text-white font-mono text-[11px] transition-all flex items-center gap-1.5 flex-shrink-0 ml-2 shadow-sm">
-                            <span>Read Paper</span> <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
-                        </a>
+                        <span class="font-mono text-[11px] truncate">Inquiry Refocused · Distance Reconstruction Evaluated</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-olive-100 text-olive-900 font-mono text-[11px] font-semibold flex-shrink-0">
+                            Research Scope Defined
+                        </span>
                     </div>
                 </div>
 
-                <!-- Case Study 2 -->
+                <!-- Card 2: Local cMYC Reconstruction Lead -->
                 <div class="academic-card p-7 rounded-2xl border-l-4 border-l-olive-800 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between gap-2 mb-3">
-                            <span class="px-3 py-1 rounded-full bg-olive-100 text-olive-800 text-xs font-mono font-bold whitespace-nowrap">Case Study 2</span>
-                            <span class="text-xs font-mono text-slate-500">Cross-Platform Validation</span>
+                            <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-mono font-bold whitespace-nowrap">Local Investigation</span>
+                            <span class="text-xs font-mono text-slate-500">cMYC Monomer Chain E</span>
                         </div>
-                        <h3 class="text-base font-bold text-olive-900 mb-2">Cross-Platform Microarray to RNA-Seq Validation</h3>
+                        <h3 class="text-base font-bold text-olive-900 mb-2">2. The Local cMYC Reconstruction Lead</h3>
                         <p class="text-xs text-slate-700 leading-relaxed mb-3">
-                            Translating legacy biomarker signatures developed on 1990s Affymetrix HG-U133 Microarray chips (e.g. GSE15471) onto modern Illumina NovaSeq RNA-seq platforms poses a major hurdle for pharmaceutical companies.
+                            Initial exploration of c-Myc monomer chain E yielded a retrospective test-centered diagnostic skill of approximately +0.207, with 63.05% of MSE improvement arising from variance error reduction rather than static mean offset recovery alone.
                         </p>
                         <p class="text-xs text-slate-600 leading-relaxed mb-4">
-                            <strong>Chara Impact:</strong> Chara heat diffusion smoothing projects Affymetrix probe intensities onto the same thermodynamic manifold as RNA-seq transcript counts in a single mathematical step, enabling cross-generational clinical validation.
+                            <strong>Simulation Caveats:</strong> Detailed audit identified key limitations in the custom simulation setup: coarse-grained topologies, 349 harmonic elastic network restraints, and evaluation strictly restricted to an isolated monomer chain rather than the full simulated heterotetrameric assembly.
                         </p>
                     </div>
                     <div class="p-3.5 rounded-xl bg-parchment-100 border border-olive-900/10 text-xs text-slate-700 flex items-center justify-between">
-                        <span class="font-mono text-[11px] truncate">Hepatogastroenterology (2008) · Badea et al.</span>
-                        <a href="https://pubmed.ncbi.nlm.nih.gov/19117288/" target="_blank" class="px-3 py-1 rounded-lg bg-olive-800 hover:bg-olive-900 text-white font-mono text-[11px] transition-all flex items-center gap-1.5 flex-shrink-0 ml-2 shadow-sm">
-                            <span>Read Paper</span> <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
-                        </a>
+                        <span class="font-mono text-[11px] truncate">Lead Documented · Centered Diagnostic ~+0.207</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-900 font-mono text-[11px] font-semibold flex-shrink-0">
+                            Simulation Caveats
+                        </span>
                     </div>
                 </div>
 
-                <!-- Case Study 3 -->
+                <!-- Card 3: Three-Protein External Pilot -->
                 <div class="academic-card p-7 rounded-2xl border-l-4 border-l-olive-900 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between gap-2 mb-3">
-                            <span class="px-3 py-1 rounded-full bg-olive-100 text-olive-800 text-xs font-mono font-bold whitespace-nowrap">Case Study 3</span>
-                            <span class="text-xs font-mono text-slate-500">Precision Oncology</span>
+                            <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 text-xs font-mono font-bold whitespace-nowrap">Completed Pilot</span>
+                            <span class="text-xs font-mono text-slate-500">ATLAS Atomistic Triplicates</span>
                         </div>
-                        <h3 class="text-base font-bold text-olive-900 mb-2">Early-Stage Cancer Detection & Precision Oncology</h3>
+                        <h3 class="text-base font-bold text-olive-900 mb-2">3. The Three-Protein External Pilot</h3>
                         <p class="text-xs text-slate-700 leading-relaxed mb-3">
-                            In early-stage oncological screening, subtle expression signals are easily masked by sequencing noise. Chara manifold projection isolates true structural variance from platform noise, aiding computational target discovery.
+                            To eliminate custom simulation artifacts, CHARA was evaluated on independent, standardized all-atom simulations from the ATLAS database across 3 structurally distinct proteins: 1utg_A (all-α, skill 0.386), 2cg7_A (all-β, skill 0.319), and 2j6b_A (α+β, skill 0.406).
                         </p>
                         <p class="text-xs text-slate-600 leading-relaxed mb-4">
-                            <strong>Chara Impact:</strong> Allows research labs to compute baseline hazard curves for early-stage surgical resection candidates, prioritizing patients for targeted adjuvant therapy regimens.
+                            <strong>Pilot Outcome:</strong> Across 9 independent held-out runs simulated in explicit solvent CHARMM36m, M8 robust transfer maintained positive reconstruction skill without elastic network restraints or custom force-field modifications.
                         </p>
                     </div>
                     <div class="p-3.5 rounded-xl bg-parchment-100 border border-olive-900/10 text-xs text-slate-700 flex items-center justify-between">
-                        <span class="font-mono text-[11px] truncate">Nature (2009) · Stratton et al.</span>
-                        <a href="https://doi.org/10.1016/j.ccell.2017.07.007" target="_blank" class="px-3 py-1 rounded-lg bg-olive-800 hover:bg-olive-900 text-white font-mono text-[11px] transition-all flex items-center gap-1.5 flex-shrink-0 ml-2 shadow-sm">
-                            <span>Read Paper</span> <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
+                        <span class="font-mono text-[11px] truncate">ATLAS Database · 9 Held-Out Rotations</span>
+                        <a href="reports/chara_external_confirmation/20260908_v1/REPORT.html" target="_blank" class="px-3 py-1 rounded-lg bg-olive-800 hover:bg-olive-900 text-white font-mono text-[11px] transition-all flex items-center gap-1.5 flex-shrink-0 ml-2 shadow-sm">
+                            <span>Pilot Report</span> <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
                         </a>
                     </div>
                 </div>
 
-                <!-- Case Study 4 -->
+                <!-- Card 4: Next Validation Step -->
                 <div class="academic-card p-7 rounded-2xl border-l-4 border-l-olive-600 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between gap-2 mb-3">
-                            <span class="px-3 py-1 rounded-full bg-olive-100 text-olive-800 text-xs font-mono font-bold whitespace-nowrap">Case Study 4</span>
-                            <span class="text-xs font-mono text-slate-500">Pipeline Integration</span>
+                            <span class="px-3 py-1 rounded-full bg-slate-200 text-slate-800 text-xs font-mono font-bold whitespace-nowrap">Planned Scope</span>
+                            <span class="text-xs font-mono text-slate-500">Methodological Calibration</span>
                         </div>
-                        <h3 class="text-base font-bold text-olive-900 mb-2">PyTorch & Scanpy Pipeline Integration</h3>
+                        <h3 class="text-base font-bold text-olive-900 mb-2">4. Next Validation Step: Multi-Protein Scaling</h3>
                         <p class="text-xs text-slate-700 leading-relaxed mb-3">
-                            Bioinformatics teams building deep survival autoencoders or single-cell pseudo-bulk models can use `chara-survival` as a zero-leakage pre-processing step inside PyTorch data loaders or AnnData objects.
+                            A proposed 12-additional-protein study remains Planned unless its actual executed evidence is available. A prompt describing an experiment is not a completed result.
                         </p>
                         <p class="text-xs text-slate-600 leading-relaxed mb-4">
-                            <strong>Chara Impact:</strong> Eliminates the need for manual batch correction pipelines in Python, returning aligned matrices in under 3.2 seconds.
+                            <strong>Methodological Prerequisites:</strong> Baseline QR configurations, nested hyperparameter tuning protocols, and aggregate bootstrap uncertainty bounds require formal resolution prior to claiming generalized method superiority.
                         </p>
                     </div>
                     <div class="p-3.5 rounded-xl bg-parchment-100 border border-olive-900/10 text-xs text-slate-700 flex items-center justify-between">
-                        <span class="font-mono text-[11px] truncate">Genome Biology (2018) · Wolf et al.</span>
-                        <a href="https://doi.org/10.1186/s13059-017-1382-0" target="_blank" class="px-3 py-1 rounded-lg bg-olive-800 hover:bg-olive-900 text-white font-mono text-[11px] transition-all flex items-center gap-1.5 flex-shrink-0 ml-2 shadow-sm">
-                            <span>Read Paper</span> <i class="fas fa-arrow-up-right-from-square text-[10px]"></i>
-                        </a>
+                        <span class="font-mono text-[11px] truncate">12-Protein Panel · Protocol Frozen</span>
+                        <span class="px-2.5 py-1 rounded-lg bg-slate-200 text-slate-800 font-mono text-[11px] font-semibold flex-shrink-0">
+                            Planned Study
+                        </span>
                     </div>
                 </div>
 
@@ -600,255 +601,176 @@
         </section>
     </main>
 
-    <!-- PAGE 4: LIVE DEMO & COMPARATIVE MULTI-MODEL BENCHMARK SANDBOX -->
+    <!-- PAGE 4: EXPLORE SAVED MD RESULTS (INTERACTIVE DEMO / COMPARISON) -->
     <main id="page-inference" class="tab-page flex-grow">
         <section class="max-w-7xl mx-auto px-6 py-12 w-full">
             
             <div class="text-center mb-6">
-                <span class="text-xs font-mono tracking-widest text-olive-700 uppercase font-bold block mb-2">HIGH-PERFORMANCE COMPARATIVE SURVIVAL ENGINE</span>
-                <h2 class="text-3xl sm:text-5xl font-bold text-olive-900 tracking-tight mb-3 font-academic">Interactive Inference &amp; Model Comparison</h2>
-                <p class="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto">Upload a cohort CSV file to evaluate real survival trajectories and compare Chara against baseline survival architectures side-by-side.</p>
+                <span class="text-xs font-mono tracking-widest text-olive-700 uppercase font-bold block mb-2">INTERACTIVE TRAJECTORY RECONSTRUCTION VIEWER</span>
+                <h2 class="text-3xl sm:text-5xl font-bold text-olive-900 tracking-tight mb-3 font-academic">Explore Saved MD Results</h2>
+                <p class="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto">Inspect real saved predictions from the completed pilot and evaluate actual target distance versus reconstructed distance trajectories over simulation time (nm/ns).</p>
             </div>
 
-            <!-- DETAILED DATA FORMAT & USER UPLOAD SPECIFICATIONS CARD -->
-            <div class="academic-card p-6 sm:p-7 rounded-3xl mb-8 border-l-4 border-l-olive-700 bg-parchment-100/90 shadow-sm">
-                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4 pb-4 border-b border-olive-900/15">
+            <!-- Archived Route Banner (For deep links from retired clinical interface) -->
+            <div id="archivedNoticeBanner" class="academic-card p-4 sm:p-5 rounded-2xl mb-8 border-l-4 border-l-amber-600 bg-amber-50/70 text-xs text-amber-950 font-mono leading-relaxed shadow-sm">
+                <div class="flex items-start gap-3">
+                    <i class="fas fa-circle-info text-amber-700 text-base mt-0.5"></i>
                     <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="px-2 py-0.5 rounded bg-olive-800 text-white font-mono text-[10px] font-bold uppercase">DATA FORMAT SPECIFICATION</span>
-                            <span class="text-xs font-mono text-slate-500">Cohort Transcriptomics Matrix</span>
-                        </div>
-                        <h3 class="text-lg sm:text-xl font-bold text-olive-900 font-academic">What Data to Upload &amp; How to Structure Your CSV</h3>
+                        <strong class="font-bold">Archived Notice:</strong> The earlier clinical survival prototype is retired from interactive inference. This interface now explores verified molecular dynamics distance reconstruction results from completed external pilot evaluations on independent trajectories.
                     </div>
-
-                    <!-- 1-Click Sample Dataset Downloads -->
-                    <div class="flex flex-wrap items-center gap-2.5">
-                        <button onclick="downloadSampleCohort(12)" class="px-3.5 py-2 rounded-xl bg-white hover:bg-olive-50 border border-olive-900/20 text-olive-900 font-mono text-xs font-semibold transition-all flex items-center gap-2 shadow-sm">
-                            <i class="fas fa-download text-olive-700"></i>
-                            <span>Sample CSV (12 Patients)</span>
-                        </button>
-                        <button onclick="downloadSampleCohort(25)" class="px-3.5 py-2 rounded-xl bg-white hover:bg-olive-50 border border-olive-900/20 text-olive-900 font-mono text-xs font-semibold transition-all flex items-center gap-2 shadow-sm">
-                            <i class="fas fa-download text-olive-700"></i>
-                            <span>Sample CSV (25 Patients)</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="grid md:grid-cols-3 gap-6 text-xs text-slate-700 leading-relaxed mb-4">
-                    <div>
-                        <h4 class="font-bold text-olive-900 text-xs sm:text-sm mb-1.5 flex items-center gap-1.5">
-                            <i class="fas fa-table-columns text-olive-700"></i> 1. Column &amp; Row Structure
-                        </h4>
-                        <p class="mb-1"><strong>Column 1:</strong> <code>Patient_ID</code> (e.g. <code>PATIENT_01</code>, <code>TCGA-LUAD-01</code>, <code>GSM12345</code>).</p>
-                        <p><strong>Columns 2 to N:</strong> Standard <strong>HGNC Gene Symbols</strong> (e.g. <code>CCL20</code>, <code>DKK1</code>, <code>MS4A1</code>, <code>FAIM2</code>, <code>TP53</code>, <code>KRAS</code>, <code>EGFR</code>, etc.).</p>
-                    </div>
-
-                    <div>
-                        <h4 class="font-bold text-olive-900 text-xs sm:text-sm mb-1.5 flex items-center gap-1.5">
-                            <i class="fas fa-chart-simple text-olive-700"></i> 2. Expression Units
-                        </h4>
-                        <p class="mb-1">Chara accepts unadjusted expression counts across all standard measurement platforms:</p>
-                        <p>• <strong>RNA-Seq:</strong> TPM, FPKM, RPKM, or log2(CPM+1).</p>
-                        <p>• <strong>Microarray:</strong> Log2 RMA / MAS5 probe intensity values.</p>
-                    </div>
-
-                    <div>
-                        <h4 class="font-bold text-olive-900 text-xs sm:text-sm mb-1.5 flex items-center gap-1.5">
-                            <i class="fas fa-shield-halved text-olive-700"></i> 3. Zero Data Leakage
-                        </h4>
-                        <p class="mb-1">You do not need to perform manual batch correction before uploading.</p>
-                        <p>Chara projects your expression matrix onto the frozen <strong>4,337-gene thermodynamic manifold</strong> in real time without training label leakage.</p>
-                    </div>
-                </div>
-
-                <!-- Interactive Visual Table Format Helper -->
-                <div class="p-3 rounded-xl bg-white border border-olive-900/15 overflow-x-auto font-mono text-[11px]">
-                    <span class="text-[10px] text-slate-500 font-bold uppercase tracking-wider block mb-1.5 font-sans">Example CSV Structure (First 4 Columns Preview):</span>
-                    <table class="w-full text-left text-slate-800">
-                        <thead class="bg-olive-100/70 border-b border-olive-900/10 text-olive-900 font-bold">
-                            <tr>
-                                <th class="p-2">Patient_ID</th>
-                                <th class="p-2">CCL20</th>
-                                <th class="p-2">DKK1</th>
-                                <th class="p-2">MS4A1</th>
-                                <th class="p-2">FAIM2</th>
-                                <th class="p-2 text-slate-400">... [remaining genes]</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-olive-900/10">
-                            <tr>
-                                <td class="p-2 font-semibold text-olive-900">PATIENT_01</td>
-                                <td class="p-2 text-rose-700">14.82</td>
-                                <td class="p-2 text-rose-700">12.45</td>
-                                <td class="p-2 text-slate-600">2.10</td>
-                                <td class="p-2 text-slate-600">1.95</td>
-                                <td class="p-2 text-slate-400">...</td>
-                            </tr>
-                            <tr>
-                                <td class="p-2 font-semibold text-olive-900">PATIENT_02</td>
-                                <td class="p-2 text-slate-600">3.12</td>
-                                <td class="p-2 text-slate-600">2.80</td>
-                                <td class="p-2 text-olive-700 font-semibold">16.40</td>
-                                <td class="p-2 text-olive-700 font-semibold">14.90</td>
-                                <td class="p-2 text-slate-400">...</td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
 
+            <!-- Interactive Selector & Trajectory Viewer Grid -->
             <div class="grid lg:grid-cols-12 gap-6 items-stretch mb-8">
                 
-                <!-- Upload Column -->
+                <!-- Controls Column (Left Panel) -->
                 <div class="lg:col-span-5 flex flex-col">
                     <div class="academic-card p-6 sm:p-7 rounded-3xl h-full flex flex-col justify-between">
                         <div>
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-base sm:text-lg font-bold text-olive-900 flex items-center gap-2">
-                                    <i class="fas fa-file-csv text-olive-700"></i> Cohort Input File
+                                    <i class="fas fa-sliders text-olive-700"></i> Experiment Selectors
                                 </h3>
-                                <span class="text-[11px] font-mono text-olive-700 bg-olive-100 px-2.5 py-1 rounded-md border border-olive-900/10">CSV Files Only</span>
+                                <span class="text-[11px] font-mono text-olive-700 bg-olive-100 px-2.5 py-1 rounded-md border border-olive-900/10">Real Saved Predictions</span>
                             </div>
 
-                            <div id="dropzone" class="upload-dropzone rounded-2xl p-8 sm:p-12 min-h-[230px] flex flex-col items-center justify-center text-center cursor-pointer mb-4 group">
-                                <input type="file" id="fileInput" class="hidden" accept=".csv">
-                                <div class="w-14 h-14 rounded-2xl bg-olive-100 border border-olive-900/15 flex items-center justify-center text-olive-800 text-xl mb-3 group-hover:scale-105 transition-transform shadow-sm">
-                                    <i class="fas fa-cloud-arrow-up"></i>
-                                </div>
-                                <p class="text-olive-900 font-bold text-base mb-1">Drag & Drop Cohort CSV Here</p>
-                                <p class="text-slate-600 text-xs mb-3 max-w-xs">Rows: Patient ID | Columns: HGNC Gene Symbols</p>
-                                <span class="text-xs font-mono px-3.5 py-1.5 rounded-xl bg-white border border-olive-900/15 text-olive-900 font-semibold shadow-sm hover:bg-olive-50 transition-colors">or click to browse</span>
+                            <!-- Selector 1: Available Protein -->
+                            <div class="mb-4">
+                                <label for="selectProtein" class="text-xs font-mono font-bold text-olive-900 uppercase tracking-wider block mb-1.5">
+                                    1. Target Protein System:
+                                </label>
+                                <select id="selectProtein" onchange="onProteinChange()" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-olive-900/20 text-xs font-semibold text-olive-900 focus:outline-none focus:border-olive-700 shadow-sm">
+                                    <option value="1utg_A">1utg_A — Uteroglobin (all-alpha, 70 res)</option>
+                                    <option value="2cg7_A">2cg7_A — Fibronectin III (all-beta, 90 res)</option>
+                                    <option value="2j6b_A">2j6b_A — AFV1 viral protein (alpha+beta, 109 res)</option>
+                                </select>
                             </div>
 
-                            <div id="fileInfo" class="hidden mb-4 p-4 rounded-xl bg-olive-100/80 border border-olive-900/20 flex items-center justify-between">
-                                <div class="flex items-center gap-3 overflow-hidden">
-                                    <i class="fas fa-file-code text-olive-800 text-xl"></i>
-                                    <div>
-                                        <p id="fileName" class="text-xs font-semibold text-olive-900 truncate max-w-[180px]">filename.csv</p>
-                                        <p id="fileSize" class="text-[10px] font-mono text-slate-500">0 KB</p>
-                                    </div>
-                                </div>
-                                <button id="removeFile" class="text-slate-500 hover:text-rose-700 text-xs p-1.5"><i class="fas fa-xmark"></i></button>
+                            <!-- Selector 2: Held-Out Run / Fold -->
+                            <div class="mb-4">
+                                <label for="selectFold" class="text-xs font-mono font-bold text-olive-900 uppercase tracking-wider block mb-1.5">
+                                    2. Held-Out Run Rotation:
+                                </label>
+                                <select id="selectFold" onchange="onFoldChange()" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-olive-900/20 text-xs font-semibold text-olive-900 focus:outline-none focus:border-olive-700 shadow-sm">
+                                    <option value="1">Fold 1 — R1 Held-Out (R2, R3 Development)</option>
+                                    <option value="2">Fold 2 — R2 Held-Out (R1, R3 Development)</option>
+                                    <option value="3">Fold 3 — R3 Held-Out (R1, R2 Development)</option>
+                                </select>
                             </div>
 
-                            <!-- ARCHITECTURE SELECTOR (MOVED TO LEFT CARD TO FILL SPACE & BALANCE UI) -->
+                            <!-- Selector 3: Target Residue Pair -->
+                            <div class="mb-4">
+                                <label for="selectTarget" class="text-xs font-mono font-bold text-olive-900 uppercase tracking-wider block mb-1.5">
+                                    3. Target Residue Pair:
+                                </label>
+                                <select id="selectTarget" onchange="onTargetChange()" class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-olive-900/20 text-xs font-semibold text-olive-900 focus:outline-none focus:border-olive-700 shadow-sm">
+                                    <!-- Populated dynamically via JS -->
+                                </select>
+                            </div>
+
+                            <!-- Selector 4: Method Pills -->
                             <div class="mb-4 pt-3.5 pb-3.5 px-4 rounded-2xl bg-olive-50/85 border border-olive-900/15">
                                 <div class="flex items-center justify-between mb-2.5">
-                                    <div class="flex items-center gap-1.5">
-                                        <i class="fas fa-sliders text-olive-700 text-xs"></i>
-                                        <span class="text-[11px] font-mono font-bold text-olive-900 uppercase tracking-wider">SELECT ARCHITECTURE:</span>
-                                    </div>
-                                    <span class="text-[10px] font-mono text-olive-800 font-semibold bg-olive-200/50 px-2 py-0.5 rounded">4 Modes</span>
+                                    <span class="text-[11px] font-mono font-bold text-olive-900 uppercase tracking-wider">4. Select Method:</span>
+                                    <span class="text-[10px] font-mono text-olive-800 font-semibold bg-olive-200/50 px-2 py-0.5 rounded">Budget k=10</span>
                                 </div>
 
-                                <!-- 4 Interactive Architecture Selector Pills -->
                                 <div class="grid grid-cols-2 gap-2">
-                                    <button id="toggle-chara" onclick="setActiveModel('chara')" class="model-pill active-chara px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm">
+                                    <button id="btn-m8" onclick="setActiveMethod('m8')" class="method-pill active-m8 px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm">
                                         <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                                        <span>Chara (Ours)</span>
+                                        <span>M8 Robust Transfer</span>
                                     </button>
-                                    <button id="toggle-elastic" onclick="setActiveModel('elastic')" class="model-pill px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm">
+                                    <button id="btn-m4" onclick="setActiveMethod('m4')" class="method-pill px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm">
                                         <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-                                        <span>ElasticNet</span>
+                                        <span>M4 PCA Pivoted QR</span>
                                     </button>
-                                    <button id="toggle-clinical" onclick="setActiveModel('clinical')" class="model-pill px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm">
-                                        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-                                        <span>Clinical</span>
+                                    <button id="btn-m1" onclick="setActiveMethod('m1')" class="method-pill px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm">
+                                        <span class="w-2 h-2 rounded-full bg-slate-500"></span>
+                                        <span>M1 Constant Mean</span>
                                     </button>
-                                    <button id="toggle-compare" onclick="setActiveModel('compare')" class="model-pill px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm">
+                                    <button id="btn-m7" onclick="setActiveMethod('m7')" class="method-pill px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm">
+                                        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                                        <span>M7 Mean Transfer</span>
+                                    </button>
+                                    <button id="btn-overlay" onclick="setActiveMethod('overlay')" class="col-span-2 method-pill px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm">
                                         <i class="fas fa-layer-group text-[10px]"></i>
-                                        <span>Multi-Overlay</span>
+                                        <span>Multi-Method Overlay Comparison</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Action Buttons: Run Engine & Clear/Reset Button Side by Side -->
-                        <div>
-                            <div class="flex items-center gap-3">
-                                <button id="runBtn" class="btn-olive flex-1 py-3.5 rounded-2xl font-bold text-sm sm:text-base flex items-center justify-center gap-2 opacity-50 cursor-not-allowed" disabled>
-                                    <span>Execute Selected Architecture</span>
-                                    <i class="fas fa-bolt text-xs"></i>
+                        <!-- Action Buttons: Update View & Download Real Results CSV -->
+                        <div class="pt-2">
+                            <div class="flex flex-col sm:flex-row items-center gap-3">
+                                <button id="loadBtn" onclick="renderCurrentExperiment()" class="btn-olive flex-1 w-full py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2">
+                                    <i class="fas fa-arrows-rotate"></i>
+                                    <span>Update Trajectory View</span>
                                 </button>
-                                <button id="clearBtn" class="btn-outline-clear px-4 py-3.5 rounded-2xl font-semibold text-xs sm:text-sm flex items-center gap-1.5 shadow-sm" title="Clear and Reset">
-                                    <i class="fas fa-rotate-left"></i>
-                                    <span class="hidden sm:inline">Clear</span>
-                                </button>
-                            </div>
-
-                            <div id="errorBox" class="hidden mt-3 p-4 rounded-xl bg-rose-100 border border-rose-300 text-rose-900 text-xs font-mono font-medium">
+                                <a href="data/BENCHMARK_RESULTS.csv" download="CHARA_BENCHMARK_RESULTS.csv" class="btn-outline-clear w-full sm:w-auto px-4 py-3 rounded-2xl font-semibold text-xs flex items-center justify-center gap-1.5 shadow-sm" title="Download Real Results CSV">
+                                    <i class="fas fa-download text-olive-700"></i>
+                                    <span>Results CSV</span>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Results Column: Multi-Chart Suite & KPI Metrics (Description Banner Stays Here) -->
+                <!-- Results Column: Trajectory Plot & KPI Metrics (Right Panel) -->
                 <div class="lg:col-span-7 flex flex-col">
                     <div class="academic-card p-6 sm:p-7 rounded-3xl min-h-[520px] flex flex-col relative justify-between h-full">
                         
-                        <!-- TOP MATHEMATICAL & BIOPHYSICAL SPECIFICATION BANNER (DESCRIPTION STAYS HERE) -->
-                        <div id="modelDescriptionBanner" class="p-3.5 rounded-2xl bg-olive-50/90 border border-olive-900/10 text-xs text-slate-700 font-mono leading-relaxed mb-4">
+                        <!-- Mathematical Specification Banner -->
+                        <div id="experimentBanner" class="p-3.5 rounded-2xl bg-olive-50/90 border border-olive-900/10 text-xs text-slate-700 font-mono leading-relaxed mb-4">
                             <div class="flex items-center gap-1.5 text-olive-800 font-bold mb-1">
                                 <span class="w-2 h-2 rounded-full bg-olive-700 animate-pulse"></span>
-                                <span class="text-[11px] uppercase tracking-wider">ACTIVE EVALUATION ARCHITECTURE:</span>
+                                <span class="text-[11px] uppercase tracking-wider">ACTIVE EXPERIMENT:</span>
                             </div>
-                            <div id="modelDescText">
-                                <strong>Chara Thermodynamic Laplacian (Ours):</strong> Spectral heat diffusion operator <code class="bg-olive-200/80 text-olive-950 px-1.5 py-0.5 rounded font-mono font-bold text-xs">H<sub>t</sub> = e<sup>-tL</sup></code> on MD-weighted STRING manifold with 58 regularized Coxnet biomarkers. <em class="text-olive-700 font-semibold">(C-Index: 0.784, Zero-leakage OOD Transfer)</em>
+                            <div id="experimentDescText">
+                                <!-- Populated dynamically -->
                             </div>
                         </div>
 
-                        <!-- Loading Overlay -->
-                        <div id="loadingOverlay" class="hidden absolute inset-0 z-20 academic-card rounded-3xl flex flex-col items-center justify-center p-8 text-center backdrop-blur-md">
-                            <div class="w-12 h-12 border-4 border-olive-200 border-t-olive-800 rounded-full animate-spin mb-4"></div>
-                            <p id="loadingMainText" class="text-base sm:text-lg font-bold text-olive-900 mb-1">Executing Model Pipeline...</p>
-                            <p id="loadingSubtext" class="text-xs text-olive-700 font-mono animate-pulse">Evaluating survival projections and calibration curves...</p>
-                        </div>
-
-                        <!-- Empty View (Before Upload / Run) -->
-                        <div id="emptyView" class="flex flex-col items-center justify-center text-center py-12 text-slate-500 my-auto">
-                            <div class="w-14 h-14 rounded-2xl bg-olive-100/60 border border-olive-900/10 flex items-center justify-center text-xl text-olive-700 mb-4">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                            <h4 class="text-lg sm:text-xl font-bold text-olive-900 mb-1 font-academic">No Active Cohort Data</h4>
-                            <p class="text-slate-600 text-xs max-w-sm">Upload a transcriptomic CSV on the left to compute real thermodynamic survival trajectories.</p>
-                        </div>
-
-                        <!-- Results View (After Execution) -->
-                        <div id="resultsView" class="hidden flex-col h-full w-full justify-between">
+                        <!-- Results View -->
+                        <div id="resultsView" class="flex flex-col h-full w-full justify-between">
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-3 pb-3 border-b border-olive-900/10">
                                 <div>
                                     <h3 id="resultsHeaderTitle" class="text-lg sm:text-xl font-bold text-olive-900 font-academic">
-                                        Cohort Survival Trajectories
+                                        Intramolecular Distance Trajectory (nm vs ns)
                                     </h3>
-                                    <p id="resultsSubHeader" class="text-[11px] text-slate-500 font-mono mt-0.5">Kaplan-Meier Projections (0 to 60 Months)</p>
+                                    <p id="resultsSubHeader" class="text-[11px] text-slate-500 font-mono mt-0.5">
+                                        Standardized Atomistic Explicit-Solvent Run (5.0 to 100.0 ns)
+                                    </p>
                                 </div>
 
-                                <!-- PROMINENT CLEAN DOWNLOAD PDF BUTTON -->
-                                <button id="downloadPdfBtn" class="btn-olive px-4 py-2 rounded-xl font-bold text-xs flex items-center gap-2 shadow-sm hover:scale-105 transition-all">
-                                    <i class="fas fa-file-pdf text-sm"></i> Download Clinical PDF Report
-                                </button>
+                                <a href="reports/chara_external_confirmation/20260908_v1/CHARA_INDEPENDENT_BENCHMARK_EVIDENCE.zip" download class="btn-olive px-3.5 py-1.5 rounded-xl font-semibold text-xs flex items-center gap-1.5 shadow-sm hover:scale-105 transition-all">
+                                    <i class="fas fa-box-archive text-xs"></i> <span>Evidence ZIP</span>
+                                </a>
                             </div>
 
-                            <div class="relative w-full h-[240px] mb-4">
-                                <canvas id="survivalChart"></canvas>
+                            <!-- Primary Trajectory Chart -->
+                            <div class="relative w-full h-[250px] mb-4">
+                                <canvas id="trajectoryChart"></canvas>
                             </div>
 
+                            <!-- 4 KPI Metrics for the Selected Target -->
                             <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                                 <div class="academic-card p-3 rounded-xl border-l-2 border-l-olive-600">
-                                    <p class="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-0.5">Mean Risk Score</p>
-                                    <p id="kpiRisk" class="text-base sm:text-lg font-bold text-olive-900">--</p>
+                                    <p class="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-0.5">Target Skill (S<sub>i</sub>)</p>
+                                    <p id="kpiSkill" class="text-base sm:text-lg font-bold text-olive-900">--</p>
                                 </div>
                                 <div class="academic-card p-3 rounded-xl border-l-2 border-l-olive-700">
-                                    <p class="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-0.5">1-Year Survival</p>
-                                    <p id="kpi1y" class="text-base sm:text-lg font-bold text-olive-900">--</p>
+                                    <p class="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-0.5">Recon RMSE</p>
+                                    <p id="kpiRmse" class="text-base sm:text-lg font-bold text-olive-900">--</p>
                                 </div>
                                 <div class="academic-card p-3 rounded-xl border-l-2 border-l-olive-800">
-                                    <p class="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-0.5">3-Year Survival</p>
-                                    <p id="kpi3y" class="text-base sm:text-lg font-bold text-olive-900">--</p>
+                                    <p class="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-0.5">Base RMSE</p>
+                                    <p id="kpiBaseRmse" class="text-base sm:text-lg font-bold text-olive-900">--</p>
                                 </div>
                                 <div class="academic-card p-3 rounded-xl border-l-2 border-l-olive-900">
-                                    <p class="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-0.5">5-Year Survival</p>
-                                    <p id="kpi5y" class="text-base sm:text-lg font-bold text-olive-900">--</p>
+                                    <p class="text-[10px] font-mono text-slate-500 uppercase tracking-wider mb-0.5">Pearson r</p>
+                                    <p id="kpiCorr" class="text-base sm:text-lg font-bold text-olive-900">--</p>
                                 </div>
                             </div>
                         </div>
@@ -857,25 +779,25 @@
                 </div>
             </div>
 
-            <!-- SECONDARY CHARTS SUITE -->
-            <div id="secondaryChartsContainer" class="hidden grid md:grid-cols-2 gap-6 mb-8">
+            <!-- Secondary Diagnostic Charts Suite -->
+            <div id="secondaryChartsContainer" class="grid md:grid-cols-2 gap-6 mb-8">
                 <div class="academic-card p-6 sm:p-7 rounded-3xl">
                     <h3 class="text-sm sm:text-base font-bold text-olive-900 mb-1 flex items-center gap-2 font-academic">
-                        <i class="fas fa-chart-simple text-olive-700"></i> Patient Risk Stratification Density
+                        <i class="fas fa-chart-simple text-olive-700"></i> Target-by-Target Reconstruction Skill
                     </h3>
-                    <p id="riskDistSubtext" class="text-[11px] text-slate-500 font-mono mb-4">Calculated Distribution across Cox Hazard Spectrum</p>
+                    <p class="text-[11px] text-slate-500 font-mono mb-4">Evaluated across representative target residue pairs on this held-out run</p>
                     <div class="relative w-full h-[210px]">
-                        <canvas id="riskDistChart"></canvas>
+                        <canvas id="targetErrorChart"></canvas>
                     </div>
                 </div>
 
                 <div class="academic-card p-6 sm:p-7 rounded-3xl">
                     <h3 class="text-sm sm:text-base font-bold text-olive-900 mb-1 flex items-center gap-2 font-academic">
-                        <i class="fas fa-dna text-olive-700"></i> Model Feature Hazard Contributions
+                        <i class="fas fa-dna text-olive-700"></i> Fold-Level Method Skill Comparison (k=10)
                     </h3>
-                    <p id="geneWeightsSubtext" class="text-[11px] text-slate-500 font-mono mb-4">Active Coefficients in Evaluated Architecture</p>
+                    <p class="text-[11px] text-slate-500 font-mono mb-4">Overall 500-target skill on this held-out fold (M8 vs M7 vs M4)</p>
                     <div class="relative w-full h-[210px]">
-                        <canvas id="geneWeightsChart"></canvas>
+                        <canvas id="foldComparisonChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -883,14 +805,14 @@
         </section>
     </main>
 
-    <!-- PAGE 5: TEAM & ACKNOWLEDGMENTS -->
+    <!-- PAGE 5: RESEARCH TEAM & ACKNOWLEDGMENTS -->
     <main id="page-team" class="tab-page flex-grow">
         <section class="max-w-7xl mx-auto px-6 py-12">
             
             <div class="text-center mb-12">
-                <span class="text-xs font-mono tracking-widest text-olive-700 uppercase font-bold block mb-2">LABORATORY AUTHORS & ACKNOWLEDGMENTS</span>
-                <h2 class="text-3xl sm:text-5xl font-extrabold text-olive-900 tracking-tight mb-3 font-academic">Research Team & Acknowledgments</h2>
-                <p class="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto">Computational and Physical Genomics Laboratory · IIT Mandi.</p>
+                <span class="text-xs font-mono tracking-widest text-olive-700 uppercase font-bold block mb-2">LABORATORY AUTHORS &amp; ACKNOWLEDGMENTS</span>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-olive-900 tracking-tight mb-3 font-academic">Research Team &amp; Acknowledgments</h2>
+                <p class="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto">Computational and Physical Genomics Laboratory · Indian Institute of Technology Mandi.</p>
             </div>
 
             <!-- Authors Grid -->
@@ -906,7 +828,7 @@
                             <h3 class="text-lg sm:text-xl font-bold text-olive-900 mb-0.5 font-academic">Dr. Kharerin Hungyo</h3>
                             <p class="text-olive-700 text-[11px] font-semibold uppercase tracking-wider mb-2">Principal Investigator · Assistant Professor, IIT Mandi</p>
                             <p class="text-slate-700 text-xs leading-relaxed mb-2.5">
-                                PhD from IIT Bombay with postdoctoral research fellowships at Penn State University and ENS de Lyon. Directs the Computational & Physical Genomics Lab studying biophysical chromatin organization, nucleosome positioning, and AI/ML survival architectures.
+                                PhD from IIT Bombay with postdoctoral research fellowships at Penn State University and ENS de Lyon. Directs the Computational &amp; Physical Genomics Lab at the Indian Institute of Technology Mandi.
                             </p>
                         </div>
                         <a href="mailto:kharerin@iitmandi.ac.in" class="text-xs font-mono text-olive-800 hover:underline flex items-center gap-1.5 font-medium mt-1">
@@ -915,7 +837,7 @@
                     </div>
                 </div>
 
-                <!-- Sharon Melhi (Research Intern Bio) -->
+                <!-- Sharon Melhi -->
                 <div class="academic-card p-6 sm:p-7 rounded-2xl academic-card-hover flex flex-col sm:flex-row gap-5 items-start border-l-4 border-l-olive-900">
                     <div class="w-full sm:w-36 h-44 rounded-xl overflow-hidden flex-shrink-0 border border-olive-900/15 bg-white shadow-sm">
                         <img src="assets/sharon-melhi.png" alt="Sharon Melhi" class="w-full h-full object-cover">
@@ -925,15 +847,15 @@
                             <h3 class="text-lg sm:text-xl font-bold text-olive-900 mb-0.5 font-academic">Sharon Melhi</h3>
                             <p class="text-olive-700 text-[11px] font-semibold uppercase tracking-wider mb-1.5">Research Intern · CPG Lab, IIT Mandi</p>
                             <p class="text-slate-700 text-xs leading-relaxed mb-2">
-                                Creator and developer of Chara Survival. Research Intern at the Indian Institute of Technology Mandi working under Dr. Kharerin Hungyo.
+                                Research Intern at the Indian Institute of Technology Mandi working under the supervision of Dr. Kharerin Hungyo. Author and developer of the CHARA research codebase.
                             </p>
                             <div class="mb-2">
-                                <span class="text-[10px] font-mono text-slate-500 uppercase tracking-wider block mb-1">Research Interests:</span>
+                                <span class="text-[10px] font-mono text-slate-500 uppercase tracking-wider block mb-1">Research Focus:</span>
                                 <div class="flex flex-wrap gap-1 text-[10px] font-mono text-olive-900">
-                                    <span class="px-2 py-0.5 rounded bg-olive-100 border border-olive-900/10">Drug Discovery</span>
-                                    <span class="px-2 py-0.5 rounded bg-olive-100 border border-olive-900/10">Computational Oncology</span>
-                                    <span class="px-2 py-0.5 rounded bg-olive-100 border border-olive-900/10">Precision Medicine</span>
-                                    <span class="px-2 py-0.5 rounded bg-olive-100 border border-olive-900/10">Early Cancer Detection</span>
+                                    <span class="px-2 py-0.5 rounded bg-olive-100 border border-olive-900/10">Molecular Dynamics</span>
+                                    <span class="px-2 py-0.5 rounded bg-olive-100 border border-olive-900/10">Trajectory Transfer</span>
+                                    <span class="px-2 py-0.5 rounded bg-olive-100 border border-olive-900/10">Conformational Dynamics</span>
+                                    <span class="px-2 py-0.5 rounded bg-olive-100 border border-olive-900/10">Sensor Placement</span>
                                     <span class="px-2 py-0.5 rounded bg-olive-100 border border-olive-900/10">Computational Biology</span>
                                 </div>
                             </div>
@@ -980,7 +902,7 @@
         <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-slate-600 font-mono">
             <div class="flex items-center gap-3">
                 <img src="assets/iit-mandi-logo.png" alt="IIT Mandi" class="w-7 h-7 object-contain">
-                <p>© 2026 Indian Institute of Technology Mandi · Computational & Physical Genomics Lab</p>
+                <p>© 2026 Indian Institute of Technology Mandi · Computational &amp; Physical Genomics Lab</p>
             </div>
 
             <div class="px-4 py-1 rounded-full bg-olive-100/80 border border-olive-900/15 text-olive-900 text-xs font-mono flex items-center gap-2 shadow-sm">
@@ -990,7 +912,7 @@
 
             <div class="flex flex-wrap items-center gap-5">
                 <a href="https://huggingface.co/SharonMelhi/chara-survival" target="_blank" class="hover:text-olive-900 transition-colors flex items-center gap-1">
-                    <span>🤗</span> Hugging Face Hub
+                    <span>🤗</span> Hugging Face (Survival Prototype)
                 </a>
                 <a href="https://pypi.org/project/chara-survival/" target="_blank" class="hover:text-olive-900 transition-colors">PyPI (chara-survival)</a>
                 <a href="https://github.com/Sharon-codes/Chara" target="_blank" class="hover:text-olive-900 transition-colors">GitHub Repository</a>
@@ -998,121 +920,23 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script type="module">
-        import { client } from "https://esm.sh/@gradio/client";
+    <!-- Interactive Logic & Charting Scripts -->
+    <script>
+        // State variables
+        let currentProtein = "1utg_A";
+        let currentFold = "1";
+        let currentTargetIdx = 0;
+        let activeMethod = "m8"; // m8, m4, m1, m7, overlay
 
-        // Grok API Key (Decoded at runtime)
-        const GROK_API_KEY = atob("eGFpLUhJb3M4ZmdNbkpJcG1wZ2dEaWxiajVFZnpLVlhLSXdVbXFZekZNUGNKblJybmx6TDRkQXpXMjJBVjRiWE85cGdQWkR2SzNRMGRwYVNZY08=");
+        // Chart instances
+        let trajChartInst = null;
+        let targetErrorChartInst = null;
+        let foldComparisonChartInst = null;
+        let benchmarkSkillChartInst = null;
+        let benchmarkFoldsChartInst = null;
+        let benchmarksRendered = false;
 
-        // Active Selected Survival Model (chara, elastic, clinical, compare)
-        let activeModelType = "chara";
-
-        // EXACT TRAINED CHARA COXNET MODEL WEIGHTS (from chara_model_4337.pkl)
-        const CHARA_TRAINED_COEFS = {
-            "CPS1": 0.024256, "SPINK1": -0.019702, "BARX1": 0.032799, "TCN1": 0.016706,
-            "TM4SF4": 0.011669, "CLDN6": 0.019029, "BRDT": -0.007445, "CYP4F11": -0.012024,
-            "CT83": 0.006111, "IGF2BP1": 0.035123, "SLCO1B3": 0.005083, "SPRR1B": 0.032398,
-            "CLDN10": -0.004274, "TNNT1": 0.010778, "CTNND2": -0.001121, "TF": -0.008664,
-            "LY6K": 0.024194, "FAM133A": -0.046985, "SFTPB": -0.018688, "DKK1": 0.061055,
-            "UPK1B": 0.003346, "NLRP2": -0.013209, "CNTNAP2": 0.004644, "SLC5A5": -0.028951,
-            "TNNC2": -0.011731, "SALL1": 0.006467, "RIMS2": 0.017127, "SULT4A1": -0.016858,
-            "NOTUM": -0.014316, "MS4A1": -0.070780, "IGFBP1": 0.024830, "ZNHIT2": 0.003374,
-            "NEUROD1": -0.005052, "PRR15": 0.013551, "TDRD1": -0.002668, "NEFL": 0.007209,
-            "TEX15": 0.003895, "VGF": 0.005910, "CCL20": 0.064220, "CT45A1": -0.018637,
-            "LINC00319": 0.006164, "PKP2": 0.001297, "CDH26": -0.025860, "FAIM2": -0.052377,
-            "IRX5": -0.000703, "FLNC": 0.015065, "MPV17L": -0.008083, "CNGA1": 0.002779,
-            "ATP8A2": -0.004691, "LRRC66": 0.003392, "ANO4": 0.001095, "SLC52A1": -0.003671,
-            "NXPH1": 0.028594, "CYP17A1": -0.026286, "LINGO2": 0.003267, "KIR2DL1": -0.020454,
-            "CLEC18A": -0.013637, "HRCT1": 0.004997
-        };
-
-        // EXACT BASELINE SURVIVAL S0(t) FROM TRAINED MODEL (0 to 60 Months)
-        const BASELINE_S0 = [
-            1.0000, 0.9875, 0.9712, 0.9537, 0.9236, 0.9020, 0.8793, 0.8639, 0.8376, 0.8129,
-            0.7864, 0.7696, 0.7364, 0.7015, 0.6787, 0.6639, 0.6203, 0.5905, 0.5772, 0.5630,
-            0.5084, 0.4968, 0.4747, 0.4575, 0.4298, 0.4298, 0.4234, 0.4196, 0.4187, 0.4079,
-            0.3953, 0.3808, 0.3808, 0.3808, 0.3440, 0.3249, 0.3249, 0.3249, 0.3249, 0.3249,
-            0.3249, 0.2959, 0.2945, 0.2850, 0.2594, 0.2594, 0.2594, 0.2594, 0.2594, 0.2594,
-            0.2594, 0.2594, 0.2594, 0.2594, 0.2594, 0.2594, 0.2594, 0.2594, 0.2594, 0.2594, 0.2594
-        ];
-
-        // Model Switcher Function
-        window.setActiveModel = function(modelKey) {
-            activeModelType = modelKey;
-            
-            // Update UI Button Classes
-            document.querySelectorAll(".model-pill").forEach(el => {
-                el.className = "model-pill px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm";
-            });
-
-            const btn = document.getElementById("toggle-" + modelKey);
-            if (btn) {
-                if (modelKey === "chara") btn.classList.add("active-chara");
-                else if (modelKey === "elastic") btn.classList.add("active-elastic");
-                else if (modelKey === "clinical") btn.classList.add("active-clinical");
-                else if (modelKey === "compare") btn.classList.add("active-compare");
-            }
-
-            // Update Banner Description with Clean HTML Math Typography
-            const descEl = document.getElementById("modelDescText");
-            if (descEl) {
-                if (modelKey === "chara") {
-                    descEl.innerHTML = "<strong>Chara Thermodynamic Laplacian (Ours):</strong> Spectral heat diffusion operator <code class='bg-olive-200/80 text-olive-950 px-1.5 py-0.5 rounded font-mono font-bold text-xs'>H<sub>t</sub> = e<sup>-tL</sup></code> on MD-weighted STRING manifold with 58 regularized Coxnet biomarkers. <em class='text-olive-700 font-semibold'>(C-Index: 0.784, Zero-leakage OOD Transfer)</em>";
-                } else if (modelKey === "elastic") {
-                    descEl.innerHTML = "<strong>Unadjusted ElasticNet Cox:</strong> Raw un-smoothed transcriptomic features <code class='bg-rose-100 text-rose-950 px-1.5 py-0.5 rounded font-mono font-bold text-xs'>X &middot; &beta;</code> without graph manifold regularization. <em class='text-rose-700 font-semibold'>(C-Index: 0.524, Cross-platform Domain Shift Collapse)</em>";
-                } else if (modelKey === "clinical") {
-                    descEl.innerHTML = "<strong>Standard Clinical Model:</strong> Baseline demographic parameters <code class='bg-blue-100 text-blue-950 px-1.5 py-0.5 rounded font-mono font-bold text-xs'>&lambda;<sub>0</sub>(t) &middot; exp(&beta;<sub>age</sub> + &beta;<sub>stage</sub>)</code> without transcriptomic features. <em class='text-blue-700 font-semibold'>(C-Index: 0.500, Random Stratification)</em>";
-                } else if (modelKey === "compare") {
-                    descEl.innerHTML = "<strong>Multi-Model Overlay Comparison:</strong> Simultaneous overlay of <span class='text-emerald-700 font-bold'>Chara (Green)</span> vs <span class='text-rose-600 font-bold'>ElasticNet (Red)</span> vs <span class='text-blue-600 font-bold'>Clinical Baseline (Blue)</span> across your cohort.";
-                }
-            }
-
-            // Re-render if cohort is already loaded
-            if (currentCalculatedData) {
-                processAndRenderVisualizations(currentCalculatedData);
-            }
-        };
-
-        // 1-Click Sample Dataset Downloader for Users
-        window.downloadSampleCohort = function(n) {
-            const genes = Object.keys(CHARA_TRAINED_COEFS);
-            let csvContent = "Patient_ID," + genes.join(",") + "\n";
-
-            for (let i = 1; i <= n; i++) {
-                const pid = `PATIENT_${i < 10 ? '0' + i : i}`;
-                const ptype = i % 4; // 0=Critical, 1=High, 2=Moderate, 3=Low
-                const rowVals = [pid];
-
-                genes.forEach(g => {
-                    const w = CHARA_TRAINED_COEFS[g];
-                    let base = 7.0 + (Math.random() * 2.0 - 1.0);
-                    if (ptype === 0) {
-                        if (w > 0.015) base += 5.0 + Math.random() * 3.0;
-                        else if (w < -0.015) base -= 3.5 + Math.random() * 2.5;
-                    } else if (ptype === 1) {
-                        if (w > 0.015) base += 2.5 + Math.random() * 2.0;
-                        else if (w < -0.015) base -= 1.5 + Math.random() * 1.5;
-                    } else if (ptype === 3) {
-                        if (w > 0.015) base -= 3.0 + Math.random() * 2.0;
-                        else if (w < -0.015) base += 4.5 + Math.random() * 3.0;
-                    }
-                    rowVals.push(Math.max(0.1, parseFloat(base.toFixed(2))));
-                });
-                csvContent += rowVals.join(",") + "\n";
-            }
-
-            const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.setAttribute("href", url);
-            link.setAttribute("download", `chara_sample_cohort_${n}patients.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        };
-
-        // Mobile Menu Handler
+        // Mobile Menu
         window.toggleMobileMenu = function() {
             const menu = document.getElementById("mobile-menu");
             if (menu) menu.classList.toggle("hidden");
@@ -1135,50 +959,92 @@
             if (targetTab) targetTab.classList.add("active");
 
             if (tabId === "benchmarks") initBenchmarkCharts();
+            if (tabId === "inference") initInferenceView();
 
             window.scrollTo({ top: 0, behavior: "smooth" });
         };
 
+        // URL Route Handler (Hash based navigation with backward compatibility)
+        function handleRoute() {
+            const hash = window.location.hash.replace("#", "").toLowerCase();
+            if (hash === "benchmarks") {
+                switchTab("benchmarks");
+            } else if (hash === "usecases" || hash === "cases") {
+                switchTab("usecases");
+            } else if (hash === "inference" || hash === "demo" || hash === "clinical" || hash === "survival") {
+                switchTab("inference");
+                if (hash === "clinical" || hash === "survival") {
+                    const notice = document.getElementById("archivedNoticeBanner");
+                    if (notice) notice.scrollIntoView({ behavior: "smooth" });
+                }
+            } else if (hash === "team") {
+                switchTab("team");
+            } else {
+                switchTab("home");
+            }
+        }
+
+        window.addEventListener("hashchange", handleRoute);
+
+        // Visitor counter
         document.addEventListener("DOMContentLoaded", () => {
             let visits = parseInt(localStorage.getItem("chara_site_visits") || "12");
             visits += 1;
             localStorage.setItem("chara_site_visits", visits);
             const vEl = document.getElementById("visitorCountFooter");
             if (vEl) vEl.textContent = visits.toLocaleString();
+
+            handleRoute();
+            initInferenceView();
         });
 
-        // Benchmark Charts
-        let benchmarksRendered = false;
+        // ----------------------------------------------------
+        // BENCHMARK CHARTS (M8 vs M7 vs Centered Diagnostic)
+        // ----------------------------------------------------
         function initBenchmarkCharts() {
             if (benchmarksRendered) return;
             benchmarksRendered = true;
 
-            const ctx1 = document.getElementById("benchmarkCIndexChart").getContext("2d");
-            new Chart(ctx1, {
+            const pilotData = window.CHARA_PILOT_DATA;
+            if (!pilotData) return;
+
+            // Chart 1: Skill Comparison (M8 vs M7 vs Centered Diagnostic)
+            const ctx1 = document.getElementById("benchmarkSkillChart").getContext("2d");
+            if (benchmarkSkillChartInst) benchmarkSkillChartInst.destroy();
+
+            const labels = ["1utg_A (all-α)", "2cg7_A (all-β)", "2j6b_A (α+β)", "Macro Mean"];
+            const m8Vals = [0.385691, 0.319264, 0.405957, 0.370304];
+            const m7Vals = [0.333865, 0.322845, 0.388613, 0.348441];
+            const diagVals = [0.273502, 0.248618, 0.285084, 0.269068];
+
+            benchmarkSkillChartInst = new Chart(ctx1, {
                 type: "bar",
                 data: {
-                    labels: ["TCGA-PAAD", "ICGC-PACA", "GSE15471", "GSE28735", "GSE57495"],
+                    labels: labels,
                     datasets: [
                         {
-                            label: "Unadjusted Cox",
-                            data: [0.782, 0.531, 0.508, 0.522, 0.495],
-                            backgroundColor: "rgba(225, 29, 72, 0.75)",
-                            borderColor: "#e11d48",
-                            borderWidth: 1
-                        },
-                        {
-                            label: "ComBat Adjustment",
-                            data: [0.782, 0.682, 0.641, 0.665, 0.628],
-                            backgroundColor: "rgba(148, 163, 184, 0.75)",
-                            borderColor: "#94a3b8",
-                            borderWidth: 1
-                        },
-                        {
-                            label: "Chara Laplacian (Ours)",
-                            data: [0.782, 0.784, 0.762, 0.771, 0.758],
+                            label: "M8 Robust Transfer (Worst-Dir)",
+                            data: m8Vals,
                             backgroundColor: "rgba(68, 93, 48, 0.9)",
                             borderColor: "#2d3d21",
-                            borderWidth: 1.5
+                            borderWidth: 1.5,
+                            borderRadius: 6
+                        },
+                        {
+                            label: "M7 Mean Transfer (Average-Dir)",
+                            data: m7Vals,
+                            backgroundColor: "rgba(217, 119, 6, 0.85)",
+                            borderColor: "#b45309",
+                            borderWidth: 1.5,
+                            borderRadius: 6
+                        },
+                        {
+                            label: "M8 Centered Diagnostic (Test Means)",
+                            data: diagVals,
+                            backgroundColor: "rgba(71, 85, 105, 0.75)",
+                            borderColor: "#334155",
+                            borderWidth: 1.5,
+                            borderRadius: 6
                         }
                     ]
                 },
@@ -1186,39 +1052,63 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: { grid: { color: "rgba(68, 93, 48, 0.08)" }, ticks: { color: "#2d3d21" } },
-                        y: { min: 0.4, max: 0.9, grid: { color: "rgba(68, 93, 48, 0.08)" }, ticks: { color: "#2d3d21" } }
+                        x: { grid: { color: "rgba(68, 93, 48, 0.08)" }, ticks: { color: "#2d3d21", font: { weight: "600", size: 11 } } },
+                        y: { 
+                            min: 0.0, max: 0.50, 
+                            title: { display: true, text: "Skill (Zero = Dev Baseline)", color: "#2d3d21", font: { size: 10, weight: "bold" } },
+                            grid: { color: "rgba(68, 93, 48, 0.08)" }, 
+                            ticks: { color: "#2d3d21", callback: (val) => "+" + val.toFixed(2) } 
+                        }
                     },
-                    plugins: { legend: { labels: { color: "#1a1811" } } }
+                    plugins: { 
+                        legend: { position: "top", labels: { color: "#1a1811", boxWidth: 12, font: { size: 11 } } },
+                        tooltip: {
+                            callbacks: {
+                                label: (item) => `${item.dataset.label}: ${item.raw.toFixed(6)}`
+                            }
+                        }
+                    }
                 }
             });
 
-            const ctx2 = document.getElementById("benchmarkBrierChart").getContext("2d");
-            new Chart(ctx2, {
+            // Chart 2: Fold Points Range (Observed Range, No Invented Error Bars)
+            const ctx2 = document.getElementById("benchmarkFoldsChart").getContext("2d");
+            if (benchmarkFoldsChartInst) benchmarkFoldsChartInst.destroy();
+
+            benchmarkFoldsChartInst = new Chart(ctx2, {
                 type: "line",
                 data: {
-                    labels: ["1 Year", "2 Years", "3 Years", "4 Years", "5 Years"],
+                    labels: ["Fold 1 (R1)", "Fold 2 (R2)", "Fold 3 (R3)"],
                     datasets: [
                         {
-                            label: "Unadjusted Cox",
-                            data: [0.24, 0.29, 0.35, 0.41, 0.46],
-                            borderColor: "#e11d48",
-                            borderWidth: 2,
-                            fill: false
-                        },
-                        {
-                            label: "ComBat Adjustment",
-                            data: [0.18, 0.22, 0.26, 0.29, 0.32],
-                            borderColor: "#94a3b8",
-                            borderWidth: 2,
-                            fill: false
-                        },
-                        {
-                            label: "Chara Laplacian (Ours)",
-                            data: [0.11, 0.13, 0.15, 0.17, 0.18],
+                            label: "1utg_A (all-α)",
+                            data: [0.570158, 0.279248, 0.307666],
                             borderColor: "#445d30",
-                            borderWidth: 2.5,
-                            fill: false
+                            backgroundColor: "#445d30",
+                            borderWidth: 2,
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.2
+                        },
+                        {
+                            label: "2cg7_A (all-β)",
+                            data: [0.448078, 0.126464, 0.383249],
+                            borderColor: "#be123c",
+                            backgroundColor: "#be123c",
+                            borderWidth: 2,
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.2
+                        },
+                        {
+                            label: "2j6b_A (α+β)",
+                            data: [0.476995, 0.420158, 0.320718],
+                            borderColor: "#1d4ed8",
+                            backgroundColor: "#1d4ed8",
+                            borderWidth: 2,
+                            pointRadius: 6,
+                            pointHoverRadius: 8,
+                            tension: 0.2
                         }
                     ]
                 },
@@ -1227,764 +1117,376 @@
                     maintainAspectRatio: false,
                     scales: {
                         x: { grid: { color: "rgba(68, 93, 48, 0.08)" }, ticks: { color: "#2d3d21" } },
-                        y: { min: 0, max: 0.5, grid: { color: "rgba(68, 93, 48, 0.08)" }, ticks: { color: "#2d3d21" } }
-                    },
-                    plugins: { legend: { labels: { color: "#1a1811" } } }
-                }
-            });
-        }
-
-        // Dropzone & Inference Engine
-        const dropzone = document.getElementById("dropzone");
-        const fileInput = document.getElementById("fileInput");
-        const fileInfo = document.getElementById("fileInfo");
-        const fileName = document.getElementById("fileName");
-        const fileSize = document.getElementById("fileSize");
-        const removeFile = document.getElementById("removeFile");
-        const runBtn = document.getElementById("runBtn");
-        const clearBtn = document.getElementById("clearBtn");
-        const errorBox = document.getElementById("errorBox");
-
-        let selectedFile = null;
-        let survChartInst = null;
-        let riskDistChartInst = null;
-        let geneWeightsChartInst = null;
-        let lastGrokAnalysisSections = null;
-        let currentCalculatedData = null;
-
-        if (dropzone) {
-            dropzone.addEventListener("dragover", (e) => { e.preventDefault(); dropzone.classList.add("dragover"); });
-            dropzone.addEventListener("dragleave", () => { dropzone.classList.remove("dragover"); });
-            dropzone.addEventListener("drop", (e) => {
-                e.preventDefault();
-                dropzone.classList.remove("dragover");
-                if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
-            });
-            dropzone.addEventListener("click", () => { fileInput.click(); });
-            fileInput.addEventListener("change", (e) => {
-                if (e.target.files.length) handleFile(e.target.files[0]);
-            });
-        }
-
-        function handleFile(file) {
-            if (!file.name.toLowerCase().endsWith(".csv")) {
-                showError("Invalid File Type: Only transcriptomic CSV cohort files (.csv) are supported.");
-                selectedFile = null;
-                runBtn.disabled = true;
-                runBtn.classList.add("opacity-50", "cursor-not-allowed");
-                return;
-            }
-            selectedFile = file;
-            fileName.textContent = file.name;
-            fileSize.textContent = (file.size / 1024).toFixed(1) + " KB";
-            
-            dropzone.classList.add("hidden");
-            fileInfo.classList.remove("hidden");
-            
-            runBtn.disabled = false;
-            runBtn.classList.remove("opacity-50", "cursor-not-allowed");
-            errorBox.classList.add("hidden");
-        }
-
-        function resetAllState() {
-            selectedFile = null;
-            currentCalculatedData = null;
-            lastGrokAnalysisSections = null;
-            if (fileInput) fileInput.value = "";
-            if (fileInfo) fileInfo.classList.add("hidden");
-            if (dropzone) dropzone.classList.remove("hidden");
-            if (runBtn) {
-                runBtn.disabled = true;
-                runBtn.classList.add("opacity-50", "cursor-not-allowed");
-            }
-            if (errorBox) errorBox.classList.add("hidden");
-
-            // Hide results & secondary charts
-            const resultsView = document.getElementById("resultsView");
-            const emptyView = document.getElementById("emptyView");
-            const secondaryCharts = document.getElementById("secondaryChartsContainer");
-            if (resultsView) resultsView.classList.add("hidden");
-            if (emptyView) emptyView.classList.remove("hidden");
-            if (secondaryCharts) secondaryCharts.classList.add("hidden");
-
-            if (survChartInst) { survChartInst.destroy(); survChartInst = null; }
-            if (riskDistChartInst) { riskDistChartInst.destroy(); riskDistChartInst = null; }
-            if (geneWeightsChartInst) { geneWeightsChartInst.destroy(); geneWeightsChartInst = null; }
-        }
-
-        if (removeFile) removeFile.addEventListener("click", resetAllState);
-        if (clearBtn) clearBtn.addEventListener("click", resetAllState);
-
-        function showError(msg) {
-            errorBox.textContent = msg;
-            errorBox.classList.remove("hidden");
-        }
-
-        if (runBtn) {
-            runBtn.addEventListener("click", async () => {
-                if (!selectedFile) return;
-
-                document.getElementById("loadingOverlay").classList.remove("hidden");
-                document.getElementById("loadingMainText").textContent = "Executing " + (activeModelType === "compare" ? "Multi-Model Comparison Suite" : activeModelType.toUpperCase() + " Engine") + "...";
-                document.getElementById("loadingSubtext").textContent = "Evaluating Graph Laplacian smoothing and survival trajectories...";
-                runBtn.disabled = true;
-                errorBox.classList.add("hidden");
-
-                try {
-                    // Execute Real Mathematical Graph Laplacian & Comparison Engine
-                    const calculatedData = await executeRealGraphLaplacianEngine(selectedFile);
-                    currentCalculatedData = calculatedData;
-
-                    processAndRenderVisualizations(calculatedData);
-
-                    // Call Grok AI API in background for clinical oncology analysis
-                    document.getElementById("loadingSubtext").textContent = "Generating Grok AI Clinical Oncology Analysis...";
-                    await generateGrokClinicalReport(calculatedData);
-                    
-                } catch (error) {
-                    showError("Inference Error: " + error.message);
-                } finally {
-                    document.getElementById("loadingOverlay").classList.add("hidden");
-                    runBtn.disabled = false;
-                }
-            });
-        }
-
-        // FULL IN-BROWSER GRAPH LAPLACIAN & COMPARATIVE INFERENCE ENGINE (EXACT MATHEMATICAL FORMULATION)
-        async function executeRealGraphLaplacianEngine(file) {
-            const text = await file.text();
-            const lines = text.trim().split("\n").filter(l => l.trim().length > 0);
-            if (lines.length < 2) throw new Error("Uploaded CSV file must contain at least 2 rows (header + patient records).");
-
-            const header = lines[0].split(",").map(s => s.trim().replace(/["\r]/g, ''));
-            const geneNames = header.slice(1);
-            const numGenes = geneNames.length;
-            const patientIds = [];
-            const rawMatrix = [];
-
-            for (let i = 1; i < lines.length; i++) {
-                const parts = lines[i].split(",");
-                patientIds.push(parts[0].trim().replace(/["\r]/g, '') || `Patient_${i}`);
-                const expr = parts.slice(1).map(v => {
-                    const num = parseFloat(v);
-                    return isNaN(num) ? 0.0 : num;
-                });
-                rawMatrix.push(expr);
-            }
-
-            const numPatients = rawMatrix.length;
-
-            // 1. Feature Z-score standardization per gene across cohort
-            const standardizedMatrix = Array.from({length: numPatients}, () => new Array(numGenes).fill(0));
-
-            for (let g = 0; g < numGenes; g++) {
-                let sum = 0;
-                for (let i = 0; i < numPatients; i++) sum += rawMatrix[i][g];
-                const mean = sum / numPatients;
-
-                let sumSq = 0;
-                for (let i = 0; i < numPatients; i++) {
-                    const diff = rawMatrix[i][g] - mean;
-                    sumSq += diff * diff;
-                }
-                const std = Math.sqrt(sumSq / Math.max(1, numPatients - 1)) || 1.0;
-
-                for (let i = 0; i < numPatients; i++) {
-                    standardizedMatrix[i][g] = (rawMatrix[i][g] - mean) / std;
-                }
-            }
-
-            // 2. Compute Gaussian Affinity Matrix W & Degree Matrix D
-            const W = Array.from({length: numPatients}, () => new Array(numPatients).fill(0));
-            const D = new Array(numPatients).fill(0);
-            const sigma = Math.sqrt(numGenes) * 1.5 || 5.0;
-
-            for (let i = 0; i < numPatients; i++) {
-                for (let j = 0; j < numPatients; j++) {
-                    if (i === j) {
-                        W[i][j] = 1.0;
-                    } else {
-                        let distSq = 0;
-                        for (let g = 0; g < numGenes; g++) {
-                            const d = standardizedMatrix[i][g] - standardizedMatrix[j][g];
-                            distSq += d * d;
+                        y: { 
+                            min: 0.0, max: 0.65, 
+                            title: { display: true, text: "Held-Out Skill", color: "#2d3d21", font: { size: 10, weight: "bold" } },
+                            grid: { color: "rgba(68, 93, 48, 0.08)" }, 
+                            ticks: { color: "#2d3d21", callback: (val) => "+" + val.toFixed(2) } 
                         }
-                        W[i][j] = Math.exp(-distSq / (2 * sigma * sigma));
+                    },
+                    plugins: { 
+                        legend: { position: "top", labels: { color: "#1a1811", boxWidth: 12 } },
+                        tooltip: {
+                            callbacks: {
+                                label: (item) => `${item.dataset.label}: ${item.raw.toFixed(6)}`
+                            }
+                        }
                     }
-                    D[i] += W[i][j];
                 }
-            }
-
-            // 3. Spectral Heat Diffusion Operator H_t = exp(-t L)
-            const smoothedMatrix = Array.from({length: numPatients}, () => new Array(numGenes).fill(0));
-            const t_diffusion = 0.5;
-
-            for (let i = 0; i < numPatients; i++) {
-                for (let g = 0; g < numGenes; g++) {
-                    let weightedSum = 0;
-                    let normSum = 0;
-                    for (let j = 0; j < numPatients; j++) {
-                        const kernelVal = (W[i][j] / Math.sqrt(D[i] * D[j])) * Math.exp(-t_diffusion * (1.0 - W[i][j]));
-                        weightedSum += kernelVal * standardizedMatrix[j][g];
-                        normSum += kernelVal;
-                    }
-                    smoothedMatrix[i][g] = normSum > 0 ? (weightedSum / normSum) : standardizedMatrix[i][g];
-                }
-            }
-
-            // 4. Calculate Risk Scores for All 3 Architectures
-            // A. Chara (Smoothed + Exact Weights)
-            const charaRiskRaw = [];
-            const geneContributions = {};
-            for (let i = 0; i < numPatients; i++) {
-                let r = 0;
-                for (let g = 0; g < numGenes; g++) {
-                    const gName = geneNames[g].toUpperCase();
-                    const w = CHARA_TRAINED_COEFS[gName] !== undefined ? CHARA_TRAINED_COEFS[gName] : ((g % 2 === 0 ? 0.015 : -0.012) * ((g + 1) / numGenes));
-                    const contrib = smoothedMatrix[i][g] * w;
-                    r += contrib;
-                    if (!geneContributions[geneNames[g]]) geneContributions[geneNames[g]] = 0;
-                    geneContributions[geneNames[g]] += Math.abs(contrib);
-                }
-                charaRiskRaw.push(r);
-            }
-
-            // B. Unadjusted ElasticNet (Raw Un-smoothed + Coefficients)
-            const elasticRiskRaw = [];
-            for (let i = 0; i < numPatients; i++) {
-                let r = 0;
-                for (let g = 0; g < numGenes; g++) {
-                    const gName = geneNames[g].toUpperCase();
-                    const w = CHARA_TRAINED_COEFS[gName] !== undefined ? CHARA_TRAINED_COEFS[gName] : ((g % 2 === 0 ? 0.015 : -0.012) * ((g + 1) / numGenes));
-                    r += standardizedMatrix[i][g] * w; // No smoothing!
-                }
-                elasticRiskRaw.push(r);
-            }
-
-            // C. Standard Clinical Baseline (Age/Stage proxy risk distribution)
-            const clinicalRiskRaw = patientIds.map((_, idx) => ((idx % 3) - 1) * 0.45 + (Math.sin(idx) * 0.2));
-
-            // Standardize Risk Distributions
-            function standardizeArr(arr) {
-                const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
-                const std = Math.sqrt(arr.map(x => (x - mean)**2).reduce((a, b) => a + b, 0) / Math.max(1, arr.length - 1)) || 1.0;
-                return arr.map(x => parseFloat(((x - mean) / std).toFixed(4)));
-            }
-
-            const charaNormRisk = standardizeArr(charaRiskRaw);
-            const elasticNormRisk = standardizeArr(elasticRiskRaw);
-            const clinicalNormRisk = standardizeArr(clinicalRiskRaw);
-
-            // 5. Generate Exact Kaplan-Meier Curves S_i(t) = [S0(t)]^exp(r_i)
-            const times = Array.from({length: 61}, (_, i) => i * 1.0);
-            
-            function buildCurves(normRisks, hazardScaling=0.85) {
-                return normRisks.map(r => {
-                    const mult = Math.exp(r * hazardScaling);
-                    return times.map(m => {
-                        const s0 = BASELINE_S0[m];
-                        return Math.max(0.01, Math.min(1.0, parseFloat(Math.pow(s0, mult).toFixed(4))));
-                    });
-                });
-            }
-
-            const charaCurves = buildCurves(charaNormRisk, 0.85);
-            const elasticCurves = buildCurves(elasticNormRisk, 0.45); // Compressed/noisy separation
-            const clinicalCurves = buildCurves(clinicalNormRisk, 0.30); // Weak baseline separation
-
-            // Sort Top 10 Driver Genes
-            const sortedGenes = Object.entries(geneContributions)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 10)
-                .map(([name, val]) => ({
-                    gene: name,
-                    weight: parseFloat((CHARA_TRAINED_COEFS[name.toUpperCase()] !== undefined ? CHARA_TRAINED_COEFS[name.toUpperCase()] : (val / numPatients)).toFixed(4))
-                }));
-
-            return {
-                numPatients: numPatients,
-                patientIds: patientIds,
-                times: times,
-                topGenes: sortedGenes,
-                // Chara
-                chara: {
-                    riskScores: charaNormRisk,
-                    curves: charaCurves,
-                    risk_mean: charaNormRisk.reduce((a, b) => a + b, 0) / numPatients,
-                    surv_1y: charaCurves.map(c => c[12]).reduce((a, b) => a + b, 0) / numPatients,
-                    surv_3y: charaCurves.map(c => c[36]).reduce((a, b) => a + b, 0) / numPatients,
-                    surv_5y: charaCurves.map(c => c[60]).reduce((a, b) => a + b, 0) / numPatients
-                },
-                // ElasticNet
-                elastic: {
-                    riskScores: elasticNormRisk,
-                    curves: elasticCurves,
-                    risk_mean: elasticNormRisk.reduce((a, b) => a + b, 0) / numPatients,
-                    surv_1y: elasticCurves.map(c => c[12]).reduce((a, b) => a + b, 0) / numPatients,
-                    surv_3y: elasticCurves.map(c => c[36]).reduce((a, b) => a + b, 0) / numPatients,
-                    surv_5y: elasticCurves.map(c => c[60]).reduce((a, b) => a + b, 0) / numPatients
-                },
-                // Clinical
-                clinical: {
-                    riskScores: clinicalNormRisk,
-                    curves: clinicalCurves,
-                    risk_mean: clinicalNormRisk.reduce((a, b) => a + b, 0) / numPatients,
-                    surv_1y: clinicalCurves.map(c => c[12]).reduce((a, b) => a + b, 0) / numPatients,
-                    surv_3y: clinicalCurves.map(c => c[36]).reduce((a, b) => a + b, 0) / numPatients,
-                    surv_5y: clinicalCurves.map(c => c[60]).reduce((a, b) => a + b, 0) / numPatients
-                }
-            };
+            });
         }
 
-        function processAndRenderVisualizations(data) {
-            document.getElementById("emptyView").classList.add("hidden");
-            document.getElementById("resultsView").classList.remove("hidden");
-            document.getElementById("resultsView").classList.add("flex");
-            document.getElementById("secondaryChartsContainer").classList.remove("hidden");
+        // ----------------------------------------------------
+        // INTERACTIVE INFERENCE & SAVED RESULTS VIEWER
+        // ----------------------------------------------------
+        function initInferenceView() {
+            populateTargetDropdown();
+            renderCurrentExperiment();
+        }
 
-            const modelData = activeModelType === "compare" ? data.chara : data[activeModelType];
-            const numPatients = data.numPatients;
+        function onProteinChange() {
+            currentProtein = document.getElementById("selectProtein").value;
+            populateTargetDropdown();
+            renderCurrentExperiment();
+        }
 
-            // Update UI KPI Cards
-            document.getElementById("kpiRisk").textContent = modelData.risk_mean.toFixed(4);
-            document.getElementById("kpi1y").textContent = (modelData.surv_1y * 100).toFixed(1) + "%";
-            document.getElementById("kpi3y").textContent = (modelData.surv_3y * 100).toFixed(1) + "%";
-            document.getElementById("kpi5y").textContent = (modelData.surv_5y * 100).toFixed(1) + "%";
+        function onFoldChange() {
+            currentFold = document.getElementById("selectFold").value;
+            populateTargetDropdown();
+            renderCurrentExperiment();
+        }
 
-            // Update Results Card Title
-            const headerTitle = document.getElementById("resultsHeaderTitle");
-            const subTitle = document.getElementById("resultsSubHeader");
-            if (activeModelType === "compare") {
-                headerTitle.textContent = "Multi-Model Survival Benchmark Overlay";
-                subTitle.textContent = "Chara Laplacian (Green) vs ElasticNet (Red) vs Clinical (Blue)";
-            } else if (activeModelType === "chara") {
-                headerTitle.textContent = "Chara Laplacian Survival Trajectories";
-                subTitle.textContent = "Thermodynamic Heat Diffusion Smoothing (0 to 60 Months)";
-            } else if (activeModelType === "elastic") {
-                headerTitle.textContent = "Unadjusted ElasticNet Survival Projections";
-                subTitle.textContent = "Raw Feature Space (Compressed Cross-Platform Separation)";
-            } else if (activeModelType === "clinical") {
-                headerTitle.textContent = "Standard Clinical Baseline Trajectories";
-                subTitle.textContent = "Demographic Covariate Prior (Uncalibrated Baseline)";
+        function onTargetChange() {
+            currentTargetIdx = parseInt(document.getElementById("selectTarget").value) || 0;
+            renderCurrentExperiment();
+        }
+
+        window.setActiveMethod = function(methodKey) {
+            activeMethod = methodKey;
+            
+            document.querySelectorAll(".method-pill").forEach(el => {
+                el.className = "method-pill px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-sm";
+            });
+            const btn = document.getElementById("btn-" + methodKey);
+            if (btn) {
+                if (methodKey === "m8") btn.classList.add("active-m8");
+                else if (methodKey === "m4") btn.classList.add("active-m4");
+                else if (methodKey === "m1") btn.classList.add("active-m1");
+                else if (methodKey === "m7") btn.classList.add("active-m7");
+                else if (methodKey === "overlay") btn.classList.add("active-overlay");
             }
 
-            // 1. Render Primary Survival Chart
-            const ctxSurv = document.getElementById("survivalChart").getContext("2d");
-            if (survChartInst) survChartInst.destroy();
+            renderCurrentExperiment();
+        };
+
+        function populateTargetDropdown() {
+            const selectEl = document.getElementById("selectTarget");
+            if (!selectEl) return;
+            selectEl.innerHTML = "";
+
+            const pilotData = window.CHARA_PILOT_DATA;
+            if (!pilotData || !pilotData.experiments || !pilotData.experiments[currentProtein]) return;
+
+            const targets = pilotData.experiments[currentProtein].folds[currentFold].targets;
+            targets.forEach((t, idx) => {
+                const opt = document.createElement("option");
+                opt.value = idx;
+                opt.textContent = `${t.label} (mean: ${t.mean_dev_dist_nm} nm, S=${t.metrics.m8_skill > 0 ? '+' : ''}${t.metrics.m8_skill.toFixed(3)})`;
+                selectEl.appendChild(opt);
+            });
+
+            currentTargetIdx = 0;
+        }
+
+        window.renderCurrentExperiment = function() {
+            const pilotData = window.CHARA_PILOT_DATA;
+            if (!pilotData || !pilotData.experiments || !pilotData.experiments[currentProtein]) return;
+
+            const exp = pilotData.experiments[currentProtein];
+            const foldData = exp.folds[currentFold];
+            const target = foldData.targets[currentTargetIdx] || foldData.targets[0];
+            const times = pilotData.times_ns;
+
+            // Update Banner Description
+            const bannerDesc = document.getElementById("experimentDescText");
+            const headerTitle = document.getElementById("resultsHeaderTitle");
+            const subHeader = document.getElementById("resultsSubHeader");
+
+            let methodTitle = "";
+            let methodDesc = "";
+
+            if (activeMethod === "m8") {
+                methodTitle = "M8 Robust Transfer (Worst-Direction Transfer)";
+                methodDesc = `<strong>M8 Robust Transfer (Ours):</strong> Evaluates sensor distances selected by minimizing worst-case transfer error between development runs. Regularized ridge reconstruction on <code>${exp.metadata.name}</code> (${exp.metadata.structural_class}), Fold ${currentFold}.`;
+            } else if (activeMethod === "m4") {
+                methodTitle = "M4 PCA Pivoted QR";
+                methodDesc = `<strong>M4 PCA Pivoted QR:</strong> Standard sensor selection using column-pivoted QR on top principal components. Evaluated on <code>${exp.metadata.name}</code>, Fold ${currentFold}.`;
+            } else if (activeMethod === "m1") {
+                methodTitle = "M1 Development Constant Mean (Baseline)";
+                methodDesc = `<strong>M1 Constant Mean Baseline:</strong> Static baseline predicting the mean distance observed across both development runs: <code>y = μ<sub>dev</sub></code>.`;
+            } else if (activeMethod === "m7") {
+                methodTitle = "M7 Mean Transfer (Average-Direction Transfer)";
+                const fM7 = foldData.fold_metrics["M7_MEAN_TRANSFER"];
+                const fM8 = foldData.fold_metrics["M8_ROBUST_TRANSFER"];
+                methodDesc = `<strong>M7 Mean Transfer:</strong> Target-level frame predictions for M7 are not recorded in this prediction bundle. Showing verified fold-level comparison on ${foldData.label}: <strong>M7 Skill = ${fM7.skill.toFixed(4)}</strong> vs <strong>M8 Skill = ${fM8.skill.toFixed(4)}</strong>.`;
+            } else if (activeMethod === "overlay") {
+                methodTitle = "Multi-Method Trajectory Overlay";
+                methodDesc = `<strong>Multi-Method Overlay:</strong> Comparing Actual True Distance (<span class='text-olive-900 font-bold'>Black/Dark Olive</span>) vs M8 Robust Transfer (<span class='text-emerald-700 font-bold'>Green</span>) vs PCA/QR (<span class='text-rose-700 font-bold'>Red</span>) vs Constant Mean Baseline (<span class='text-slate-600 font-bold'>Slate</span>).`;
+            }
+
+            if (bannerDesc) bannerDesc.innerHTML = `${methodDesc} <span class="text-olive-800 font-bold block mt-1">Target: ${target.label} (Cα separation: ${target.res_distance_seq} residues)</span>`;
+            if (headerTitle) headerTitle.textContent = `${target.label} Distance Trajectory`;
+            if (subHeader) subHeader.textContent = `${exp.metadata.name} · ${foldData.label} · Test Replicate ${foldData.test_replicate} (5.0 to 100.0 ns)`;
+
+            // Update KPIs
+            const kpiSkillEl = document.getElementById("kpiSkill");
+            const kpiRmseEl = document.getElementById("kpiRmse");
+            const kpiBaseRmseEl = document.getElementById("kpiBaseRmse");
+            const kpiCorrEl = document.getElementById("kpiCorr");
+
+            if (activeMethod === "m7") {
+                const fM7 = foldData.fold_metrics["M7_MEAN_TRANSFER"];
+                const fBase = foldData.fold_metrics["M1_DEVELOPMENT_CONSTANT_MEAN"];
+                if (kpiSkillEl) kpiSkillEl.textContent = (fM7.skill > 0 ? "+" : "") + fM7.skill.toFixed(4);
+                if (kpiRmseEl) kpiRmseEl.textContent = fM7.rmse_nm.toFixed(4) + " nm";
+                if (kpiBaseRmseEl) kpiBaseRmseEl.textContent = fBase.rmse_nm.toFixed(4) + " nm";
+                if (kpiCorrEl) kpiCorrEl.textContent = "Fold Avg";
+            } else {
+                const isPca = activeMethod === "m4";
+                const isBase = activeMethod === "m1";
+                const sk = isBase ? 0.0 : (isPca ? target.metrics.pca_skill : target.metrics.m8_skill);
+                const rmse = isBase ? target.metrics.base_rmse_nm : (isPca ? target.metrics.pca_rmse_nm : target.metrics.m8_rmse_nm);
+                
+                if (kpiSkillEl) kpiSkillEl.textContent = (sk > 0 ? "+" : "") + sk.toFixed(4);
+                if (kpiRmseEl) kpiRmseEl.textContent = rmse.toFixed(4) + " nm";
+                if (kpiBaseRmseEl) kpiBaseRmseEl.textContent = target.metrics.base_rmse_nm.toFixed(4) + " nm";
+                if (kpiCorrEl) kpiCorrEl.textContent = isBase ? "0.0000" : (target.metrics.pearson_r !== undefined ? target.metrics.pearson_r.toFixed(4) : "--");
+            }
+
+            // Render Trajectory Line Chart
+            renderTrajectoryChart(times, target, activeMethod);
+
+            // Render Secondary Diagnostic Charts
+            renderSecondaryDiagnosticCharts(foldData);
+        };
+
+        function renderTrajectoryChart(times, target, methodKey) {
+            const ctx = document.getElementById("trajectoryChart").getContext("2d");
+            if (trajChartInst) trajChartInst.destroy();
 
             let datasets = [];
 
-            if (activeModelType === "compare") {
-                // Overlay mean curves for all 3 models + top/bottom arms
-                function meanCurve(curves) {
-                    return data.times.map((_, t) => curves.map(c => c[t]).reduce((a, b) => a + b, 0) / curves.length);
-                }
-                const charaAvg = meanCurve(data.chara.curves);
-                const elasticAvg = meanCurve(data.elastic.curves);
-                const clinicalAvg = meanCurve(data.clinical.curves);
-
+            if (methodKey === "m7") {
+                // If M7 is selected: show True vs Baseline with notice that target frames were not recorded in npz
                 datasets = [
                     {
-                        label: "Chara Laplacian (Ours - Peak C-Index 0.784)",
-                        data: charaAvg,
-                        borderColor: "#445d30",
-                        backgroundColor: "rgba(68, 93, 48, 0.15)",
-                        borderWidth: 3.5,
+                        label: "Actual Target Distance (Y_true)",
+                        data: target.series.y_true,
+                        borderColor: "#2d3d21",
+                        borderWidth: 2.2,
+                        pointRadius: 0,
                         fill: false
                     },
                     {
-                        label: "Unadjusted ElasticNet Cox (C-Index 0.524)",
-                        data: elasticAvg,
-                        borderColor: "#be123c",
-                        backgroundColor: "rgba(190, 18, 60, 0.15)",
+                        label: "Development Mean Baseline",
+                        data: target.series.pred_base,
+                        borderColor: "#94a3b8",
+                        borderWidth: 1.8,
+                        borderDash: [4, 4],
+                        pointRadius: 0,
+                        fill: false
+                    }
+                ];
+            } else if (methodKey === "overlay") {
+                datasets = [
+                    {
+                        label: "Actual Target Distance (Y_true)",
+                        data: target.series.y_true,
+                        borderColor: "#2d3d21",
+                        backgroundColor: "rgba(45, 61, 33, 0.05)",
                         borderWidth: 2.5,
-                        borderDash: [5, 5],
+                        pointRadius: 0,
                         fill: false
                     },
                     {
-                        label: "Standard Clinical Model (C-Index 0.500)",
-                        data: clinicalAvg,
-                        borderColor: "#1d4ed8",
-                        backgroundColor: "rgba(29, 78, 216, 0.15)",
+                        label: "M8 Robust Transfer (Ours)",
+                        data: target.series.pred_m8,
+                        borderColor: "#10b981",
                         borderWidth: 2,
+                        borderDash: [5, 3],
+                        pointRadius: 0,
+                        fill: false
+                    },
+                    {
+                        label: "M4 PCA Pivoted QR",
+                        data: target.series.pred_pca,
+                        borderColor: "#f43f5e",
+                        borderWidth: 1.8,
                         borderDash: [3, 3],
+                        pointRadius: 0,
+                        fill: false
+                    },
+                    {
+                        label: "Development Mean Baseline",
+                        data: target.series.pred_base,
+                        borderColor: "#64748b",
+                        borderWidth: 1.5,
+                        borderDash: [2, 4],
+                        pointRadius: 0,
                         fill: false
                     }
                 ];
             } else {
-                const targetCurves = data[activeModelType].curves;
-                const targetRisks = data[activeModelType].riskScores;
-                datasets = targetCurves.map((curve, idx) => {
-                    const r = targetRisks[idx];
-                    let color = "rgba(114, 148, 87, 0.85)";
-                    if (activeModelType === "chara") {
-                        color = r > 0.6 ? "#e11d48" : (r < -0.6 ? "#445d30" : "rgba(114, 148, 87, 0.85)");
-                    } else if (activeModelType === "elastic") {
-                        color = r > 0.5 ? "rgba(190, 18, 60, 0.8)" : "rgba(244, 63, 94, 0.6)";
-                    } else {
-                        color = "rgba(29, 78, 216, 0.7)";
-                    }
-                    return {
-                        label: data.patientIds[idx] || `Patient ${idx+1}`,
-                        data: curve,
-                        borderColor: color,
-                        borderWidth: Math.abs(r) > 0.6 ? 2 : 1.2,
-                        stepped: true,
+                const reconData = methodKey === "m4" ? target.series.pred_pca : (methodKey === "m1" ? target.series.pred_base : target.series.pred_m8);
+                const reconColor = methodKey === "m4" ? "#e11d48" : (methodKey === "m1" ? "#64748b" : "#10b981");
+                const reconLabel = methodKey === "m4" ? "M4 PCA/QR Prediction" : (methodKey === "m1" ? "M1 Constant Baseline" : "M8 Robust Prediction");
+
+                datasets = [
+                    {
+                        label: "Actual Target Distance (Y_true)",
+                        data: target.series.y_true,
+                        borderColor: "#2d3d21",
+                        borderWidth: 2.2,
                         pointRadius: 0,
                         fill: false
-                    };
-                });
+                    },
+                    {
+                        label: reconLabel,
+                        data: reconData,
+                        borderColor: reconColor,
+                        borderWidth: 2.2,
+                        borderDash: [5, 3],
+                        pointRadius: 0,
+                        fill: false
+                    },
+                    {
+                        label: "Development Mean Baseline",
+                        data: target.series.pred_base,
+                        borderColor: "#94a3b8",
+                        borderWidth: 1.5,
+                        borderDash: [3, 3],
+                        pointRadius: 0,
+                        fill: false
+                    }
+                ];
             }
 
-            survChartInst = new Chart(ctxSurv, {
+            trajChartInst = new Chart(ctx, {
                 type: "line",
-                data: { labels: data.times, datasets: datasets },
+                data: { labels: times, datasets: datasets },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { 
-                        legend: { display: activeModelType === "compare" },
+                    plugins: {
+                        legend: { position: "top", labels: { color: "#1a1811", font: { size: 10 }, boxWidth: 12 } },
                         tooltip: {
                             callbacks: {
-                                title: (items) => `Month ${items[0].label}`,
-                                label: (item) => `${item.dataset.label}: ${(item.raw * 100).toFixed(1)}% Survival`
+                                title: (items) => `${items[0].label} ns`,
+                                label: (item) => `${item.dataset.label}: ${item.raw.toFixed(3)} nm`
                             }
                         }
                     },
                     scales: {
-                        x: { 
-                            title: { display: true, text: "Timeline (Months Post-Diagnosis)", color: "#2d3d21", font: { size: 10, weight: "bold" } },
-                            grid: { color: "rgba(68, 93, 48, 0.08)" }, 
-                            ticks: { color: "#2d3d21", stepSize: 6, maxTicksLimit: 11 } 
+                        x: {
+                            title: { display: true, text: "Simulation Time (ns)", color: "#2d3d21", font: { size: 10, weight: "bold" } },
+                            grid: { color: "rgba(68, 93, 48, 0.08)" },
+                            ticks: { color: "#2d3d21", maxTicksLimit: 12, callback: (v, idx) => times[idx] !== undefined ? times[idx] + " ns" : v }
                         },
-                        y: { 
-                            title: { display: true, text: "Survival Probability", color: "#2d3d21", font: { size: 10, weight: "bold" } },
-                            min: 0, max: 1.02, 
-                            grid: { color: "rgba(68, 93, 48, 0.08)" }, 
-                            ticks: { color: "#2d3d21", callback: (val) => (val * 100) + "%" } 
+                        y: {
+                            title: { display: true, text: "Distance (nm)", color: "#2d3d21", font: { size: 10, weight: "bold" } },
+                            grid: { color: "rgba(68, 93, 48, 0.08)" },
+                            ticks: { color: "#2d3d21", callback: (val) => val.toFixed(2) + " nm" }
                         }
                     }
                 }
             });
+        }
 
-            // 2. Render Chart 2: Patient Risk Stratification Density
-            const ctxRisk = document.getElementById("riskDistChart").getContext("2d");
-            if (riskDistChartInst) riskDistChartInst.destroy();
+        function renderSecondaryDiagnosticCharts(foldData) {
+            // Chart 1: Target by Target Skill
+            const ctxTarg = document.getElementById("targetErrorChart").getContext("2d");
+            if (targetErrorChartInst) targetErrorChartInst.destroy();
 
-            const riskBins = ["Low (r < -0.5)", "Moderate (-0.5 to 0.5)", "High (0.5 to 1.2)", "Critical (r > 1.2)"];
-            const binCounts = [0, 0, 0, 0];
-            modelData.riskScores.forEach(r => {
-                if (r < -0.5) binCounts[0]++;
-                else if (r <= 0.5) binCounts[1]++;
-                else if (r <= 1.2) binCounts[2]++;
-                else binCounts[3]++;
-            });
+            const targets = foldData.targets;
+            const tLabels = targets.map(t => `${t.res_1}-${t.res_2}`);
+            const m8Skills = targets.map(t => t.metrics.m8_skill);
+            const pcaSkills = targets.map(t => t.metrics.pca_skill);
 
-            riskDistChartInst = new Chart(ctxRisk, {
+            targetErrorChartInst = new Chart(ctxTarg, {
                 type: "bar",
                 data: {
-                    labels: riskBins,
-                    datasets: [{
-                        label: "Patient Count",
-                        data: binCounts,
-                        backgroundColor: activeModelType === "elastic" ? ["#be123c", "#f43f5e", "#fda4af", "#9f1239"] : (activeModelType === "clinical" ? ["#1d4ed8", "#3b82f6", "#93c5fd", "#1e40af"] : ["#445d30", "#729457", "#d97706", "#e11d48"]),
-                        borderRadius: 8
-                    }]
+                    labels: tLabels,
+                    datasets: [
+                        {
+                            label: "M8 Skill",
+                            data: m8Skills,
+                            backgroundColor: m8Skills.map(s => s >= 0 ? "rgba(68, 93, 48, 0.85)" : "rgba(225, 29, 72, 0.75)"),
+                            borderRadius: 4
+                        },
+                        {
+                            label: "PCA/QR Skill",
+                            data: pcaSkills,
+                            backgroundColor: "rgba(225, 29, 72, 0.4)",
+                            borderColor: "rgba(225, 29, 72, 0.8)",
+                            borderWidth: 1,
+                            borderRadius: 4
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
                     scales: {
-                        x: { grid: { display: false }, ticks: { color: "#2d3d21", font: { size: 10 } } },
-                        y: { grid: { color: "rgba(68, 93, 48, 0.08)" }, ticks: { precision: 0, color: "#2d3d21" } }
-                    }
+                        x: { grid: { display: false }, ticks: { color: "#2d3d21", font: { size: 9 } } },
+                        y: { 
+                            grid: { color: "rgba(68, 93, 48, 0.08)" }, 
+                            ticks: { color: "#2d3d21", font: { size: 10 } },
+                            title: { display: true, text: "Skill (Higher = Better)", color: "#2d3d21", font: { size: 9 } }
+                        }
+                    },
+                    plugins: { legend: { position: "top", labels: { boxWidth: 10, font: { size: 10 } } } }
                 }
             });
 
-            // 3. Render Chart 3: Calculated Driver Genes
-            const ctxGene = document.getElementById("geneWeightsChart").getContext("2d");
-            if (geneWeightsChartInst) geneWeightsChartInst.destroy();
+            // Chart 2: Fold Level Method Skill Comparison
+            const ctxFold = document.getElementById("foldComparisonChart").getContext("2d");
+            if (foldComparisonChartInst) foldComparisonChartInst.destroy();
 
-            const topGenes = data.topGenes || [];
-            const geneLabels = topGenes.map(g => g.gene);
-            const geneVals = topGenes.map(g => g.weight);
+            const m8FoldSkill = foldData.fold_metrics["M8_ROBUST_TRANSFER"] ? foldData.fold_metrics["M8_ROBUST_TRANSFER"].skill : 0;
+            const m7FoldSkill = foldData.fold_metrics["M7_MEAN_TRANSFER"] ? foldData.fold_metrics["M7_MEAN_TRANSFER"].skill : 0;
+            const m4FoldSkill = foldData.fold_metrics["M4_PCA_PIVOTED_QR"] ? foldData.fold_metrics["M4_PCA_PIVOTED_QR"].skill : 0;
+            const diagFoldSkill = foldData.fold_metrics["M8_CENTERED_DIAGNOSTIC"] ? foldData.fold_metrics["M8_CENTERED_DIAGNOSTIC"].skill : 0;
 
-            geneWeightsChartInst = new Chart(ctxGene, {
+            foldComparisonChartInst = new Chart(ctxFold, {
                 type: "bar",
                 data: {
-                    labels: geneLabels,
+                    labels: ["M8 Robust", "M7 Mean", "M4 PCA/QR", "M8 Centered Diag"],
                     datasets: [{
-                        label: "Hazard Beta Weight",
-                        data: geneVals,
-                        backgroundColor: geneVals.map(w => w > 0 ? "rgba(225, 29, 72, 0.85)" : "rgba(68, 93, 48, 0.85)"),
+                        label: "Fold Skill",
+                        data: [m8FoldSkill, m7FoldSkill, m4FoldSkill, diagFoldSkill],
+                        backgroundColor: [
+                            "rgba(68, 93, 48, 0.9)",
+                            "rgba(217, 119, 6, 0.85)",
+                            "rgba(225, 29, 72, 0.8)",
+                            "rgba(71, 85, 105, 0.8)"
+                        ],
                         borderRadius: 6
                     }]
                 },
                 options: {
-                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
                     scales: {
-                        x: { grid: { color: "rgba(68, 93, 48, 0.08)" }, ticks: { color: "#2d3d21" } },
-                        y: { grid: { display: false }, ticks: { color: "#2d3d21", font: { weight: "bold" } } }
-                    }
-                }
-            });
-        }
-
-        // Live Personalized Grok AI Clinical Report Generation Function
-        async function generateGrokClinicalReport(data) {
-            const numPatients = data.numPatients;
-            const meanRisk = data.chara.risk_mean.toFixed(4);
-            const surv1y = (data.chara.surv_1y * 100).toFixed(1) + "%";
-            const surv3y = (data.chara.surv_3y * 100).toFixed(1) + "%";
-            const surv5y = (data.chara.surv_5y * 100).toFixed(1) + "%";
-            
-            // Risk stratum counts
-            let lowN = 0, modN = 0, highN = 0, critN = 0;
-            data.chara.riskScores.forEach(r => {
-                if (r < -0.5) lowN++;
-                else if (r <= 0.5) modN++;
-                else if (r <= 1.2) highN++;
-                else critN++;
-            });
-
-            const topGenesStr = data.topGenes.map(g => `${g.gene} (beta=${g.weight > 0 ? '+' : ''}${g.weight})`).join(", ");
-
-            const promptText = `Act as Senior Computational Oncologist at the Computational & Physical Genomics Lab, IIT Mandi. Write a deeply personalized, rigorous clinical oncological interpretation for the following evaluated transcriptomic cohort (evaluated via Chara Thermodynamic Graph Laplacian Manifold Alignment, chara_model_4337.pkl).
-
-EXACT COHORT PARAMETERS:
-- Total Patients: n = ${numPatients}
-- Active Evaluation Mode: ${activeModelType.toUpperCase()}
-- Mean Cox Proportional Hazard Risk: ${meanRisk}
-- Risk Distribution Breakdown: Low Risk (${lowN} patients), Moderate Risk (${modN} patients), High Risk (${highN} patients), Critical Risk (${critN} patients).
-- 1-Year Survival Probability: ${surv1y}
-- 3-Year Survival Probability: ${surv3y}
-- 5-Year Survival Probability: ${surv5y}
-- Top Driver Gene Coefficients: ${topGenesStr}
-
-INSTRUCTIONS:
-Write a flowing, professional academic narrative. DO NOT output code blocks, ASCII borders, dashes, or Markdown tables. Provide clear, detailed text under these 4 sections:
-1. Executive Clinical Summary
-2. Thermodynamic Manifold Smoothing & Multi-Model Comparative Discrimination
-3. Biomarker Mechanistic Evaluation
-4. Tailored Adjuvant Recommendations & Clinical Action Plan`;
-
-            try {
-                const res = await fetch("https://api.x.ai/v1/chat/completions", {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${GROK_API_KEY}`,
-                        "Content-Type": "application/json"
+                        x: { grid: { display: false }, ticks: { color: "#2d3d21", font: { size: 10, weight: "600" } } },
+                        y: { 
+                            min: 0.0, max: 0.65,
+                            grid: { color: "rgba(68, 93, 48, 0.08)" }, 
+                            ticks: { color: "#2d3d21", font: { size: 10 }, callback: (v) => "+" + v.toFixed(2) },
+                            title: { display: true, text: "Overall 500-Target Skill", color: "#2d3d21", font: { size: 9 } }
+                        }
                     },
-                    body: JSON.stringify({
-                        messages: [
-                            { role: "system", content: "You are Chara AI, a precision oncology survival analytics specialist at IIT Mandi." },
-                            { role: "user", content: promptText }
-                        ],
-                        model: "grok-beta",
-                        temperature: 0.4
-                    })
-                });
-
-                if (!res.ok) throw new Error(`Grok API error: ${res.status}`);
-
-                const result = await res.json();
-                const rawResponse = result.choices[0].message.content;
-                lastGrokAnalysisSections = rawResponse;
-
-            } catch (err) {
-                lastGrokAnalysisSections = `1. Executive Clinical Summary: The evaluated cohort of ${numPatients} patient transcriptomic profiles demonstrated a standardized mean hazard risk score of ${meanRisk}. Overall cohort survival decays from ${surv1y} at 12 months post-diagnosis down to ${surv3y} at 36 months and ${surv5y} at 60 months.
-
-2. Thermodynamic Manifold Smoothing & Multi-Model Comparative Discrimination: In cross-model validation, Chara achieves superior discriminative ranking (C-Index: 0.784) compared to unadjusted ElasticNet (0.524) and standard clinical baseline (0.500). Manifold diffusion across the graph Laplacian isolated platform noise while capturing true clinical variance, resolving into ${lowN} Low-Risk, ${modN} Moderate-Risk, ${highN} High-Risk, and ${critN} Critical-Risk individuals.
-
-3. Biomarker Mechanistic Evaluation: Survival discrimination is governed by significant regularized drivers including ${topGenesStr}. High expression of positive oncogenic drivers drives accelerated hazard accumulation, whereas protective signatures mitigate progression.
-
-4. Tailored Adjuvant Recommendations & Clinical Action Plan: Patients in the high and critical risk tiers (${highN + critN} patients) warrant immediate multidisciplinary evaluation for targeted adjuvant therapy regimens (e.g. combination MEK/EGFR inhibitors or immunotherapeutic checkpoint blockade). Conversely, the ${lowN} low-risk patients may safely follow active surveillance protocols to spare over-treatment toxicity.`;
-            }
-        }
-
-        // 2-PAGE PUBLICATION-GRADE PDF REPORT GENERATOR (PROPORTIONAL CLEAN HELVETICA TYPOGRAPHY)
-        const downloadPdfBtn = document.getElementById("downloadPdfBtn");
-        if (downloadPdfBtn) {
-            downloadPdfBtn.addEventListener("click", () => {
-                if (!currentCalculatedData) return;
-
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF({ unit: "pt", format: "letter", orientation: "portrait" });
-
-                const pageWidth = doc.internal.pageSize.getWidth(); // ~612 pt
-                const pageHeight = doc.internal.pageSize.getHeight(); // ~792 pt
-                const margin = 36;
-                const contentWidth = pageWidth - (margin * 2); // 540 pt
-
-                // ==================== PAGE 1 ====================
-                // 1. Header Banner
-                doc.setFillColor(45, 61, 33); // Deep olive #2d3d21
-                doc.rect(margin, 28, contentWidth, 54, "F");
-
-                doc.setTextColor(255, 255, 255);
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(13);
-                doc.text("CHARA · CLINICAL ONCOLOGY SURVIVAL REPORT", margin + 16, 52);
-
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(8.5);
-                doc.text("Computational & Physical Genomics Laboratory · Indian Institute of Technology Mandi", margin + 16, 68);
-
-                // Date & Metadata Bar
-                doc.setTextColor(90, 100, 85);
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(8);
-                const evalDate = `Evaluation Date: ${new Date().toLocaleDateString()} | Cohort Size: n = ${currentCalculatedData.numPatients} Patients | Model: Frozen 4,337-Gene Signature (Active: ${activeModelType.toUpperCase()})`;
-                doc.text(evalDate, margin, 96);
-
-                // 2. Summary KPI Metric Boxes (4 Boxes)
-                const boxY = 104;
-                const boxHeight = 38;
-                const boxWidth = (contentWidth - 18) / 4;
-
-                const activeStats = activeModelType === "compare" ? currentCalculatedData.chara : currentCalculatedData[activeModelType];
-
-                const kpis = [
-                    { label: "MEAN RISK SCORE", val: activeStats.risk_mean.toFixed(4) },
-                    { label: "1-YEAR SURVIVAL", val: (activeStats.surv_1y * 100).toFixed(1) + "%" },
-                    { label: "3-YEAR SURVIVAL", val: (activeStats.surv_3y * 100).toFixed(1) + "%" },
-                    { label: "5-YEAR SURVIVAL", val: (activeStats.surv_5y * 100).toFixed(1) + "%" }
-                ];
-
-                kpis.forEach((k, idx) => {
-                    const bx = margin + idx * (boxWidth + 6);
-                    doc.setFillColor(246, 248, 243);
-                    doc.setDrawColor(200, 215, 190);
-                    doc.roundedRect(bx, boxY, boxWidth, boxHeight, 4, 4, "FD");
-
-                    doc.setTextColor(110, 120, 100);
-                    doc.setFontSize(6.5);
-                    doc.setFont("helvetica", "bold");
-                    doc.text(k.label, bx + 6, boxY + 11);
-
-                    doc.setTextColor(45, 61, 33);
-                    doc.setFontSize(11.5);
-                    doc.setFont("helvetica", "bold");
-                    doc.text(k.val, bx + 6, boxY + 28);
-                });
-
-                // 3. GRAPH 1: Kaplan-Meier Survival Trajectories & Explanation
-                doc.setTextColor(45, 61, 33);
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(9.5);
-                doc.text("FIGURE 1: KAPLAN-MEIER SURVIVAL TRAJECTORIES (0 - 60 MONTHS)", margin, 160);
-
-                const survCanvas = document.getElementById("survivalChart");
-                if (survCanvas) {
-                    const chartImgData = survCanvas.toDataURL("image/png");
-                    doc.setDrawColor(220, 225, 215);
-                    doc.roundedRect(margin, 166, contentWidth, 145, 4, 4, "S");
-                    doc.addImage(chartImgData, "PNG", margin + 4, 170, contentWidth - 8, 137);
+                    plugins: { legend: { display: false } }
                 }
-
-                // Narrative Explanation for Graph 1
-                doc.setTextColor(60, 65, 55);
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(7.5);
-                const fig1Expl = `Figure 1 Caption: Patient-specific survival trajectories evaluated across 60 months using the frozen Breslow baseline estimator S_i(t) = [S0(t)]^exp(r_i). Evaluated in active mode [${activeModelType.toUpperCase()}]. Red curves represent high-hazard patients with accelerated post-diagnosis mortality; green curves indicate favorable survival maintenance supported by protective transcriptomic markers.`;
-                const splitFig1 = doc.splitTextToSize(fig1Expl, contentWidth);
-                doc.text(splitFig1, margin, 324);
-
-                // 4. GRAPH 2: Patient Risk Stratification Density & Explanation
-                doc.setTextColor(45, 61, 33);
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(9.5);
-                doc.text("FIGURE 2: PATIENT RISK STRATIFICATION DENSITY SPECTRUM", margin, 358);
-
-                const riskCanvas = document.getElementById("riskDistChart");
-                if (riskCanvas) {
-                    const riskImgData = riskCanvas.toDataURL("image/png");
-                    doc.setDrawColor(220, 225, 215);
-                    doc.roundedRect(margin, 364, contentWidth, 140, 4, 4, "S");
-                    doc.addImage(riskImgData, "PNG", margin + 4, 368, contentWidth - 8, 132);
-                }
-
-                // Narrative Explanation for Graph 2
-                doc.setTextColor(60, 65, 55);
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(7.5);
-                const fig2Expl = `Figure 2 Caption: Categorizes the patient cohort across four clinically actionable hazard tiers (Low, Moderate, High, Critical). This objective spectrum isolates candidates for immediate adjuvant intervention from low-risk patients suitable for active surveillance.`;
-                const splitFig2 = doc.splitTextToSize(fig2Expl, contentWidth);
-                doc.text(splitFig2, margin, 516);
-
-                // Page 1 Footer
-                doc.setTextColor(130, 140, 125);
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(7.5);
-                doc.text("Page 1 of 2 · Chara Survival Framework · IIT Mandi CPG Lab · https://chara-frontend.vercel.app", margin, pageHeight - 18);
-
-                // ==================== PAGE 2 ====================
-                doc.addPage();
-
-                // Page 2 Header Banner
-                doc.setFillColor(45, 61, 33);
-                doc.rect(margin, 28, contentWidth, 36, "F");
-
-                doc.setTextColor(255, 255, 255);
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(11);
-                doc.text("CHARA SURVIVAL REPORT · BIOMARKERS & CLINICAL ANALYSIS", margin + 14, 50);
-
-                // 5. GRAPH 3: Top Driver Gene Hazard Weights & Explanation
-                doc.setTextColor(45, 61, 33);
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(9.5);
-                doc.text("FIGURE 3: TOP 10 TRANSCRIPTOMIC BIOMARKER HAZARD WEIGHTS (CHARA MODEL)", margin, 80);
-
-                const geneCanvas = document.getElementById("geneWeightsChart");
-                if (geneCanvas) {
-                    const geneImgData = geneCanvas.toDataURL("image/png");
-                    doc.setDrawColor(220, 225, 215);
-                    doc.roundedRect(margin, 86, contentWidth, 145, 4, 4, "S");
-                    doc.addImage(geneImgData, "PNG", margin + 4, 90, contentWidth - 8, 137);
-                }
-
-                // Narrative Explanation for Graph 3
-                doc.setTextColor(60, 65, 55);
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(7.5);
-                const fig3Expl = `Figure 3 Caption: Key regularized hazard coefficients from chara_model_4337. Positive hazard weights (red, e.g. CCL20, DKK1, IGF2BP1, BARX1, SPRR1B) correlate with aggressive proliferation and metastatic invasion, whereas negative weights (green, e.g. MS4A1, FAIM2, FAM133A, SLC5A5) provide protective survival advantage.`;
-                const splitFig3 = doc.splitTextToSize(fig3Expl, contentWidth);
-                doc.text(splitFig3, margin, 242);
-
-                // 6. Section 4: Personalized AI Biophysical Oncology Analysis (PROPORTIONAL HELVETICA)
-                doc.setTextColor(45, 61, 33);
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(9.5);
-                doc.text("SECTION 4: AI CLINICAL ONCOLOGY ANALYSIS & THERAPEUTIC RECOMMENDATIONS", margin, 274);
-
-                doc.setFillColor(252, 252, 250);
-                doc.setDrawColor(220, 225, 215);
-                doc.roundedRect(margin, 282, contentWidth, 444, 4, 4, "FD");
-
-                // Render clean Helvetica proportional text
-                doc.setTextColor(40, 45, 35);
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(8);
-
-                const rawReport = lastGrokAnalysisSections || "Evaluated transcriptomic cohort successfully aligned on frozen 4,337-gene thermodynamic manifold.";
-                const formattedReport = rawReport.replace(/[\r\n]{3,}/g, "\n\n").trim();
-                const splitReport = doc.splitTextToSize(formattedReport, contentWidth - 24);
-                
-                doc.text(splitReport.slice(0, 52), margin + 12, 300, { lineHeightFactor: 1.25 });
-
-                // Page 2 Footer
-                doc.setTextColor(130, 140, 125);
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(7.5);
-                doc.text("Page 2 of 2 · Chara Survival Framework · IIT Mandi CPG Lab · https://chara-frontend.vercel.app", margin, pageHeight - 18);
-
-                // Save PDF directly to user's device
-                doc.save(`Chara_Clinical_Oncology_Report_${new Date().toISOString().slice(0,10)}.pdf`);
             });
         }
     </script>
