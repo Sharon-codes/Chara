@@ -112,6 +112,11 @@ print(benchmark_metrics)
 # 8. Plot Publication-Grade Kaplan-Meier Curves & Biomarkers
 model.plot_survival(cohort_df, save_path="km_survival.png")
 model.plot_biomarkers(top_n=10, save_path="biomarkers.png")
+
+# 9. Reconstruction Skill & Exact Population Moment Decomposition
+skill = chara.reconstruction_skill(predicted_distances, true_distances)
+moments = chara.population_moment_decomposition(predicted_distances, true_distances)
+# moments returns: {'mse': ..., 'bias_squared': ..., 'var_residual': ..., 'identity_residual': ...}
 ```
 
 ### Direct Hugging Face Hub Loading

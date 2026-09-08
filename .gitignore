@@ -34,6 +34,7 @@ Thumbs.db
 *.log
 temp_output.txt
 debug_output.txt
+tools/last_prompt.txt
 
 # DSSP temporary files
 dssp_in_*

@@ -147,3 +147,99 @@ def integrated_brier_score(survival_curves, time, event, time_grid=None) -> floa
         return 0.0
     return float(np.mean(brier_scores))
 
+
+def reconstruction_skill(y_pred, y_true, y_baseline=None, axis=0):
+    """
+    Computes reconstruction skill score relative to a baseline reference.
+    
+    Skill = 1 - MSE(model) / MSE(baseline)
+    
+    Parameters:
+    -----------
+    y_pred : array-like
+        Predicted values (e.g. reconstructed molecular pairwise distances).
+    y_true : array-like
+        Ground-truth observed values.
+    y_baseline : array-like, optional
+        Baseline prediction. If None, defaults to temporal/sample mean of y_true along axis.
+    axis : int, optional
+        Time or sample axis (default 0).
+        
+    Returns:
+    --------
+    skill : float or ndarray
+        Normalized skill score (1.0 = perfect reconstruction, 0.0 = baseline performance, < 0 = worse than baseline).
+    """
+    p = np.asarray(y_pred, dtype=np.float64)
+    y = np.asarray(y_true, dtype=np.float64)
+    if y_baseline is None:
+        b = np.mean(y, axis=axis, keepdims=True)
+    else:
+        b = np.asarray(y_baseline, dtype=np.float64)
+        
+    mse_m = np.mean((p - y) ** 2, axis=axis)
+    mse_b = np.mean((b - y) ** 2, axis=axis)
+    
+    if np.isscalar(mse_b) or mse_b.ndim == 0:
+        if mse_b < 1e-15:
+            return 0.0 if mse_m < 1e-15 else -np.inf
+        return float(1.0 - (mse_m / mse_b))
+    
+    skill = np.zeros_like(mse_b)
+    mask = (mse_b > 1e-15)
+    skill[mask] = 1.0 - (mse_m[mask] / mse_b[mask])
+    skill[~mask] = np.where(mse_m[~mask] < 1e-15, 0.0, -np.inf)
+    return skill
+
+
+def population_moment_decomposition(y_pred, y_true, axis=0):
+    """
+    Decomposes temporal Mean Squared Error (MSE) into squared temporal mean residual (Bias^2)
+    and population residual variance (Var_res):
+    
+        MSE = Bias^2 + Var_res
+        
+    where Bias = mean(y_pred - y_true) and Var_res = Var(y_pred - y_true, ddof=0).
+    
+    Parameters:
+    -----------
+    y_pred : array-like
+        Predicted trajectories or feature reconstructions.
+    y_true : array-like
+        Ground-truth trajectory values.
+    axis : int, optional
+        Time axis over which moments are computed (default 0).
+        
+    Returns:
+    --------
+    dict with keys:
+        'mse': Mean squared error
+        'bias_squared': Squared temporal mean residual (Bias^2)
+        'var_residual': Population residual variance around temporal mean
+        'identity_residual': Absolute difference |MSE - (Bias^2 + Var_res)|
+    """
+    p = np.asarray(y_pred, dtype=np.float64)
+    y = np.asarray(y_true, dtype=np.float64)
+    residual = p - y
+    
+    mse = np.mean(residual ** 2, axis=axis)
+    bias = np.mean(residual, axis=axis)
+    bias2 = bias ** 2
+    var_res = np.var(residual, axis=axis, ddof=0)
+    
+    id_res = np.abs(mse - (bias2 + var_res))
+    
+    if np.isscalar(mse) or mse.ndim == 0:
+        return {
+            "mse": float(mse),
+            "bias_squared": float(bias2),
+            "var_residual": float(var_res),
+            "identity_residual": float(id_res)
+        }
+    return {
+        "mse": mse,
+        "bias_squared": bias2,
+        "var_residual": var_res,
+        "identity_residual": id_res
+    }
+

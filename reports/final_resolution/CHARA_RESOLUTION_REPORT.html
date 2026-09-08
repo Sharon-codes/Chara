@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Chara — Final Resolution & Evidence Verification Report</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #1a202c; max-width: 1200px; margin: 0 auto; padding: 24px; background-color: #f7fafc; }
+  h1, h2, h3, h4 { color: #2d3748; margin-top: 1.5em; }
+  h1 { border-bottom: 2px solid #cbd5e0; padding-bottom: 8px; font-size: 26px; }
+  h2 { border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; font-size: 20px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); font-size: 13px; }
+  th, td { padding: 10px 12px; text-align: left; border: 1px solid #e2e8f0; }
+  th { background-color: #edf2f7; font-weight: 600; color: #4a5568; }
+  tr:nth-child(even) { background-color: #f8fafc; }
+  .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+  .badge-unresolved { background-color: #feebc8; color: #c05621; }
+  .badge-ineligible { background-color: #fed7d7; color: #9b2c2c; }
+  .badge-fixed { background-color: #c6f6d5; color: #22543d; }
+  .badge-verified { background-color: #bee3f8; color: #2c5282; }
+  pre, code { font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 12px; }
+  pre { background: #2d3748; color: #edf2f7; padding: 14px; border-radius: 6px; overflow-x: auto; }
+  .callout { background: #ebf8ff; border-left: 4px solid #3182ce; padding: 12px 16px; margin: 16px 0; border-radius: 0 4px 4px 0; }
+  .callout-warn { background: #fffaf0; border-left: 4px solid #dd6b20; padding: 12px 16px; margin: 16px 0; border-radius: 0 4px 4px 0; }
+</style>
+</head>
+<body>
+
+<h1>Chara: Final Computational Audit, Diagnostic Resolution & Evidence Report</h1>
+<p><strong>Audit Execution Date:</strong> 2026-09-07 | <strong>Environment:</strong> Windows, Python 3.11.15 | <strong>Precision:</strong> float64 throughout</p>
+
+<div class="callout">
+  <strong>Audit Status Summary:</strong>
+  All 12 production runs are assigned <code>UNRESOLVED</code> provenance due to local unavailability of GROMACS 2026.3 dump tools and verified generation of nonstandard 604-atomtype potentials. The diagnostic bug in high-variance subgroup selection has been completely corrected without test data leakage. Both proposed independent confirmation datasets are verified ineligible.
+</div>
+
+<h2>1. Compact System Status & Provenance Inspection</h2>
+<table>
+  <thead>
+    <tr>
+      <th>System</th>
+      <th>Compiled TPR Inspection Status</th>
+      <th>Force Field Parameter Status</th>
+      <th>Molecular Construct Reconciliation</th>
+      <th>Subgroup Selection Bug Status</th>
+      <th>Confirmation Dataset Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>KRAS_G12D</strong></td>
+      <td><span class="badge badge-unresolved">UNRESOLVED</span><br>gmx dump unavailable locally</td>
+      <td><span class="badge badge-unresolved">DOCUMENTED_CUSTOM</span><br>604 stubbed types; 6 overrides in martini.itp</td>
+      <td>PDB 4OBE is Wild-Type KRAS (fragment 1–169). Canonical residue 12 is Glycine (no mutation).</td>
+      <td><span class="badge badge-fixed">CORRECTED</span><br>Leakage eliminated; overlap with old set: 58.0%</td>
+      <td><span class="badge badge-ineligible">INELIGIBLE</span><br>DESRES BPTI: 1 continuous run; no open download.</td>
+    </tr>
+    <tr>
+      <td><strong>cMYC_MAX</strong></td>
+      <td><span class="badge badge-unresolved">UNRESOLVED</span><br>gmx dump unavailable locally</td>
+      <td><span class="badge badge-unresolved">DOCUMENTED_CUSTOM</span><br>604 stubbed types; nonbonded matrix flattened</td>
+      <td>PDB 1NKP protein-only heterotetramer (Chains E–H, 812 beads); DNA omitted.</td>
+      <td><span class="badge badge-fixed">CORRECTED</span><br>Leakage eliminated; overlap with old set: 34.5%</td>
+      <td><span class="badge badge-ineligible">INELIGIBLE</span><br>MoDEL: single runs per fold; no triplicates.</td>
+    </tr>
+    <tr>
+      <td><strong>Mut_p53</strong></td>
+      <td><span class="badge badge-unresolved">UNRESOLVED</span><br>gmx dump unavailable locally</td>
+      <td><span class="badge badge-unresolved">DOCUMENTED_CUSTOM</span><br>604 stubbed types; 355,746 official pairs missing</td>
+      <td>PDB 2J1X quintuple mutant (M133L/V203A/Y220C/N239Y/N268D). Not R273H hotspot.</td>
+      <td><span class="badge badge-fixed">CORRECTED</span><br>Leakage eliminated; overlap with old set: 68.4%</td>
+      <td><span class="badge badge-ineligible">INELIGIBLE</span><br>No qualifying multi-replicate dataset found.</td>
+    </tr>
+    <tr>
+      <td><strong>PTPN11</strong></td>
+      <td><span class="badge badge-unresolved">UNRESOLVED</span><br>gmx dump unavailable locally</td>
+      <td><span class="badge badge-unresolved">DOCUMENTED_CUSTOM</span><br>604 stubbed types; nonbonded matrix flattened</td>
+      <td>PDB 4DGP residues 1–528 + LEHHHHHH tag (1280 beads). Rep1: 996 physical frames (5 dropped).</td>
+      <td><span class="badge badge-fixed">CORRECTED</span><br>Leakage eliminated; overlap with old set: 59.6%</td>
+      <td><span class="badge badge-ineligible">INELIGIBLE</span><br>No qualifying multi-replicate dataset found.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>2. Subgroup Selection Bug: Verification & Impact Diff</h2>
+<div class="callout-warn">
+  <strong>Diagnostic Bug Root Cause:</strong> In <code>code/02_correct_diagnostics.py</code>, development variance was loaded by querying key <code>"targets"</code>, whereas distance arrays store target data under key <code>"Y"</code>. The list remained empty and silently fell back to <code>np.var(Y_true, axis=0)</code> from the held-out test run! Consequently, the purported development-selected top quartile of variance was contaminated by held-out test data in all 12 folds.
+</div>
+
+<p><strong>Correction:</strong> Development arrays are now loaded strictly from <code>distances_{r}.npz["Y"]</code> for the two training runs assigned to that fold (Fold 1: reps 1+2; Fold 2: reps 1+3; Fold 3: reps 2+3), concatenating all development frames and selecting the top quartile of pooled development variance without test data fallback.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>System</th>
+      <th>Fold</th>
+      <th>Dev Runs</th>
+      <th>Test Run</th>
+      <th>Corrected Dev Cutoff (nm²)</th>
+      <th>Old Test Leaked Cutoff (nm²)</th>
+      <th>Overlap / Target Count</th>
+      <th>Overlap %</th>
+      <th>Targets Replaced</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>KRAS_G12D</td><td>Fold 1</td><td>rep1+rep2</td><td>rep3</td><td>0.004235</td><td>0.002496</td><td>153 / 250</td><td>61.2%</td><td>97 targets</td></tr><tr><td>KRAS_G12D</td><td>Fold 2</td><td>rep1+rep3</td><td>rep2</td><td>0.003434</td><td>0.002703</td><td>132 / 250</td><td>52.8%</td><td>118 targets</td></tr><tr><td>KRAS_G12D</td><td>Fold 3</td><td>rep2+rep3</td><td>rep1</td><td>0.003762</td><td>0.002285</td><td>150 / 250</td><td>60.0%</td><td>100 targets</td></tr><tr><td>cMYC_MAX</td><td>Fold 1</td><td>rep1+rep2</td><td>rep3</td><td>0.002704</td><td>0.001271</td><td>95 / 125</td><td>76.0%</td><td>30 targets</td></tr><tr><td>cMYC_MAX</td><td>Fold 2</td><td>rep1+rep3</td><td>rep2</td><td>0.002192</td><td>0.002051</td><td>81 / 125</td><td>64.8%</td><td>44 targets</td></tr><tr><td>cMYC_MAX</td><td>Fold 3</td><td>rep2+rep3</td><td>rep1</td><td>0.002078</td><td>0.002268</td><td>83 / 125</td><td>66.4%</td><td>42 targets</td></tr><tr><td>Mut_p53</td><td>Fold 1</td><td>rep1+rep2</td><td>rep3</td><td>0.004968</td><td>0.003200</td><td>169 / 250</td><td>67.6%</td><td>81 targets</td></tr><tr><td>Mut_p53</td><td>Fold 2</td><td>rep1+rep3</td><td>rep2</td><td>0.004531</td><td>0.004533</td><td>177 / 250</td><td>70.8%</td><td>73 targets</td></tr><tr><td>Mut_p53</td><td>Fold 3</td><td>rep2+rep3</td><td>rep1</td><td>0.005090</td><td>0.003971</td><td>167 / 250</td><td>66.8%</td><td>83 targets</td></tr><tr><td>PTPN11</td><td>Fold 1</td><td>rep1+rep2</td><td>rep3</td><td>0.003809</td><td>0.002996</td><td>142 / 250</td><td>56.8%</td><td>108 targets</td></tr><tr><td>PTPN11</td><td>Fold 2</td><td>rep1+rep3</td><td>rep2</td><td>0.003903</td><td>0.002343</td><td>151 / 250</td><td>60.4%</td><td>99 targets</td></tr><tr><td>PTPN11</td><td>Fold 3</td><td>rep2+rep3</td><td>rep1</td><td>0.003782</td><td>0.002712</td><td>154 / 250</td><td>61.6%</td><td>96 targets</td></tr>
+  </tbody>
+</table>
+
+<h2>3. Exact Population-Moment Decomposition & Reference Values</h2>
+<p>For every target $j$ and model prediction, the temporal mean squared error is decomposed into squared temporal mean residual (Bias²) and residual variance:</p>
+<pre>MSE = (mean(y_pred - y_true))^2 + Var(y_pred - y_true) = Bias^2 + Var_res</pre>
+<p>Numerical checks verify that <code>abs(MSE - (Bias^2 + Var_res)) &lt; 1e-15</code> across all 528 diagnostic records.</p>
+
+<h3>Independently Checked KRAS M8 (Robust Transfer) Reference Values:</h3>
+<table>
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>Fold 1</th>
+      <th>Fold 2</th>
+      <th>Fold 3</th>
+      <th>Sum of 3 Folds</th>
+      <th>Aggregate Ratio (ΔBias² / ΔMSE)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Fold-Mean ΔMSE (nm²)</strong></td>
+      <td>0.000912044431</td>
+      <td>0.000967888796</td>
+      <td>0.001078308836</td>
+      <td><strong>0.002958242063380099</strong></td>
+      <td rowspan="2" style="vertical-align: middle; text-align: center; font-size: 16px; font-weight: bold;">83.774431%<br>(~83.8%)</td>
+    </tr>
+    <tr>
+      <td><strong>Fold-Mean ΔBias² (nm²)</strong></td>
+      <td>0.000687399435</td>
+      <td>0.000748172947</td>
+      <td>0.001042678087</td>
+      <td><strong>0.002478250469269188</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Target-Sum ΔMSE (nm²)</strong><br><em>(Sum across 1000 targets)</em></td>
+      <td>0.912044</td>
+      <td>0.967889</td>
+      <td>1.078309</td>
+      <td><strong>2.958242</strong></td>
+      <td rowspan="2" style="vertical-align: middle; text-align: center; font-size: 14px;">Earlier reported target-sum values: 2.958 and 2.478</td>
+    </tr>
+    <tr>
+      <td><strong>Target-Sum ΔBias² (nm²)</strong></td>
+      <td>0.687399</td>
+      <td>0.748173</td>
+      <td>1.042678</td>
+      <td><strong>2.478250</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>4. Corrected Subgroup Performance (Development-Defined Top Quartile)</h2>
+<table>
+  <thead>
+    <tr>
+      <th>System</th>
+      <th>Fold</th>
+      <th>Method</th>
+      <th>Target Count</th>
+      <th>RMSE Model (nm)</th>
+      <th>RMSE Baseline (nm)</th>
+      <th>Skill</th>
+      <th>Median Pearson r</th>
+      <th>ΔMSE (nm²)</th>
+      <th>ΔBias² (nm²)</th>
+      <th>Bias² Fraction</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>KRAS_G12D</td><td>Fold 1</td><td>Robust Transfer Selector (k=10)</td><td>250</td><td>0.0778</td><td>0.0957</td><td>+0.3384</td><td>0.2445</td><td>0.003098</td><td>0.002275</td><td>73.4%</td></tr><tr><td>KRAS_G12D</td><td>Fold 2</td><td>Robust Transfer Selector (k=10)</td><td>250</td><td>0.1053</td><td>0.1192</td><td>+0.2204</td><td>0.2329</td><td>0.003132</td><td>0.002371</td><td>75.7%</td></tr><tr><td>KRAS_G12D</td><td>Fold 3</td><td>Robust Transfer Selector (k=10)</td><td>250</td><td>0.0917</td><td>0.1073</td><td>+0.2697</td><td>0.1779</td><td>0.003104</td><td>0.003009</td><td>96.9%</td></tr>
+  </tbody>
+</table>
+
+<h2>5. Noncircular Lag Diagnostics (KRAS Robust Transfer, Support [100..899])</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Fold</th>
+      <th>Lag 0 Skill</th>
+      <th>Lag 10 Skill</th>
+      <th>Lag 25 Skill</th>
+      <th>Lag 50 Skill</th>
+      <th>Lag 100 Skill</th>
+      <th>Paired Drop (Lag 0 - Lag 100)</th>
+      <th>Observation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Fold 1</strong></td>
+      <td>+0.2003</td>
+      <td>+0.1481</td>
+      <td>+0.1440</td>
+      <td>+0.1319</td>
+      <td>+0.1103</td>
+      <td>+0.0900</td>
+      <td rowspan="3">Skill remains positive even at lag 100 (50 ns offset) because the static mean offset shift operates as a time-invariant correction.</td>
+    </tr>
+    <tr>
+      <td><strong>Fold 2</strong></td>
+      <td>+0.2185</td>
+      <td>+0.1752</td>
+      <td>+0.1704</td>
+      <td>+0.1582</td>
+      <td>+0.1356</td>
+      <td>+0.0829</td>
+    </tr>
+    <tr>
+      <td><strong>Fold 3</strong></td>
+      <td>+0.1989</td>
+      <td>+0.1524</td>
+      <td>+0.1489</td>
+      <td>+0.1378</td>
+      <td>+0.1205</td>
+      <td>+0.0784</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>6. Verification of Independent Confirmation Dataset Candidates</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Candidate Dataset</th>
+      <th>Primary Publication & DOI</th>
+      <th>Actual Access Route & License</th>
+      <th>Simulation Structure</th>
+      <th>Eligibility Status</th>
+      <th>Factual Deficiency / Discrepancy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>DESRES Anton BPTI</strong></td>
+      <td>Shaw et al., <em>Science</em> 330, 341 (2010)<br>DOI: 10.1126/science.1187409</td>
+      <td>Not in public open download archives (Zenodo/Dryad). Academic license on request from DESRES.</td>
+      <td>1 continuous 1.031 ms run (Condition A) + 1 run of 106 us (Condition B).</td>
+      <td><span class="badge badge-ineligible">VERIFIED_INELIGIBLE</span></td>
+      <td>Fails public download access without formal request; fails multi-replicate criterion (only 1 run under standard conditions, not 5 replicates).</td>
+    </tr>
+    <tr>
+      <td><strong>MoDEL Database</strong></td>
+      <td>Meyer et al., <em>Structure</em> 18, 1399 (2010)<br>DOI: 10.1016/j.str.2010.07.013</td>
+      <td>Web portal (mmb.irbbarcelona.org/MoDEL/) and REST API. Creative Commons open access.</td>
+      <td>Single 10–100 ns runs per PDB fold across 1,700+ proteins.</td>
+      <td><span class="badge badge-ineligible">VERIFIED_INELIGIBLE</span></td>
+      <td>Fails multi-replicate criterion (broad single-run structural coverage, zero multi-replicate benchmark sets for individual targets). Erroneous DOI 10.1093/bioinformatics/btw348 corrected.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>7. Artifact Manifest & Verification Instructions</h2>
+<p>The core evidence archive <code>CHARA_RESOLUTION_CORE.zip</code> contains all standalone evidence and verification scripts:</p>
+<ul>
+  <li><code>CHARA_RESOLUTION_REPORT.html</code> — This self-contained offline master report.</li>
+  <li><code>RUN_PARAMETER_STATUS.csv</code> — Provenance and recorded gmx dump execution attempts for all 12 production runs.</li>
+  <li><code>EFFECTIVE_PAIR_COMPARISON.csv</code> — Parameter comparison records and unmapped matrices.</li>
+  <li><code>SUBGROUP_CORRECTION_DIFF.csv</code> — Fold-by-fold comparison of old test-leaked vs corrected dev-only top quartile.</li>
+  <li><code>DIAGNOSTICS_FIXED.csv</code> — 528 recomputed diagnostic records across all models, folds, and groups.</li>
+  <li><code>DATASET_ACCESS_VERIFIED.csv</code> — Systematic verification of proposed external confirmation datasets.</li>
+  <li><code>CLOSEST_WORK_CORRECTED.csv</code> — 5 verified primary papers with exact section citations and factual overlap.</li>
+  <li><code>CLAIM_CORRECTIONS_FINAL.csv</code> — 8 verified claim corrections with source citations and supported replacements.</li>
+  <li><code>audit_diagnostic_patch.diff</code> — Unified diff fixing the development variance loading bug.</li>
+  <li><code>verify_final_resolution.py</code> — Standalone verification script checking hashes and moment identities.</li>
+</ul>
+
+<p>To verify all checksums and mathematical identities in an isolated environment:</p>
+<pre>python verify_final_resolution.py</pre>
+
+</body>
+</html>

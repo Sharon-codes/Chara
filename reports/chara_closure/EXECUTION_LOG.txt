@@ -1,0 +1,80 @@
+================================================================================
+CHARA BOUNDED CLOSURE: AUDIT & REPRODUCIBILITY EXECUTION LOG
+Timestamp: 2026-09-07T23:30:00+05:30
+Platform: Windows 11 (AMD64)
+Python Version: 3.11.15 (main, CPython, MSC v.1944 64 bit)
+Dependencies: numpy 2.2.3, pandas 2.2.3, MDAnalysis 2.10.0
+Git Commit: 07bb308 (Working tree clean except new closure tools and reports)
+================================================================================
+
+1. ENVIRONMENT & GROMACS PROBING
+- Primary route attempted: Native Windows PATH discovery
+  Command: gmx --version
+  Result: FileNotFoundError: gmx not found on Windows PATH
+  Winget package query: 'winget search gromacs' -> No package found matching input criteria.
+  Chocolatey package query: 'choco search gromacs' -> 0 gromacs packages found (jmol only).
+  Conda-forge API query: Latest release 2026.3 exists, but architectures are exclusively
+  ['linux-64', 'linux-aarch64', 'linux-ppc64le', 'osx-64', 'osx-arm64']. Zero win-64 packages exist.
+- Materially different fallback attempted: Subsystem / Container execution
+  Command: wsl.exe -l -v
+  Result: ReturnCode 1: The Windows Subsystem for Linux is not installed.
+  Command: docker --version
+  Result: CommandNotFound: docker is not recognized as an internal or external command.
+  Git Bash query: 'which gmx' -> No gmx in PATH.
+- Python parser fallback:
+  MDAnalysis 2.10.0 TPRParser.parse() on production.tpr:
+  Result: NotImplementedError: Your tpx version is 138, which this parser does not support, yet.
+  (MDAnalysis supports TPX versions up to 137; production TPRs are compiled under GROMACS 2026.3, TPX v138).
+- Final Compiled TPR Status across all 12 runs: UNRESOLVED.
+- Missing Capability Required: Linux x86_64 runtime environment with GROMACS 2026.3 installed.
+
+2. INPUT ARTIFACT CHECKSUMS (ORIGINAL PRODUCTION RUNS)
+- KRAS_G12D Rep1: production.tpr (497,772 bytes) sha256=113d0774a36be8ce6e7399fcb621eebdb06225b6a7b3db20c8ec87ab1987515e
+- KRAS_G12D Rep2: production.tpr (497,772 bytes) sha256=d344ff99e0df2f37c3558c440ec88880aa1375b485906f363c6314f6b005efc8
+- KRAS_G12D Rep3: production.tpr (497,772 bytes) sha256=1bc260810313f8c5b56501c5188f61537ae50730d17e76ea02e4d0d0f4d38ff0
+- cMYC_MAX Rep1: production.tpr (497,772 bytes) sha256=a33989341496a77d12f91df5e7aa61a0b5f543e33f37b1d9bf5b8f62c03cfba9
+- cMYC_MAX Rep2: production.tpr (497,772 bytes) sha256=bf9671d47fb4cb185c74261c3127814bfa4d8ba9866874dc9e8bb3c2b1ea7fc5
+- cMYC_MAX Rep3: production.tpr (497,772 bytes) sha256=ecda57e6ee877991ae9a0225199677ff8dd1765c9dd62423bb0cbef97893cb5d
+- Mut_p53 Rep1: production.tpr (1,139,172 bytes) sha256=ba7df7dbe8a5da9942a35368a52926715fbc74fb7c86a6058e0a3693240fb17a
+- Mut_p53 Rep2: production.tpr (1,139,172 bytes) sha256=9cb8949826cfd4f8e5c8c50c76dbbf9aebf59a35e4e84b80b74d47d4e5f49df4
+- Mut_p53 Rep3: production.tpr (1,139,172 bytes) sha256=2b14bb4979e23631bb59d33b26615b3c3bca71fa2cf5a88c22271887bc863a35
+- PTPN11 Rep1: production.tpr (505,864 bytes) sha256=7fa855c3cceba37ebcaad53f3e1b76451dc047a06488dcfba84ec564c7810e7c
+- PTPN11 Rep2: production.tpr (505,864 bytes) sha256=e289bf55d9b52a55ce8c8e1e32661e5fdfca565780d1e34279b9e59d9972c8ea
+- PTPN11 Rep3: production.tpr (505,864 bytes) sha256=0e4cf8d80cbeae47dd286ef5dc3a10e74ff1353c706d8621ebf3ecdfbf916053
+
+3. DEVELOPMENT SUBGROUP SELECTION BUG FIX & ISOLATION CHECK
+- Root cause: code/02_correct_diagnostics.py checked key 'targets' in distances_rep*.npz, but arrays are keyed by 'Y'.
+  The list remained empty, silently falling back to np.var(Y_true, axis=0) from held-out test data in all 12 folds.
+- Resolution: arrays strictly loaded from 'Y' of the two assigned development runs per fold.
+- Subgroup isolation check: Perturbed test labels (random Gaussian + 999.0 nm offset) were passed to isolation validator.
+  Result: PASS. Selected development target indices, variance cutoffs, and counts are 100% identical.
+- Target overlap with old leaked set:
+  KRAS_G12D: 52.8% to 61.2% (mean 58.0%)
+  cMYC_MAX: 64.8% to 76.0% (mean 69.0667%)
+  Mut_p53: 66.8% to 70.8% (mean 68.4%)
+  PTPN11: 56.8% to 61.6% (mean 59.6%)
+- Core diagnostic finding: Static mean offset shift (Delta Bias^2) accounts for 80.5% to 86.2% of MSE reduction across all folds and methods, confirming that the dominance of static offset shifts was not an artifact of test leakage.
+
+4. EXACT POPULATION MOMENT DECOMPOSITION & REGRESSION CHECKS
+- Population identity: MSE = Bias^2 + Var_res
+  Evaluated across all 528 diagnostic records.
+  Max residual: 9.02e-17 nm^2 (well within numerical float64 precision limit < 1e-12 nm^2).
+- KRAS M8 (Robust Transfer) Reference Values:
+  Fold 1 Delta MSE: 0.000912044431 nm^2, Delta Bias^2: 0.000687399435 nm^2
+  Fold 2 Delta MSE: 0.000967888796 nm^2, Delta Bias^2: 0.000748172947 nm^2
+  Fold 3 Delta MSE: 0.001078308836 nm^2, Delta Bias^2: 0.001042678087 nm^2
+  Sum of 3 Folds Delta MSE: 0.002958242063380098 nm^2
+  Sum of 3 Folds Delta Bias^2: 0.002478250469269188 nm^2
+  Aggregate Ratio (Delta Bias^2 / Delta MSE): 83.7744314418114% (~83.8%)
+- Target-Sum across 1000 targets:
+  Delta MSE: 2.958242 nm^2
+  Delta Bias^2: 2.478250 nm^2
+- Regression Check: cMYC mean subgroup overlap is 69.0667%.
+- Regression Check: KRAS fold 2 lag 0 skill on common support [100..899] is 0.1405323 (full-support skill across 900 frames is 0.138180).
+
+5. INDEPENDENT DATASET & LITERATURE VERIFICATION
+- DESRES Anton BPTI (Shaw et al. Science 2010): VERIFIED_INELIGIBLE (1 continuous run, no public open download).
+- MoDEL Database (Meyer et al. Structure 2010): VERIFIED_INELIGIBLE (single runs per fold, no multi-replicate benchmark sets; DOI corrected).
+- DII publication: Nature Communications 16, 54 (2025), DOI: 10.1038/s41467-024-55449-7 (Wild et al.).
+- Molecular construct identities: KRAS (PDB 4OBE) is wild-type with zero G12D mutations; Mut_p53 (PDB 2J1X) is a quintuple core-domain mutant; cMYC (PDB 1NKP) omits DNA duplex; PTPN11 rep1 binary coordinates (.xtc) were never altered.
+================================================================================

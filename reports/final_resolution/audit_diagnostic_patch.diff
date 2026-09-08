@@ -1,0 +1,42 @@
+--- tools/chara_final_evidence/02_correct_diagnostics.py	2026-09-07 22:37:47.000000000 +0530
++++ tools/final_resolution/02_correct_diagnostics_fixed.py	2026-09-07 23:05:00.000000000 +0530
+@@ -115,22 +115,28 @@
+         for fold in FOLDS:
+             npz_path = os.path.join(STAGING_DIR, sys_name, "predictions", f"predictions_{sys_name}_fold_{fold}.npz")
+             if not os.path.exists(npz_path):
+                 continue
+             data = np.load(npz_path)
+             Y_true = data["Y_true"].astype(np.float64) # (N, T)
+             N, T = Y_true.shape
+ 
+-            # Development variance to freeze top-quartile rule
+-            # Buggy: used r != fold without mapping, and looked for 'targets' key instead of 'Y'
+-            dev_reps = [r for r in [1, 2, 3] if r != fold]
+-            dev_dist_files = [os.path.join(STAGING_DIR, sys_name, f"distances_rep{r}.npz") for r in dev_reps]
++            # CORRECTED: Map fold to exact development runs
++            # fold 1: test rep3, dev [rep1, rep2]
++            # fold 2: test rep2, dev [rep1, rep3]
++            # fold 3: test rep1, dev [rep2, rep3]
++            train_reps = FOLDS_CONFIG[fold]["train"]
+             dev_frames = []
+-            for df in dev_dist_files:
+-                if os.path.exists(df):
+-                    dev_data = np.load(df)
+-                    if "targets" in dev_data:
+-                        dev_frames.append(dev_data["targets"][:900].astype(np.float64))
++            for r in train_reps:
++                df_path = os.path.join(STAGING_DIR, sys_name, f"distances_{r}.npz")
++                if not os.path.exists(df_path):
++                    raise FileNotFoundError(f"Missing required development array: {df_path}")
++                dev_data = np.load(df_path)
++                if "Y" not in dev_data:
++                    raise KeyError(f"Array 'Y' missing in {df_path}")
++                dev_frames.append(dev_data["Y"].astype(np.float64))
++
+             if dev_frames:
+                 Y_dev = np.concatenate(dev_frames, axis=0)
+-                dev_var = np.var(Y_dev, axis=0) # (T,)
++                dev_var = np.var(Y_dev, axis=0, ddof=0) # (T,)
+             else:
+-                dev_var = np.var(Y_true, axis=0)
++                raise RuntimeError("Development frames empty - fallback prohibited!")
