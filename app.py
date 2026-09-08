@@ -1,22 +1,35 @@
 import io
 from pathlib import Path
-import numpy as np
-import pandas as pd
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-import gradio as gr
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 
-from chara import CharaModel
+try:
+    import numpy as np
+    import pandas as pd
+except ImportError:
+    np = None
+    pd = None
+
+try:
+    import gradio as gr
+except ImportError:
+    gr = None
+
+try:
+    from chara import CharaModel
+except ImportError:
+    CharaModel = None
 
 ROOT = Path(__file__).resolve().parent
 MODEL_PATH = ROOT / "chara_model_4337.pkl"
 
 # Initialize top-level FastAPI instance
 app = FastAPI(
-    title="Chara Survival Inference API",
-    description="Thermodynamic Graph Laplacian Manifold Alignment for Survival Inference",
-    version="0.1.6"
+    title="Chara Platform API",
+    description="Sparse Distance Reconstruction and Biophysical Validation Platform",
+    version="0.2.9"
 )
 
 # Enable CORS for frontend web integration (Vercel & local development)
@@ -30,16 +43,16 @@ app.add_middleware(
 
 # Load frozen Chara model bundle if available
 MODEL = None
-if MODEL_PATH.exists():
+if CharaModel is not None and MODEL_PATH.exists():
     try:
         MODEL = CharaModel.load(MODEL_PATH)
     except Exception as e:
         print(f"Warning: Could not load {MODEL_PATH}: {e}")
 
-def run_survival_inference(df: pd.DataFrame):
+def run_survival_inference(df):
     """Core inference execution logic."""
-    if MODEL is None:
-        raise ValueError("Chara model bundle (chara_model_4337.pkl) is not loaded.")
+    if MODEL is None or np is None:
+        raise ValueError("Chara model bundle or dependencies are not loaded.")
     
     risk, x_scaled, aligned, _, alpha = MODEL.predict(df)
     curves, times = MODEL.survival_curves(x_scaled, alpha)
@@ -57,19 +70,17 @@ def run_survival_inference(df: pd.DataFrame):
         "num_patients": int(len(df))
     }
 
-# Top-level FastAPI Routes
+# Top-level Routes: Serve frontend index.html at root
 @app.get("/")
 def root():
+    index_path = ROOT / "index.html"
+    if index_path.exists():
+        return FileResponse(index_path)
     return {
         "status": "online",
-        "service": "Chara Survival Inference API",
-        "version": "0.1.6",
-        "institution": "CPG Lab, IIT Mandi",
-        "endpoints": {
-            "health": "/health",
-            "predict": "/predict",
-            "gradio": "/gradio"
-        }
+        "service": "Chara Platform API",
+        "version": "0.2.9",
+        "institution": "CPG Lab, IIT Mandi"
     }
 
 @app.get("/health")
@@ -81,6 +92,8 @@ def health_check():
 
 @app.post("/predict")
 async def predict_api_fastapi(file: UploadFile = File(...)):
+    if pd is None:
+        raise HTTPException(status_code=503, detail="Prediction backend dependencies not loaded.")
     if not file.filename.endswith(".csv"):
         raise HTTPException(status_code=400, detail="Only CSV files (.csv) are accepted.")
     
@@ -92,30 +105,38 @@ async def predict_api_fastapi(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# Gradio API & Web Interface
-def predict_gradio(file_obj):
-    if file_obj is None:
-        return {"error": "No file uploaded"}
-    try:
-        file_path = file_obj.name if hasattr(file_obj, "name") else str(file_obj)
-        df = pd.read_csv(file_path, index_col=0)
-        return run_survival_inference(df)
-    except Exception as e:
-        return {"error": str(e)}
+# Mount static asset directories if they exist
+for folder in ["data", "assets", "screenshots"]:
+    dir_path = ROOT / folder
+    if dir_path.is_dir():
+        app.mount(f"/{folder}", StaticFiles(directory=str(dir_path)), name=folder)
 
-with gr.Blocks(title="Chara Survival API Backend") as demo:
-    gr.Markdown("# Chara Survival API Backend")
-    gr.Markdown("Computational & Physical Genomics Laboratory · Indian Institute of Technology Mandi")
-    
-    with gr.Row():
-        file_in = gr.File(label="Upload Cohort CSV", file_types=[".csv"])
-        json_out = gr.JSON(label="Inference Results (JSON)")
+# Gradio API & Web Interface (if gradio is installed)
+if gr is not None:
+    def predict_gradio(file_obj):
+        if file_obj is None:
+            return {"error": "No file uploaded"}
+        if pd is None:
+            return {"error": "Pandas not available"}
+        try:
+            file_path = file_obj.name if hasattr(file_obj, "name") else str(file_obj)
+            df = pd.read_csv(file_path, index_col=0)
+            return run_survival_inference(df)
+        except Exception as e:
+            return {"error": str(e)}
+
+    with gr.Blocks(title="Chara Survival API Backend") as demo:
+        gr.Markdown("# Chara Survival API Backend")
+        gr.Markdown("Computational & Physical Genomics Laboratory · Indian Institute of Technology Mandi")
         
-    btn = gr.Button("Run Inference API", variant="primary")
-    btn.click(predict_gradio, inputs=[file_in], outputs=[json_out], api_name="predict")
+        with gr.Row():
+            file_in = gr.File(label="Upload Cohort CSV", file_types=[".csv"])
+            json_out = gr.JSON(label="Inference Results (JSON)")
+            
+        btn = gr.Button("Run Inference API", variant="primary")
+        btn.click(predict_gradio, inputs=[file_in], outputs=[json_out], api_name="predict")
 
-# Mount Gradio app onto FastAPI app
-app = gr.mount_gradio_app(app, demo, path="/gradio")
+    app = gr.mount_gradio_app(app, demo, path="/gradio")
 
 if __name__ == "__main__":
     import uvicorn

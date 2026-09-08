@@ -12,3 +12,9 @@ license = {text = "MIT"}
 authors = [
     {name = "Sharon Melhi", email = "sharonmelhi365@gmail.com"}
 ]
+dependencies = [
+    "fastapi>=0.100.0",
+]
+
+[tool.vercel]
+entrypoint = "app.py:app"
